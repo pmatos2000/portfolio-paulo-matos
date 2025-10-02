@@ -1,0 +1,49 @@
+.activityBar {
+  background-color: var(--background-secondary);
+  width: 60px;
+  height: 100vh;
+  border-right: 1px solid var(--border-color);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activityBar button {
+  background: none;
+  border: none;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; 
+  width: 100%; 
+}
+
+.activityBar button:not(:disabled):hover {
+  color: var(--text-color);
+}
+
+.activityBar button:disabled {
+  cursor: not-allowed; 
+  opacity: 0.5;
+}
+
+.activityBar button.active {
+  color: var(--text-color);
+}
+
+.activityBar button.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 80%;
+  background-color: var(--primary-color);
+}

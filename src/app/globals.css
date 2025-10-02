@@ -3,6 +3,7 @@
   --background-secondary: #252526;
   --background-hover: #37373d;
   --border-color: #333333;
+  --primary-color: #10B981;
   --text-color: #cccccc;
   --text-color-secondary: #8e8e8e;
 }
@@ -12,6 +13,7 @@
   --background-secondary: #f3f3f3;
   --background-hover: #e3e3e3;
   --border-color: #dddddd;
+  --primary-color: #10B981;
   --text-color: #1e1e1e;
   --text-color-secondary: #5e5e5e;
 }

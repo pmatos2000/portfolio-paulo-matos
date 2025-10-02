@@ -1,0 +1,39 @@
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background-color: var(--background-primary);
+  padding: 0.5rem 1rem;
+  border-right: 1px solid var(--border-color);
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.9rem;
+}
+
+.title {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.fileList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fileList li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.fileList li:hover {
+  background-color: var(--background-hover);
+}
+
+.nested {
+  padding-left: 1.5rem; /* Indentação para arquivos dentro de pastas */
+}
