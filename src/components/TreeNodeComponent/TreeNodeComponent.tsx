@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { VscChevronDown, VscChevronRight } from "react-icons/vsc";
 import type { TreeItem } from "@/data/sidebarTree";
@@ -36,12 +37,12 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
   const IconComponent = node.icon;
   return (
     <li>
-      <a href={node.url} className={styles.leaf}>
+      <Link href={node.url} className={styles.leaf}>
         <span className={styles.icon}>
           <IconComponent size={20} />
         </span>
         <span>{node.title}</span>
-      </a>
+      </Link>
     </li>
   );
 };
