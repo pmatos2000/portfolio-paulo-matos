@@ -127,7 +127,7 @@ export const sidebarTree: TreeItem[] = [
           {
             id: "4a18e88c-1030-4144-8573-aebe63051f2c",
             type: "leaf",
-            title: "rosa-polar.pjt",
+            title: "rosa-polar.app",
             icon: PiCompassRoseDuotone,
             url: "/projetos/jogos/rosa-polar",
           },
