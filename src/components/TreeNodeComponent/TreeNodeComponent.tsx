@@ -38,7 +38,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
     <li>
       <a href={node.url} className={styles.leaf}>
         <span className={styles.icon}>
-          <IconComponent />
+          <IconComponent size={20} />
         </span>
         <span>{node.title}</span>
       </a>

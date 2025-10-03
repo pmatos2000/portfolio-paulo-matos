@@ -1,10 +1,14 @@
-import { VscFile, VscJson, VscMarkdown, VscTerminal } from "react-icons/vsc";
+import type { IconType } from "react-icons";
+import { BsHash } from "react-icons/bs";
+import { FaReact } from "react-icons/fa";
+import { MdOutlineStar } from "react-icons/md";
+import { SiJavascript, SiTypescript } from "react-icons/si";
 
 export type TreeLeaf = {
   id: string;
   type: "leaf";
   title: string;
-  icon: React.ComponentType;
+  icon: IconType;
   url: string;
 };
 
@@ -21,20 +25,20 @@ export const sidebarTree: TreeItem[] = [
   {
     id: "4608d69b-95fe-4e41-a78f-481dbbc29035",
     type: "node",
-    title: "pages",
+    title: "Inicio",
     children: [
       {
         id: "3e24ab59-1bff-479e-bce2-e3ebc2e83974",
         type: "leaf",
-        title: "sobre-mim.md",
-        icon: VscMarkdown,
+        title: "sobre-mim.css",
+        icon: BsHash,
         url: "#sobre-mim",
       },
       {
         id: "6cf9a0f7-424b-4134-8e5e-845cf0977337",
         type: "leaf",
-        title: "competencias.json",
-        icon: VscJson,
+        title: "competências.css",
+        icon: BsHash,
         url: "#competencias",
       },
     ],
@@ -45,31 +49,38 @@ export const sidebarTree: TreeItem[] = [
     title: "experiencia",
     children: [
       {
-        id: "f884810a-53f2-46a8-b871-167410cac114",
-        type: "leaf",
-        title: "2025_neuraptor.tsx",
-        icon: VscTerminal,
-        url: "#neuraptor",
-      },
-      {
         id: "a42a61c0-56c5-4729-8f5e-7a4ecf929e7b",
         type: "leaf",
-        title: "2024_wegen-coop.tsx",
-        icon: VscTerminal,
+        title: "wegen-coop.tsx",
+        icon: FaReact,
         url: "#wegen-coop",
       },
       {
         id: "5006508d-6cbf-4245-870a-bc2937747616",
         type: "leaf",
-        title: "2020_dti-digital.tsx",
-        icon: VscTerminal,
+        title: "dti-digital.tsx",
+        icon: FaReact,
+        url: "#dti-digital",
+      },
+      {
+        id: "9494afb7-4912-4239-8862-caeb999a7e41",
+        type: "leaf",
+        title: "seidor.tsx",
+        icon: FaReact,
+        url: "#dti-digital",
+      },
+      {
+        id: "36f87590-80d1-4b37-9ea2-efa8262da9d2",
+        type: "leaf",
+        title: "professor-particular.tsx",
+        icon: FaReact,
         url: "#dti-digital",
       },
       {
         id: "8d2bab0c-81f7-433b-b233-ba63a6e12cf6",
         type: "leaf",
-        title: "2019_outras.md",
-        icon: VscFile,
+        title: "outras.tsx",
+        icon: FaReact,
         url: "#outras",
       },
     ],
@@ -83,21 +94,21 @@ export const sidebarTree: TreeItem[] = [
         id: "acc80ca0-4c11-4f02-bfb4-e518dc6dc3da",
         type: "leaf",
         title: "2021_eng-sistemas.ts",
-        icon: VscTerminal,
+        icon: SiTypescript,
         url: "#eng-sistemas",
       },
       {
         id: "79550ad6-ada7-43be-b604-d5b5482cbb20",
         type: "leaf",
         title: "2016_mat-computacional.ts",
-        icon: VscTerminal,
+        icon: SiTypescript,
         url: "#mat-computacional",
       },
       {
         id: "f4e1e6bf-5ccc-4de7-ac8c-9de0a71de625",
         type: "leaf",
         title: "2011_tecnico.ts",
-        icon: VscTerminal,
+        icon: SiTypescript,
         url: "#tecnico",
       },
     ],
@@ -111,21 +122,21 @@ export const sidebarTree: TreeItem[] = [
         id: "311401dd-838e-4176-871e-e8a79ce61073",
         type: "leaf",
         title: "OBMEP.md",
-        icon: VscFile,
+        icon: MdOutlineStar,
         url: "#obmep",
       },
       {
         id: "dbcddfcb-0b90-4f75-808f-a580bfe866da",
         type: "leaf",
         title: "Destaques-Academicos.md",
-        icon: VscFile,
+        icon: MdOutlineStar,
         url: "#destaques",
       },
       {
         id: "f3b79003-68bf-4093-b8ee-d3e259acc11f",
         type: "leaf",
         title: "Squad-de-Verdade.md",
-        icon: VscFile,
+        icon: MdOutlineStar,
         url: "#squad",
       },
     ],
@@ -133,8 +144,8 @@ export const sidebarTree: TreeItem[] = [
   {
     id: "96837c60-441f-4071-ab7c-e5bbe9260163",
     type: "leaf",
-    title: "contato.ts",
-    icon: VscTerminal,
+    title: "contato.js",
+    icon: SiJavascript,
     url: "#contato",
   },
 ];
