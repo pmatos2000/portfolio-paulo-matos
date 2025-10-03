@@ -33,6 +33,10 @@
   color: var(--text-color);
 }
 
+.leaf.active {
+  background-color: var(--background-hover);
+}
+
 .leaf:hover {
   background-color: var(--background-hover);
 }

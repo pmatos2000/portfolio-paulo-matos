@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { VscChevronDown, VscChevronRight } from "react-icons/vsc";
+import { SidebarContext } from "@/contexts/SidebarContext";
 import type { TreeItem } from "@/data/sidebarTree";
 import styles from "./TreeNodeComponent.module.css";
 
@@ -11,6 +12,9 @@ type TreeNodeProps = {
 
 const TreeNodeComponent = ({ node }: TreeNodeProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
+
+  const context = useContext(SidebarContext);
+  const activeUrl = context?.activeUrl;
 
   if (node.type === "node") {
     return (
@@ -35,9 +39,14 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
   }
 
   const IconComponent = node.icon;
+  const isActive = activeUrl === node.url;
+
   return (
     <li>
-      <Link href={node.url} className={styles.leaf}>
+      <Link
+        href={node.url}
+        className={`${styles.leaf} ${isActive ? styles.active : ""}`}
+      >
         <span className={styles.icon}>
           <IconComponent size={20} />
         </span>
