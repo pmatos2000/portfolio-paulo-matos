@@ -5,11 +5,11 @@
   padding: 0.5rem 1rem;
   border-right: 1px solid var(--border-color);
   font-family: "Segoe UI", sans-serif;
-  font-size: 0.9rem;
+  font-size: var(--font-size-md);
 }
 
 .title {
-  font-size: 0.8rem;
+  font-size: var(--font-size-sm);
   color: var(--text-color-secondary);
   letter-spacing: 1px;
   margin-bottom: 1rem;
