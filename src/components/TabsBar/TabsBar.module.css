@@ -1,0 +1,41 @@
+.tabsBar {
+  background-color: var(--background-primary);
+  display: flex;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--background-secondary);
+  border-right: 1px solid var(--border-color);
+}
+
+.tab.active {
+  border-top: 2px solid var(--primary-color);
+}
+
+.icon {
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  color: var(--text-color);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 0 0.25rem;
+}
+
+.closeButton:hover {
+  background-color: var(--background-hover);
+  color: var(--text-color);
+}

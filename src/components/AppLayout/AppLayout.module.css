@@ -7,6 +7,13 @@
 
 .contentArea {
   flex-grow: 1;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
   background-color: var(--background-secondary);
+}
+
+.pageContent {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
 }

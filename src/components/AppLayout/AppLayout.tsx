@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import ActivityBar from "@/components/ActivityBar/ActivityBar";
+import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
+import TabsBar from "@/components/TabsBar/TabsBar";
 import ViewPanel from "@/components/ViewPanel/ViewPanel";
-import styles from "./AppLayout.module.css";
+import styles from "./AppLayout.module.css"; //
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [activeView, setActiveView] = useState<string | null>("Explorer");
@@ -23,7 +25,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         onIconClick={handleIconClick}
       />
       <ViewPanel activeView={activeView} />
-      <main className={styles.contentArea}>{children}</main>
+      <main className={styles.contentArea}>
+        <TabsBar />
+        <Breadcrumbs />
+        <div className={styles.pageContent}>{children}</div>
+      </main>
     </div>
   );
 }
