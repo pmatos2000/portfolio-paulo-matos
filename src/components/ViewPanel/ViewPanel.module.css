@@ -1,0 +1,22 @@
+.settingsPanel {
+  width: 280px;
+  height: 100vh;
+  background-color: var(--background-primary);
+  padding: 0.5rem 1rem;
+  border-right: 1px solid var(--border-color);
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.9rem;
+}
+
+.title {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.settingsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useTheme } from '@/contexts/ThemeContext';
-import styles from './ThemeToggle.module.css';
-import { BsFillSunFill, BsFillMoonFill } from 'react-icons/bs';
+import { BsFillMoonFill, BsFillSunFill } from "react-icons/bs";
+import { useTheme } from "@/contexts/ThemeContext";
+import styles from "./ThemeToggle.module.css";
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
@@ -14,7 +14,7 @@ const ThemeToggle = () => {
         <input
           type="checkbox"
           onChange={toggleTheme}
-          checked={theme === 'light'}
+          checked={theme === "light"}
         />
         <span className={styles.slider}>
           <BsFillSunFill className={`${styles.icon} ${styles.sun}`} />
