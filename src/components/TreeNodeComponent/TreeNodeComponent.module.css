@@ -1,0 +1,44 @@
+.nodeTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.nodeTitle:hover {
+  background-color: var(--background-hover);
+}
+
+.nestedList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.leaf {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.leaf:hover {
+  background-color: var(--background-hover);
+}
+
+.icon {
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+}
