@@ -68,6 +68,19 @@ const ZeChinelaoPage = () => {
           de publicação na Google Play Store.
         </li>
       </ul>
+
+      <h3>Código Fonte</h3>
+      <ul>
+        <li>
+          <a
+            href="https-github.com-pmatos2000-ze_chinelao-"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Download do Código Fonte (GitHub)
+          </a>
+        </li>
+      </ul>
     </div>
   );
 };
