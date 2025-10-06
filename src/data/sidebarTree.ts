@@ -1,6 +1,7 @@
 import type { IconType } from "react-icons";
 import { BsHash } from "react-icons/bs";
 import { FaReact } from "react-icons/fa";
+import { GiSlippers } from "react-icons/gi";
 import { MdOutlineStar } from "react-icons/md";
 import { PiCompassRoseDuotone } from "react-icons/pi";
 import { SiJavascript, SiTypescript } from "react-icons/si";
@@ -130,6 +131,20 @@ export const sidebarTree: TreeItem[] = [
             title: "rosa-polar.app",
             icon: PiCompassRoseDuotone,
             url: "/projetos/jogos/rosa-polar",
+          },
+        ],
+      },
+      {
+        id: "533d77a9-6582-46e5-b82a-465736bb637e",
+        type: "node",
+        title: "Aplicativos",
+        children: [
+          {
+            id: "9d9380f7-6fe2-410d-8b01-adcbf362c73f",
+            type: "leaf",
+            title: "ze-chinelao.app",
+            icon: GiSlippers,
+            url: "/projetos/aplicativos/ze-chinelao",
           },
         ],
       },

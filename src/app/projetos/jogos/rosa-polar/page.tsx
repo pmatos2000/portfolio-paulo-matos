@@ -1,8 +1,6 @@
-import styles from "./rosa-polar.module.css";
-
 const RosaPolarPage = () => {
   return (
-    <div className={styles.projectPage}>
+    <div className="contentPage">
       <h2>Rosa Polar - Uma Simulação Matemática com Godot</h2>
 
       <p>
@@ -20,7 +18,7 @@ const RosaPolarPage = () => {
       </p>
 
       <h3>Demonstração</h3>
-      <div className={styles.videoContainer}>
+      <div className="videoContainer">
         <iframe
           src="https://www.youtube.com/embed/AKIcIY77HKY"
           title="Godot - Rose Curve"
