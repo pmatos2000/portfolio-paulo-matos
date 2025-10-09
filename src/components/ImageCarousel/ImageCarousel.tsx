@@ -17,21 +17,23 @@ type ImageCarouselProps = {
 
 const ImageCarousel = ({ images, interval = 5000 }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [previousIndex, setPreviousIndex] = useState<number | null>(null);
   const [isAutoplayActive, setIsAutoplayActive] = useState(true);
 
   const goToNext = useCallback(() => {
+    setPreviousIndex(currentIndex);
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  }, [images.length]);
+  }, [currentIndex, images.length]);
 
   useEffect(() => {
     if (!isAutoplayActive || images.length <= 1) return;
-
     const timer = setInterval(goToNext, interval);
-
     return () => clearInterval(timer);
-  }, [isAutoplayActive, images.length, interval, goToNext]);
+  }, [isAutoplayActive, goToNext, images.length, interval]);
+
   const handlePrevious = () => {
     setIsAutoplayActive(false);
+    setPreviousIndex(currentIndex);
     setCurrentIndex(
       (prevIndex) => (prevIndex - 1 + images.length) % images.length,
     );
@@ -46,21 +48,31 @@ const ImageCarousel = ({ images, interval = 5000 }: ImageCarouselProps) => {
     return <div>Nenhuma imagem para exibir.</div>;
   }
 
+  const previousImage = previousIndex !== null && images[previousIndex];
+
   return (
     <div className={styles.carouselContainer}>
       <div className={styles.imageWrapper}>
+        {previousImage && (
+          <Image
+            key={`prev-${previousIndex}`}
+            src={previousImage.src}
+            alt={previousImage.alt}
+            fill
+            style={{ objectFit: "contain" }}
+            className={`${styles.carouselImage} ${styles.inactive}`}
+          />
+        )}
         <Image
-          key={currentIndex}
+          key={`current-${currentIndex}`}
           src={images[currentIndex].src}
           alt={images[currentIndex].alt}
           fill
           style={{ objectFit: "contain" }}
-          className={styles.carouselImage}
+          className={`${styles.carouselImage} ${styles.active}`}
         />
       </div>
-
       <p className={styles.caption}>{images[currentIndex].alt}</p>
-
       {images.length > 1 && (
         <>
           <button
