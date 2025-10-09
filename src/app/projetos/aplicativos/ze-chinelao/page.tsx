@@ -1,10 +1,49 @@
+import imgMenu from "@/assets/images/ze-chinelao/ImgMenu.png";
+import imgDivisores from "@/assets/images/ze-chinelao/imgDivisores.png";
+import imgDivisoresCalculo from "@/assets/images/ze-chinelao/imgDivisoresCalculo.png";
+import imgMMC from "@/assets/images/ze-chinelao/imgMMC.png";
+import imgMMCCalculo from "@/assets/images/ze-chinelao/imgMMCCalculo.png";
+import imgSistemaLinear from "@/assets/images/ze-chinelao/imgSistemaLinear.png";
+import imgSistemaLinearCalculo from "@/assets/images/ze-chinelao/imgSistemaLinearCalculo.png";
+import imgTelaInicial from "@/assets/images/ze-chinelao/imgTelaInicial.png";
+import ImageCarousel from "@/components/ImageCarousel/ImageCarousel";
+
+const zeChinelaoImages = [
+  { src: imgTelaInicial, alt: "Tela inicial do aplicativo Zé Chinelão" },
+  {
+    src: imgMenu,
+    alt: "Menu principal com as funções matemáticas disponíveis",
+  },
+  {
+    src: imgDivisores,
+    alt: "Tela de entrada de dados para o cálculo de Divisores",
+  },
+  {
+    src: imgDivisoresCalculo,
+    alt: "Exibição do cálculo passo a passo para encontrar os divisores de um número",
+  },
+  {
+    src: imgMMC,
+    alt: "Tela de entrada de dados para o cálculo de MMC (Mínimo Múltiplo Comum)",
+  },
+  { src: imgMMCCalculo, alt: "Exibição do cálculo passo a passo para o MMC" },
+  {
+    src: imgSistemaLinear,
+    alt: "Tela de entrada de dados para a resolução de um Sistema Linear",
+  },
+  {
+    src: imgSistemaLinearCalculo,
+    alt: "Exibição da solução passo a passo de um sistema linear",
+  },
+];
+
 const ZeChinelaoPage = () => {
   return (
     <div className="contentPage">
       <h2>Projeto: Zé Chinelão (2016)</h2>
 
       <p>
-        "Zé Chinelão" foi meu primeiro aplicativo Android, desenvolvido em 2016
+        "Zé Chinelao" foi meu primeiro aplicativo Android, desenvolvido em 2016
         com um foco educacional: ser uma ferramenta para cálculos matemáticos
         que resolve e exibe as operações **passo a passo**. O objetivo era ir
         além de simplesmente entregar o resultado final, mostrando toda a lógica
@@ -47,6 +86,11 @@ const ZeChinelaoPage = () => {
         app, um chinelo com os dígitos de Pi, foi uma forma de unir a
         brincadeira do nome com o propósito matemático da ferramenta.
       </p>
+
+      <h3>Galeria</h3>
+      <div className="centered-container">
+        <ImageCarousel images={zeChinelaoImages} />
+      </div>
 
       <h3>Competências em Destaque</h3>
       <ul>
