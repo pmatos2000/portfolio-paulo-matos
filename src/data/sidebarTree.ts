@@ -41,7 +41,7 @@ export const sidebarTree: TreeItem[] = [
         type: "leaf",
         title: "competências.css",
         icon: BsHash,
-        url: "#competencias",
+        url: "/competencias",
       },
     ],
   },

@@ -1,0 +1,33 @@
+.skillGroup {
+  margin-top: 3rem;
+}
+
+.categoryDescription {
+  color: var(--text-color-secondary);
+  font-size: var(--font-size-md);
+  margin-bottom: 2rem;
+}
+
+.skillsGrid {
+  display: grid;
+  grid-template-columns: 280px auto;
+  align-items: center;
+  gap: 1.25rem 2rem;
+}
+
+.skillName {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-color-secondary);
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .skillsGrid {
+    grid-template-columns: 1fr auto;
+  }
+
+  .skillName {
+    text-align: left;
+  }
+}
