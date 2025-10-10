@@ -1,0 +1,17 @@
+.skillBar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 100%;
+  max-width: 120px;
+}
+
+.barSegment {
+  height: 12px;
+  background-color: var(--background-secondary);
+  border-radius: 2px;
+}
+
+.barSegment.filled {
+  background-color: var(--primary-color);
+}

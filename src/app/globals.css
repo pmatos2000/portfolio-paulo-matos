@@ -37,6 +37,15 @@ body {
   box-sizing: border-box;
 }
 
+.section {
+  padding-top: 1rem;
+}
+
+.section h4 {
+  margin-top: 1rem;
+  color: var(--text-color-secondary);
+}
+
 .contentPage h2 {
   font-size: var(--font-size-xl);
   color: var(--text-color);
