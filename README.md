@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfólio Pessoal - Paulo Matos
 
-## Getting Started
+<img width="1908" height="938" alt="image" src="https://github.com/user-attachments/assets/61bd209b-76a6-4051-9a7c-7bd3bb1481be" />
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Sobre o Projeto
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Este é o repositório do meu portfólio pessoal, desenvolvido para ser uma representação criativa e funcional das minhas habilidades como desenvolvedor. A interface foi projetada para simular a experiência de um editor de código, especificamente o **Visual Studio Code**, com o objetivo de apresentar minhas informações profissionais, projetos e competências de uma forma familiar ao universo do desenvolvimento.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+O projeto foi construído do zero, aplicando conceitos modernos de desenvolvimento web, componentização e responsividade.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Tecnologias Utilizadas
 
-## Learn More
+A base do projeto foi construída com tecnologias de ponta do ecossistema JavaScript e React:
 
-To learn more about Next.js, take a look at the following resources:
+* **[Next.js](https://nextjs.org/)**: Framework React para produção, utilizado por sua arquitetura de App Router, otimizações de performance (SSR/SSG) e roteamento baseado em arquivos.
+* **[React](https://react.dev/)**: Biblioteca para a construção da interface de usuário componentizada.
+* **[TypeScript](https://www.typescriptlang.org/)**: Para adicionar segurança de tipos ao JavaScript, garantindo um código mais robusto e manutenível.
+* **[CSS Modules](https://github.com/css-modules/css-modules)**: Para estilização local e escopada, evitando conflitos de classes CSS.
+* **[Biome](https://biomejs.dev/)**: Ferramenta moderna e de alta performance para formatação e linting do código.
+* **[Vercel](https://vercel.com/)**: Plataforma de deploy, otimizada para projetos Next.js.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ✨ Funcionalidades Implementadas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* **Interface Inspirada no VS Code**: Simula a experiência de um editor de código com `Activity Bar`, `Sidebar` (Explorer) e abas de conteúdo.
+* **Design Responsivo**: O layout se adapta a diferentes tamanhos de tela, com um menu "hamburger" para navegação em dispositivos móveis.
+* **Navegação Dinâmica**:
+    * As abas e os *breadcrumbs* são gerados dinamicamente com base na URL atual.
+    * O `Sidebar` destaca o link ativo e expande as pastas automaticamente para revelar a página atual.
+* **Componentização**: A UI foi dividida em componentes reutilizáveis e bem definidos (`ImageCarousel`, `SkillBar`, `ThemeToggle`, etc.).
+* **Troca de Tema**: Funcionalidade de alternar entre tema claro (Light) e escuro (Dark), com persistência no `localStorage`.
+* **Estrutura de Dados Centralizada**: O conteúdo das páginas (como a árvore de navegação e as competências) é gerenciado em arquivos de dados separados, facilitando a manutenção.
 
-## Deploy on Vercel
+## ⚙️ Como Executar o Projeto Localmente
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Siga os passos abaixo para rodar o projeto na sua máquina.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/pmatos2000/portfolio-paulo-matos.git
+    ```
+
+2.  **Navegue até a pasta do projeto:**
+    ```bash
+    cd portfolio-paulo-matos
+    ```
+
+3.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+
+4.  **Execute o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+
+5.  **Abra o navegador:**
+    Acesse [`http://localhost:3000`](http://localhost:3000) para ver o projeto em execução.
