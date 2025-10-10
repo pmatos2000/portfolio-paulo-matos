@@ -185,11 +185,4 @@ export const sidebarTree: TreeItem[] = [
       },
     ],
   },
-  {
-    id: "96837c60-441f-4071-ab7c-e5bbe9260163",
-    type: "leaf",
-    title: "contato.js",
-    icon: SiJavascript,
-    url: "#contato",
-  },
 ];
