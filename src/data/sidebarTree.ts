@@ -34,7 +34,7 @@ export const sidebarTree: TreeItem[] = [
         type: "leaf",
         title: "sobre-mim.css",
         icon: BsHash,
-        url: "#sobre-mim",
+        url: "/sobre-mim",
       },
       {
         id: "6cf9a0f7-424b-4134-8e5e-845cf0977337",
