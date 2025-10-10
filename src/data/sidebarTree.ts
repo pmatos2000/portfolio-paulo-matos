@@ -4,7 +4,7 @@ import { FaReact } from "react-icons/fa";
 import { GiSlippers } from "react-icons/gi";
 import { MdOutlineStar } from "react-icons/md";
 import { PiCompassRoseDuotone } from "react-icons/pi";
-import { SiJavascript, SiTypescript } from "react-icons/si";
+import { SiTypescript } from "react-icons/si";
 
 export type TreeLeaf = {
   id: string;

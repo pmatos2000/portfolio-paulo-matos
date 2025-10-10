@@ -3,17 +3,84 @@
   flex-direction: row;
   height: 100vh;
   overflow: hidden;
+  position: relative;
+}
+
+.viewPanelContainer {
+  display: block;
+}
+
+.contentWrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 .contentArea {
   flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+  padding: 2rem;
   background-color: var(--background-secondary);
+  overflow-y: auto;
 }
 
-.pageContent {
-  flex-grow: 1;
-  padding: 2rem;
-  overflow-y: auto;
+.mobileHeader {
+  display: none;
+}
+
+.overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mainLayout > :first-child {
+    display: none;
+  }
+
+  .viewPanelContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 20;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    background-color: var(--background-primary);
+  }
+
+  .viewPanelContainer.mobileMenuOpen {
+    transform: translateX(0);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: var(--background-primary);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .hamburgerButton {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    z-index: 30;
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
 }
