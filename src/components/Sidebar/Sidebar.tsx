@@ -23,7 +23,11 @@ const findLeaf = (
   return null;
 };
 
-const Sidebar = () => {
+type SidebarProps = {
+  onCloseMenu: () => void;
+};
+
+const Sidebar = ({ onCloseMenu }: SidebarProps) => {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
 
@@ -42,7 +46,9 @@ const Sidebar = () => {
   }, [pathname, hash]);
 
   return (
-    <SidebarContext.Provider value={{ activeUrl }}>
+    <SidebarContext.Provider
+      value={{ activeUrl, closeMobileMenu: onCloseMenu }}
+    >
       <aside className={styles.sidebar}>
         <h2 className={styles.title}>EXPLORER</h2>
         <ul className={styles.fileList}>

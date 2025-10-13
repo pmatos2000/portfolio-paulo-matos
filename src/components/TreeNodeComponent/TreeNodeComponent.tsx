@@ -14,7 +14,9 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const context = useContext(SidebarContext);
-  const activeUrl = context?.activeUrl;
+  if (!context) return null;
+
+  const { activeUrl, closeMobileMenu } = context;
 
   if (node.type === "node") {
     return (
@@ -46,6 +48,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
       <Link
         href={node.url}
         className={`${styles.leaf} ${isActive ? styles.active : ""}`}
+        onClick={closeMobileMenu}
       >
         <span className={styles.icon}>
           <IconComponent size={20} />

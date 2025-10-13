@@ -12,13 +12,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [activeView, setActiveView] = useState<string | null>("Explorer");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   const handleIconClick = (iconName: string) => {
     if (iconName === activeView) {
       setActiveView(null);
     } else {
       setActiveView(iconName);
     }
-    setIsMobileMenuOpen(false);
+    closeMobileMenu();
   };
 
   return (
@@ -31,7 +33,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div
         className={`${styles.viewPanelContainer} ${isMobileMenuOpen ? styles.mobileMenuOpen : ""}`}
       >
-        <ViewPanel activeView={activeView} />
+        <ViewPanel activeView={activeView} onCloseMenu={closeMobileMenu} />
       </div>
 
       <div className={styles.contentWrapper}>

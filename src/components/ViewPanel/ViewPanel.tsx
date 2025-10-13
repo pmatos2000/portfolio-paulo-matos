@@ -2,18 +2,17 @@ import SettingsPanel from "../SettingsPanel/SettingsPanel";
 import Sidebar from "../Sidebar/Sidebar";
 
 type ViewPanelProps = {
-  activeView: string | null; // Pode ser nulo para quando o painel estiver fechado
+  activeView: string | null;
+  onCloseMenu: () => void;
 };
 
-const ViewPanel = ({ activeView }: ViewPanelProps) => {
-  // Usamos um switch para decidir qual componente renderizar
+const ViewPanel = ({ activeView, onCloseMenu }: ViewPanelProps) => {
   switch (activeView) {
     case "Explorer":
-      return <Sidebar />;
+      return <Sidebar onCloseMenu={onCloseMenu} />;
     case "Manage":
       return <SettingsPanel />;
     default:
-      // Se activeView for nulo ou qualquer outro valor, não renderiza nada.
       return null;
   }
 };
