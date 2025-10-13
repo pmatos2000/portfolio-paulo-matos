@@ -2,8 +2,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
-  width: 100%;
-  max-width: 120px;
+  width: 120px;
 }
 
 .barSegment {

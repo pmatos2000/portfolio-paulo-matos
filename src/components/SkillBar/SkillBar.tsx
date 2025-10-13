@@ -18,13 +18,13 @@ const SkillBar = ({ level }: SkillBarProps) => {
     <div className={styles.skillBar}>
       <div
         className={`${styles.barSegment} ${filledSegments >= 1 ? styles.filled : ""}`}
-      ></div>
+      />
       <div
         className={`${styles.barSegment} ${filledSegments >= 2 ? styles.filled : ""}`}
-      ></div>
+      />
       <div
         className={`${styles.barSegment} ${filledSegments >= 3 ? styles.filled : ""}`}
-      ></div>
+      />
     </div>
   );
 };
