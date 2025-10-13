@@ -11,7 +11,7 @@ type TreeNodeProps = {
 };
 
 const TreeNodeComponent = ({ node }: TreeNodeProps) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const context = useContext(SidebarContext);
   if (!context) return null;
