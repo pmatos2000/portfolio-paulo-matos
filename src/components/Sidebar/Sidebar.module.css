@@ -2,6 +2,7 @@
   width: min(280px, 85vw);
   min-width: min(280px, 85vw);
   height: 100%;
+  overflow-y: auto;
   background-color: var(--background-primary);
   padding: 0.5rem 1rem;
   border-right: 1px solid var(--border-color);
