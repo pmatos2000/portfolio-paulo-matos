@@ -5,6 +5,7 @@ import { VscClose, VscMenu } from "react-icons/vsc";
 import ActivityBar from "@/components/ActivityBar/ActivityBar";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import TabsBar from "@/components/TabsBar/TabsBar";
+import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import ViewPanel from "@/components/ViewPanel/ViewPanel";
 import styles from "./AppLayout.module.css";
 
@@ -34,6 +35,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         className={`${styles.viewPanelContainer} ${isMobileMenuOpen ? styles.mobileMenuOpen : ""}`}
       >
         <ViewPanel activeView={activeView} onCloseMenu={closeMobileMenu} />
+        <div className={styles.mobileSettings}>
+          <ThemeToggle />
+        </div>
       </div>
 
       <div className={styles.contentWrapper}>

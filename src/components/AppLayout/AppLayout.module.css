@@ -10,6 +10,10 @@
   display: block;
 }
 
+.mobileSettings {
+  display: none;
+}
+
 .contentWrapper {
   flex-grow: 1;
   display: flex;
@@ -43,6 +47,8 @@
     top: 0;
     left: 0;
     height: 100dvh;
+    display: flex;
+    flex-direction: column;
     z-index: 20;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
@@ -52,6 +58,13 @@
   .viewPanelContainer.mobileMenuOpen {
     transform: translateX(0);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .mobileSettings {
+    display: block;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--background-primary);
   }
 
   .mobileHeader {
