@@ -46,6 +46,12 @@ body {
   color: var(--text-color-secondary);
 }
 
+.contentPage {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .contentPage h2 {
   font-size: var(--font-size-xl);
   color: var(--text-color);
