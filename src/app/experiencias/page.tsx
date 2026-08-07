@@ -10,14 +10,14 @@ export const metadata = pageMetadata({
 const ExperienciasPage = () => {
   return (
     <div className="contentPage">
-      <h2>Experiências e Competências</h2>
+      <h1>Experiência profissional</h1>
       <p>
         Navegue pelas minhas principais experiências profissionais, projetos e
         competências técnicas.
       </p>
 
       <section id="wegen-coop">
-        <h3>WeGen Coop</h3>
+        <h2>WeGen Coop</h2>
         <p>
           Atuei no desenvolvimento de um sistema de gestão de contratos e
           clientes para a venda de energia solar. Fui responsável por módulos
@@ -50,7 +50,7 @@ const ExperienciasPage = () => {
       </section>
 
       <section id="dti-digital">
-        <h3>Dti digital</h3>
+        <h2>Dti digital</h2>
         <p>
           Na Dti, participei de projetos estratégicos para grandes clientes,
           atuando em frentes de alta visibilidade e impacto.
@@ -84,7 +84,7 @@ const ExperienciasPage = () => {
       </section>
 
       <section id="seidor">
-        <h3>Seidor Brasil</h3>
+        <h2>Seidor Brasil</h2>
         <p>
           Durante minha passagem pela Seidor, atuei como desenvolvedor ABAP, a
           linguagem de programação proprietária da SAP. Fui responsável pela
@@ -95,7 +95,7 @@ const ExperienciasPage = () => {
       </section>
 
       <section id="professor-particular">
-        <h3>Professor Particular</h3>
+        <h2>Professor Particular</h2>
         <p>
           Durante a faculdade, utilizei meu conhecimento para ajudar outros
           alunos a superarem desafios acadêmicos. Ministrei aulas particulares
@@ -107,7 +107,7 @@ const ExperienciasPage = () => {
       </section>
 
       <section id="outras">
-        <h3>Outras Experiências (Técnico)</h3>
+        <h2>Outras Experiências (Técnico)</h2>
         <p>
           Antes de migrar para a área de desenvolvimento de software, tive
           experiências como técnico na PROTOP e PROGETTARE, onde trabalhei em

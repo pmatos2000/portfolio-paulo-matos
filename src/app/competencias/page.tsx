@@ -14,7 +14,7 @@ export const metadata = pageMetadata({
 const CompetenciasPage = () => {
   return (
     <div className="contentPage">
-      <h2>Minhas Competências</h2>
+      <h1>Minhas Competências</h1>
       <p>
         Um resumo detalhado das tecnologias, arquiteturas e metodologias com as
         quais tenho experiência, organizado por categoria.
@@ -22,7 +22,7 @@ const CompetenciasPage = () => {
 
       {skillsData.map((group) => (
         <section key={group.category} className={styles.skillGroup}>
-          <h3>{group.category}</h3>
+          <h2>{group.category}</h2>
           <p className={styles.categoryDescription}>{group.description}</p>
 
           <div className={styles.skillsGrid}>

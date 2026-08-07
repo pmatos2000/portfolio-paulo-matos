@@ -10,7 +10,7 @@ export const metadata = pageMetadata({
 const FormacaoPage = () => {
   return (
     <div className="contentPage">
-      <h2>Formação Acadêmica</h2>
+      <h1>Formação Acadêmica</h1>
       <p>
         Minha trajetória acadêmica foi marcada pela busca de uma base sólida em
         ciências exatas e computação, culminando em uma formação
@@ -19,7 +19,7 @@ const FormacaoPage = () => {
       </p>
 
       <section id="engenharia-sistemas">
-        <h3>Engenharia de Sistemas - UFMG (2016 - 2021)</h3>
+        <h2>Engenharia de Sistemas - UFMG (2016 - 2021)</h2>
         <p>
           Formei-me no pioneiro curso de Engenharia de Sistemas da UFMG, uma
           graduação com uma abordagem interdisciplinar para a concepção e
@@ -39,7 +39,7 @@ const FormacaoPage = () => {
       </section>
 
       <section id="matematica-computacional">
-        <h3>Matemática Computacional - UFMG (Incompleto, 2012 - 2016)</h3>
+        <h2>Matemática Computacional - UFMG (Incompleto, 2012 - 2016)</h2>
         <p>
           Minha jornada na UFMG começou no curso de Matemática Computacional,
           onde completei aproximadamente 75% da grade curricular antes de fazer
@@ -59,10 +59,10 @@ const FormacaoPage = () => {
       </section>
 
       <section id="eletrotecnica">
-        <h3>
+        <h2>
           Técnico em Eletrotécnica e Automação Industrial - CEFET-MG (2008 -
           2010)
-        </h3>
+        </h2>
         <p>
           Minha primeira formação técnica foi em Eletrotécnica no CEFET-MG, um
           curso com foco nos setores de geração, transmissão e distribuição de

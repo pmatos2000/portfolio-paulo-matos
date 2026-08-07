@@ -11,7 +11,7 @@ export const metadata = pageMetadata({
 const RosaPolarPage = () => {
   return (
     <div className="contentPage">
-      <h2>Rosa Polar - Uma Simulação Matemática com Godot</h2>
+      <h1>Rosa Polar - Uma Simulação Matemática com Godot</h1>
 
       <p>
         Este projeto é uma exploração visual da beleza matemática, trazendo a
@@ -27,7 +27,7 @@ const RosaPolarPage = () => {
         interativa.
       </p>
 
-      <h3>Demonstração</h3>
+      <h2>Demonstração</h2>
       <div className="videoContainer">
         <iframe
           src="https://www.youtube.com/embed/AKIcIY77HKY"
@@ -36,7 +36,7 @@ const RosaPolarPage = () => {
         ></iframe>
       </div>
 
-      <h3>Godot como Ferramenta de Simulação Matemática</h3>
+      <h2>Godot como Ferramenta de Simulação Matemática</h2>
       <p>
         Minha formação em <strong>Matemática Computacional</strong> me deu uma
         base sólida para enxergar além do óbvio. Enquanto muitos veem a Godot
@@ -70,7 +70,7 @@ const RosaPolarPage = () => {
         experiências digitais únicas.
       </p>
 
-      <h3>Competências em Destaque</h3>
+      <h2>Competências em Destaque</h2>
       <ul>
         <li>
           <strong>Desenvolvimento de Jogos/Simulações:</strong> Godot Engine,
@@ -90,7 +90,7 @@ const RosaPolarPage = () => {
         </li>
       </ul>
 
-      <h3>Download e Interação</h3>
+      <h2>Download e Interação</h2>
       <ul>
         <li>
           <a

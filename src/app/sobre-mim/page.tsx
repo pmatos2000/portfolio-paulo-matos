@@ -20,18 +20,19 @@ const SobreMimPage = () => {
         </div>
 
         <div className={styles.textContainer}>
-          <h2>Olá! Eu sou Paulo Matos.</h2>
-          <h3>Desenvolvedor Full-Stack & Líder Técnico</h3>
+          <h1>Sobre mim</h1>
+          <h2>Desenvolvedor Full-Stack & Líder Técnico</h2>
 
           <p>
-            Sou um desenvolvedor Full-Stack com mais de 5 anos de experiência em
-            sistemas de alta complexidade, especializado em C#, ASP.NET Core e
-            React.js. Meu perfil é analítico e orientado a resultados, com foco
-            em entregar soluções de alta performance e escalabilidade, sempre
-            aplicando as melhores práticas de desenvolvimento.
+            Olá! Eu sou Paulo Matos, desenvolvedor Full-Stack com mais de 5 anos
+            de experiência em sistemas de alta complexidade, especializado em
+            C#, ASP.NET Core e React.js. Meu perfil é analítico e orientado a
+            resultados, com foco em entregar soluções de alta performance e
+            escalabilidade, sempre aplicando as melhores práticas de
+            desenvolvimento.
           </p>
 
-          <h3>Minha Jornada com a Programação</h3>
+          <h2>Minha Jornada com a Programação</h2>
           <p>
             Minha primeira aventura no mundo do código começou de uma forma um
             tanto inusitada: criando scripts em Ruby para modificar jogos no RPG
@@ -45,7 +46,7 @@ const SobreMimPage = () => {
             ajudar muitos colegas a se formarem.
           </p>
 
-          <h3>Além do Código</h3>
+          <h2>Além do Código</h2>
           <p>
             Acredito que a criatividade e a lógica que aplicamos no
             desenvolvimento se estendem para muitas outras áreas. Minha vontade

@@ -11,7 +11,7 @@ export const metadata = pageMetadata({
 const PremiosPage = () => {
   return (
     <div className="contentPage">
-      <h2>Prêmios e Reconhecimentos</h2>
+      <h1>Prêmios e Reconhecimentos</h1>
       <p>
         Uma coleção das principais premiações e reconhecimentos que recebi ao
         longo da minha trajetória acadêmica e profissional, refletindo meu
@@ -19,9 +19,9 @@ const PremiosPage = () => {
       </p>
 
       <section id="obmep">
-        <h3>
+        <h2>
           <MdOutlineStar /> Olimpíada Brasileira de Matemática (OBMEP)
-        </h3>
+        </h2>
         <p>
           A OBMEP é um projeto nacional realizado pelo Instituto de Matemática
           Pura e Aplicada (IMPA) para estimular o estudo da matemática e
@@ -40,9 +40,9 @@ const PremiosPage = () => {
       </section>
 
       <section id="cases-ageis">
-        <h3>
+        <h2>
           <MdWorkspacePremium /> Cases Mais Ágeis do Brasil (4º Lugar)
-        </h3>
+        </h2>
         <p>
           O prêmio "Cases Mais Ágeis do Brasil", organizado pela Agile Trends,
           reconhece as melhores iniciativas e resultados na aplicação de
@@ -60,9 +60,9 @@ const PremiosPage = () => {
       </section>
 
       <section id="squad-de-verdade">
-        <h3>
+        <h2>
           <MdWorkspacePremium /> Reconhecimento "Squad de Verdade"
-        </h3>
+        </h2>
         <p>
           "Squad de Verdade" é um reconhecimento concedido pela comunidade "Os
           Agilistas", uma das maiores comunidades sobre agilidade no Brasil. Ele
@@ -82,9 +82,9 @@ const PremiosPage = () => {
 
       {/* Seção Pitch Destaque */}
       <section id="pitch-destaque">
-        <h3>
+        <h2>
           <MdOutlineStar /> Pitch Destaque em Empreendedorismo e Inovação
-        </h3>
+        </h2>
         <p>
           Durante a disciplina "Oficina De Projetos, Empreendedorismo E
           Inovação" na UFMG, recebi o prêmio de "Pitch Destaque". O curso aborda

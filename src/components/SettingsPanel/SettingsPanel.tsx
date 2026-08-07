@@ -3,8 +3,8 @@ import styles from "./SettingsPanel.module.css";
 
 const SettingsPanel = () => {
   return (
-    <aside className={styles.settingsPanel}>
-      <h2 className={styles.title}>SETTINGS</h2>
+    <aside className={styles.settingsPanel} aria-label="Configurações">
+      <p className={styles.title}>SETTINGS</p>
       <div className={styles.settingsList}>
         <ThemeToggle />
       </div>

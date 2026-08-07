@@ -49,7 +49,7 @@ const zeChinelaoImages = [
 const ZeChinelaoPage = () => {
   return (
     <div className="contentPage">
-      <h2>Projeto: Zé Chinelão (2016)</h2>
+      <h1>Projeto: Zé Chinelão (2016)</h1>
 
       <p>
         "Zé Chinelao" foi meu primeiro aplicativo Android, desenvolvido em 2016
@@ -64,7 +64,7 @@ const ZeChinelaoPage = () => {
         lineares.
       </p>
 
-      <h3>O Propósito: Do Livro à Prática</h3>
+      <h2>O Propósito: Do Livro à Prática</h2>
       <p>
         Este projeto foi a materialização dos meus estudos. Eu o desenvolvi para
         aplicar e testar o conhecimento que estava adquirindo com o livro{" "}
@@ -81,7 +81,7 @@ const ZeChinelaoPage = () => {
         Play Store.
       </p>
 
-      <h3>A Origem do Nome: Uma Homenagem</h3>
+      <h2>A Origem do Nome: Uma Homenagem</h2>
       <p>
         O nome "Zé Chinelão" tem uma origem curiosa. Era uma brincadeira interna
         com meus amigos do CEFET-MG, que éramos grandes fãs da banda Legião
@@ -96,12 +96,12 @@ const ZeChinelaoPage = () => {
         brincadeira do nome com o propósito matemático da ferramenta.
       </p>
 
-      <h3>Galeria</h3>
+      <h2>Galeria</h2>
       <div className="centered-container">
         <ImageCarousel images={zeChinelaoImages} />
       </div>
 
-      <h3>Competências em Destaque</h3>
+      <h2>Competências em Destaque</h2>
       <ul>
         <li>
           <strong>Desenvolvimento Mobile:</strong> Android Nativo com Java e
@@ -122,7 +122,7 @@ const ZeChinelaoPage = () => {
         </li>
       </ul>
 
-      <h3>Código Fonte</h3>
+      <h2>Código Fonte</h2>
       <ul>
         <li>
           <a

@@ -49,8 +49,8 @@ const Sidebar = ({ onCloseMenu }: SidebarProps) => {
     <SidebarContext.Provider
       value={{ activeUrl, closeMobileMenu: onCloseMenu }}
     >
-      <aside className={styles.sidebar}>
-        <h2 className={styles.title}>EXPLORER</h2>
+      <aside className={styles.sidebar} aria-label="Explorador de arquivos">
+        <p className={styles.title}>EXPLORER</p>
         <ul className={styles.fileList}>
           {sidebarTree.map((node) => (
             <TreeNodeComponent key={node.id} node={node} />
