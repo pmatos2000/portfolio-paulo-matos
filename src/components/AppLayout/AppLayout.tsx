@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { VscClose, VscMenu } from "react-icons/vsc";
-import ActivityBar from "@/components/ActivityBar/ActivityBar";
+import ActivityBar, {
+  type ActivityView,
+} from "@/components/ActivityBar/ActivityBar";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import TabsBar from "@/components/TabsBar/TabsBar";
 import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
@@ -10,10 +12,23 @@ import ViewPanel from "@/components/ViewPanel/ViewPanel";
 import styles from "./AppLayout.module.css";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const [activeView, setActiveView] = useState<string | null>("Explorer");
+  const [activeView, setActiveView] = useState<ActivityView | null>("Explorer");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      return;
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isMobileMenuOpen]);
 
   const toggleMobileMenu = () => {
     const willOpen = !isMobileMenuOpen;
@@ -23,12 +38,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     setIsMobileMenuOpen(willOpen);
   };
 
-  const handleIconClick = (iconName: string) => {
-    if (iconName === activeView) {
-      setActiveView(null);
-    } else {
-      setActiveView(iconName);
-    }
+  const handleIconClick = (view: ActivityView) => {
+    setActiveView(view === activeView ? null : view);
     closeMobileMenu();
   };
 

@@ -1,41 +1,41 @@
 "use client";
 
+import type { IconType } from "react-icons";
 import { VscFiles, VscSettingsGear } from "react-icons/vsc";
 import styles from "./ActivityBar.module.css";
 
+export type ActivityView = "Explorer" | "Manage";
+
 type ActivityBarProps = {
   activeIcon: string;
-  onIconClick: (iconName: string) => void;
+  onIconClick: (view: ActivityView) => void;
 };
 
-const ActivityBar = ({ activeIcon, onIconClick }: ActivityBarProps) => {
-  const handleIconClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const iconName = event.currentTarget.title;
-    onIconClick(iconName);
-  };
+const VIEWS: { id: ActivityView; label: string; Icon: IconType }[] = [
+  { id: "Explorer", label: "Explorador de arquivos", Icon: VscFiles },
+  { id: "Manage", label: "Configurações", Icon: VscSettingsGear },
+];
 
+const ActivityBar = ({ activeIcon, onIconClick }: ActivityBarProps) => {
   return (
     <nav className={styles.activityBar}>
-      <div className={styles.iconGroupTop}>
-        <button
-          type="button"
-          title="Explorer"
-          className={activeIcon === "Explorer" ? styles.active : ""}
-          onClick={handleIconClick}
+      {VIEWS.map(({ id, label, Icon }, index) => (
+        <div
+          key={id}
+          className={index === 0 ? styles.iconGroupTop : styles.iconGroupBottom}
         >
-          <VscFiles size={32} />
-        </button>
-      </div>
-      <div className={styles.iconGroupBottom}>
-        <button
-          type="button"
-          title="Manage"
-          className={activeIcon === "Manage" ? styles.active : ""}
-          onClick={handleIconClick}
-        >
-          <VscSettingsGear size={32} />
-        </button>
-      </div>
+          <button
+            type="button"
+            title={label}
+            aria-label={label}
+            aria-pressed={activeIcon === id}
+            className={activeIcon === id ? styles.active : ""}
+            onClick={() => onIconClick(id)}
+          >
+            <Icon size={32} />
+          </button>
+        </div>
+      ))}
     </nav>
   );
 };

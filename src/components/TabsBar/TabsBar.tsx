@@ -2,9 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaReact } from "react-icons/fa";
-import { VscClose } from "react-icons/vsc";
-import { sidebarTree, type TreeItem, type TreeLeaf } from "@/data/sidebarTree";
+import type { IconType } from "react-icons";
+import { VscClose, VscFile, VscFolderOpened } from "react-icons/vsc";
+import {
+  sidebarTree,
+  type TreeItem,
+  type TreeLeaf,
+  type TreeNode,
+} from "@/data/sidebarTree";
 import styles from "./TabsBar.module.css";
 
 const findLeafByUrl = (nodes: TreeItem[], url: string): TreeLeaf | null => {
@@ -22,6 +27,26 @@ const findLeafByUrl = (nodes: TreeItem[], url: string): TreeLeaf | null => {
   return null;
 };
 
+/** Nó cujos filhos apontam para esta rota — a "pasta" da página. */
+const findOwnerNode = (nodes: TreeItem[], path: string): TreeNode | null => {
+  for (const node of nodes) {
+    if (node.type !== "node") {
+      continue;
+    }
+    const owns = node.children.some(
+      (child) => child.type === "leaf" && child.url.split("#")[0] === path,
+    );
+    if (owns) {
+      return node;
+    }
+    const found = findOwnerNode(node.children, path);
+    if (found) {
+      return found;
+    }
+  }
+  return null;
+};
+
 const TabsBar = () => {
   const pathname = usePathname();
 
@@ -30,10 +55,18 @@ const TabsBar = () => {
   }
 
   const activeLeaf = findLeafByUrl(sidebarTree, pathname);
+  const ownerNode = activeLeaf ? null : findOwnerNode(sidebarTree, pathname);
 
-  const IconComponent = activeLeaf?.icon || FaReact;
+  let IconComponent: IconType = VscFile;
+  let tabTitle = pathname.split("/").pop() ?? "";
 
-  const tabTitle = activeLeaf?.title || pathname.split("/").pop();
+  if (activeLeaf) {
+    IconComponent = activeLeaf.icon;
+    tabTitle = activeLeaf.title;
+  } else if (ownerNode) {
+    IconComponent = VscFolderOpened;
+    tabTitle = ownerNode.title;
+  }
 
   return (
     <div className={styles.tabsBar}>
