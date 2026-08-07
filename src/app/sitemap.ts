@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
+import { sidebarTree, type TreeItem } from "@/data/sidebarTree";
 import { siteConfig } from "@/data/site";
-import { type TreeItem, sidebarTree } from "@/data/sidebarTree";
 
 const collectRoutes = (nodes: TreeItem[], acc: Set<string>): Set<string> => {
   for (const node of nodes) {
