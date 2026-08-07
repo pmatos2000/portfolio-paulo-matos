@@ -1,6 +1,18 @@
-import { redirect } from "next/navigation";
+import Link from "next/link";
 
-export default function NotFound() {
-  redirect("/sobre-mim");
-  return null;
-}
+const NotFound = () => {
+  return (
+    <div className="contentPage">
+      <h2>404 — Arquivo não encontrado</h2>
+      <p>
+        O caminho que você tentou abrir não existe neste workspace. Ele pode ter
+        sido movido, renomeado, ou nunca ter existido.
+      </p>
+      <p>
+        <Link href="/sobre-mim">Abrir sobre-mim.css</Link>
+      </p>
+    </div>
+  );
+};
+
+export default NotFound;
