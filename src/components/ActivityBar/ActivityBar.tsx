@@ -32,7 +32,7 @@ const ActivityBar = ({ activeIcon, onIconClick }: ActivityBarProps) => {
             className={activeIcon === id ? styles.active : ""}
             onClick={() => onIconClick(id)}
           >
-            <Icon size={32} />
+            <Icon size={32} aria-hidden="true" />
           </button>
         </div>
       ))}

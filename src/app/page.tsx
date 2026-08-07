@@ -89,7 +89,7 @@ const Home = () => {
                 target="_blank"
                 rel="me noopener noreferrer"
               >
-                <Icon size={18} />
+                <Icon size={18} aria-hidden="true" />
                 <span>{label}</span>
               </a>
             ))}

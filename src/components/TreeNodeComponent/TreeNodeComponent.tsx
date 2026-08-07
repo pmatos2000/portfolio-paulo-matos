@@ -43,7 +43,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
             onClick={closeMobileMenu}
           >
             <span className={styles.icon}>
-              <VscFolderOpened size={20} />
+              <VscFolderOpened size={20} aria-hidden="true" />
             </span>
             <span>{node.title}</span>
           </Link>
@@ -60,7 +60,11 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
           aria-expanded={isExpanded}
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          {isExpanded ? <VscChevronDown /> : <VscChevronRight />}
+          {isExpanded ? (
+            <VscChevronDown aria-hidden="true" />
+          ) : (
+            <VscChevronRight aria-hidden="true" />
+          )}
           <span>{node.title}</span>
         </button>
         {children}
@@ -80,7 +84,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
         onClick={closeMobileMenu}
       >
         <span className={styles.icon}>
-          <IconComponent size={20} />
+          <IconComponent size={20} aria-hidden="true" />
         </span>
         <span>{node.title}</span>
       </Link>

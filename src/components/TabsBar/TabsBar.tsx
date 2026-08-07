@@ -72,7 +72,7 @@ const TabsBar = () => {
     <div className={styles.tabsBar}>
       <div className={`${styles.tab} ${styles.active}`}>
         <span className={styles.icon}>
-          <IconComponent />
+          <IconComponent aria-hidden="true" />
         </span>
         <span className={styles.title}>{tabTitle}</span>
         <Link
@@ -80,7 +80,7 @@ const TabsBar = () => {
           className={styles.closeButton}
           aria-label="Fechar aba e voltar ao início"
         >
-          <VscClose size={16} />
+          <VscClose size={16} aria-hidden="true" />
         </Link>
       </div>
     </div>

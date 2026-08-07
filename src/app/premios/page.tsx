@@ -20,7 +20,8 @@ const PremiosPage = () => {
 
       <section id="obmep">
         <h2>
-          <MdOutlineStar /> Olimpíada Brasileira de Matemática (OBMEP)
+          <MdOutlineStar aria-hidden="true" /> Olimpíada Brasileira de
+          Matemática (OBMEP)
         </h2>
         <p>
           A OBMEP é um projeto nacional realizado pelo Instituto de Matemática
@@ -41,7 +42,8 @@ const PremiosPage = () => {
 
       <section id="cases-ageis">
         <h2>
-          <MdWorkspacePremium /> Cases Mais Ágeis do Brasil (4º Lugar)
+          <MdWorkspacePremium aria-hidden="true" /> Cases Mais Ágeis do Brasil
+          (4º Lugar)
         </h2>
         <p>
           O prêmio "Cases Mais Ágeis do Brasil", organizado pela Agile Trends,
@@ -61,7 +63,8 @@ const PremiosPage = () => {
 
       <section id="squad-de-verdade">
         <h2>
-          <MdWorkspacePremium /> Reconhecimento "Squad de Verdade"
+          <MdWorkspacePremium aria-hidden="true" /> Reconhecimento "Squad de
+          Verdade"
         </h2>
         <p>
           "Squad de Verdade" é um reconhecimento concedido pela comunidade "Os
@@ -83,7 +86,8 @@ const PremiosPage = () => {
       {/* Seção Pitch Destaque */}
       <section id="pitch-destaque">
         <h2>
-          <MdOutlineStar /> Pitch Destaque em Empreendedorismo e Inovação
+          <MdOutlineStar aria-hidden="true" /> Pitch Destaque em
+          Empreendedorismo e Inovação
         </h2>
         <p>
           Durante a disciplina "Oficina De Projetos, Empreendedorismo E

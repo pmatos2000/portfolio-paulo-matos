@@ -59,6 +59,7 @@ const ImageCarousel = ({ images, interval = 5000 }: ImageCarouselProps) => {
             src={previousImage.src}
             alt={previousImage.alt}
             fill
+            sizes="(max-width: 768px) calc(100vw - 2rem), 800px"
             style={{ objectFit: "contain" }}
             className={`${styles.carouselImage} ${styles.inactive}`}
           />
@@ -82,7 +83,7 @@ const ImageCarousel = ({ images, interval = 5000 }: ImageCarouselProps) => {
             className={`${styles.navButton} ${styles.prev}`}
             aria-label="Imagem anterior"
           >
-            <VscChevronLeft size={24} />
+            <VscChevronLeft size={24} aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -90,7 +91,7 @@ const ImageCarousel = ({ images, interval = 5000 }: ImageCarouselProps) => {
             className={`${styles.navButton} ${styles.next}`}
             aria-label="Próxima imagem"
           >
-            <VscChevronRight size={24} />
+            <VscChevronRight size={24} aria-hidden="true" />
           </button>
         </>
       )}

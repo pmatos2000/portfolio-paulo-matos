@@ -18,8 +18,14 @@ const ThemeToggle = () => {
           aria-label="Tema claro"
         />
         <span className={styles.slider}>
-          <BsFillSunFill className={`${styles.icon} ${styles.sun}`} />
-          <BsFillMoonFill className={`${styles.icon} ${styles.moon}`} />
+          <BsFillSunFill
+            className={`${styles.icon} ${styles.sun}`}
+            aria-hidden="true"
+          />
+          <BsFillMoonFill
+            className={`${styles.icon} ${styles.moon}`}
+            aria-hidden="true"
+          />
         </span>
       </label>
     </div>

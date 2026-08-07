@@ -68,7 +68,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={isMobileMenuOpen}
           >
-            {isMobileMenuOpen ? <VscClose size={24} /> : <VscMenu size={24} />}
+            {isMobileMenuOpen ? (
+              <VscClose size={24} aria-hidden="true" />
+            ) : (
+              <VscMenu size={24} aria-hidden="true" />
+            )}
           </button>
         </header>
 
