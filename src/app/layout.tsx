@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AppLayout from "@/components/AppLayout/AppLayout";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import { siteConfig } from "@/data/site";
+import { OG_IMAGE, siteConfig } from "@/data/site";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,6 +16,21 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
+  openGraph: {
+    type: "website",
+    siteName: siteConfig.name,
+    locale: siteConfig.locale,
+    url: siteConfig.url,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [OG_IMAGE.url],
+  },
 };
 
 export default function RootLayout({

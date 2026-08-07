@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import imgMenu from "@/assets/images/ze-chinelao/ImgMenu.png";
 import imgDivisores from "@/assets/images/ze-chinelao/imgDivisores.png";
 import imgDivisoresCalculo from "@/assets/images/ze-chinelao/imgDivisoresCalculo.png";
@@ -8,13 +7,15 @@ import imgSistemaLinear from "@/assets/images/ze-chinelao/imgSistemaLinear.png";
 import imgSistemaLinearCalculo from "@/assets/images/ze-chinelao/imgSistemaLinearCalculo.png";
 import imgTelaInicial from "@/assets/images/ze-chinelao/imgTelaInicial.png";
 import ImageCarousel from "@/components/ImageCarousel/ImageCarousel";
+import { pageMetadata } from "@/data/site";
 
-export const metadata: Metadata = {
-  title: { absolute: "Zé Chinelão: MMC e sistemas lineares passo a passo" },
+export const metadata = pageMetadata({
+  title: "Zé Chinelão: MMC e sistemas lineares passo a passo",
   description:
     "Aplicativo que resolve divisores, MMC e sistemas lineares exibindo o cálculo passo a passo, pensado para o ensino de matemática.",
-  alternates: { canonical: "/projetos/aplicativos/ze-chinelao" },
-};
+  path: "/projetos/aplicativos/ze-chinelao",
+  absoluteTitle: true,
+});
 
 const zeChinelaoImages = [
   { src: imgTelaInicial, alt: "Tela inicial do aplicativo Zé Chinelão" },

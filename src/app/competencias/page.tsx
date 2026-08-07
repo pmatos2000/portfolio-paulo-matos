@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import { Fragment } from "react";
 import SkillBar from "@/components/SkillBar/SkillBar";
+import { pageMetadata } from "@/data/site";
 import { skillsData } from "@/data/skills";
 import styles from "./competencias.module.css";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Competências técnicas",
   description:
     "Tecnologias, arquiteturas e metodologias com as quais tenho experiência, organizadas por categoria e nível de proficiência.",
-  alternates: { canonical: "/competencias" },
-};
+  path: "/competencias",
+});
 
 const CompetenciasPage = () => {
   return (

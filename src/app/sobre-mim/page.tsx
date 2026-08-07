@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 
 import profileImage from "@/assets/images/profile.jpg";
+import { pageMetadata } from "@/data/site";
 import styles from "./sobre-mim.module.css";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Sobre mim",
   description:
     "Desenvolvedor Full-Stack com mais de 5 anos em sistemas de alta complexidade, especializado em C#, ASP.NET Core e React. Da modificação de jogos em RPG Maker ao ensino de C e C++ na UFMG.",
-  alternates: { canonical: "/sobre-mim" },
-};
+  path: "/sobre-mim",
+});
 
 const SobreMimPage = () => {
   return (

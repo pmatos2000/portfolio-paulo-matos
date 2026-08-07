@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/data/site";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Formação acadêmica",
   description:
     "Engenharia de Sistemas na UFMG (2016–2021), Matemática Computacional na UFMG e formação técnica em Eletrotécnica.",
-  alternates: { canonical: "/formacao" },
-};
+  path: "/formacao",
+});
 
 const FormacaoPage = () => {
   return (

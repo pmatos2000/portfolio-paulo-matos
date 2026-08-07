@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/data/site";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Experiência profissional",
   description:
     "Experiências como desenvolvedor Full-Stack na WeGen Coop, dti digital e Seidor, além de atuação como professor particular de programação.",
-  alternates: { canonical: "/experiencias" },
-};
+  path: "/experiencias",
+});
 
 const ExperienciasPage = () => {
   return (
