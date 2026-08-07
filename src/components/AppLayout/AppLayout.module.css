@@ -38,10 +38,6 @@
 }
 
 @media (max-width: 768px) {
-  .mainLayout > :first-child {
-    display: none;
-  }
-
   .viewPanelContainer {
     position: fixed;
     top: 0;

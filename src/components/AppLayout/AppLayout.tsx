@@ -15,6 +15,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
+  const toggleMobileMenu = () => {
+    const willOpen = !isMobileMenuOpen;
+    if (willOpen && !activeView) {
+      setActiveView("Explorer");
+    }
+    setIsMobileMenuOpen(willOpen);
+  };
+
   const handleIconClick = (iconName: string) => {
     if (iconName === activeView) {
       setActiveView(null);
@@ -45,7 +53,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <button
             type="button"
             className={styles.hamburgerButton}
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={toggleMobileMenu}
             aria-label="Abrir menu"
           >
             {isMobileMenuOpen ? <VscClose size={24} /> : <VscMenu size={24} />}
