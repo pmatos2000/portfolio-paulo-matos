@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { MdOutlineStar, MdWorkspacePremium } from "react-icons/md"; // Ícones para destaque
+
+export const metadata: Metadata = {
+  title: "Prêmios e reconhecimentos",
+  description:
+    "Medalha de bronze e menção honrosa na OBMEP, 4º lugar no Cases Mais Ágeis do Brasil, e outros reconhecimentos acadêmicos e profissionais.",
+  alternates: { canonical: "/premios" },
+};
 
 const PremiosPage = () => {
   return (

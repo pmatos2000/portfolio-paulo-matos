@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Formação acadêmica",
+  description:
+    "Engenharia de Sistemas na UFMG (2016–2021), Matemática Computacional na UFMG e formação técnica em Eletrotécnica.",
+  alternates: { canonical: "/formacao" },
+};
+
 const FormacaoPage = () => {
   return (
     <div className="contentPage">

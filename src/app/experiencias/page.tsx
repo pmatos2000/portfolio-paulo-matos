@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Experiência profissional",
+  description:
+    "Experiências como desenvolvedor Full-Stack na WeGen Coop, dti digital e Seidor, além de atuação como professor particular de programação.",
+  alternates: { canonical: "/experiencias" },
+};
+
 const ExperienciasPage = () => {
   return (
     <div className="contentPage">

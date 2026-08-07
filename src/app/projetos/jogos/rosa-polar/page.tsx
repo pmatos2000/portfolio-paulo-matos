@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: { absolute: "Rosa Polar: simulação da curva de Rhodonea em Godot" },
+  description:
+    "Simulação interativa da curva de Rhodonea (rosa polar) construída na Godot Engine, usando o motor de jogos como laboratório de visualização matemática.",
+  alternates: { canonical: "/projetos/jogos/rosa-polar" },
+};
+
 const RosaPolarPage = () => {
   return (
     <div className="contentPage">

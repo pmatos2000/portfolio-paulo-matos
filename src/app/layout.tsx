@@ -3,12 +3,19 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AppLayout from "@/components/AppLayout/AppLayout";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { siteConfig } from "@/data/site";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Portfólio | Paulo Matos",
-  description: "Desenvolvedor Full-Stack especialista em .NET e React",
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: siteConfig.title,
+    template: siteConfig.titleTemplate,
+  },
+  description: siteConfig.description,
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
 };
 
 export default function RootLayout({
