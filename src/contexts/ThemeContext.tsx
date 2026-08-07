@@ -20,13 +20,12 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>("dark");
 
+  // O tema já foi aplicado pelo script inline do layout raiz, antes da
+  // primeira pintura. Aqui só sincronizamos o estado do React com ele.
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") as Theme | null;
-    if (storedTheme) {
-      setTheme(storedTheme);
-      document.body.setAttribute("data-theme", storedTheme);
-    } else {
-      document.body.setAttribute("data-theme", "dark");
+    const applied = document.documentElement.getAttribute("data-theme");
+    if (applied === "light" || applied === "dark") {
+      setTheme(applied);
     }
   }, []);
 
@@ -34,7 +33,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-    document.body.setAttribute("data-theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
   };
 
   return (

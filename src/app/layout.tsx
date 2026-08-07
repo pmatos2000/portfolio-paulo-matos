@@ -33,6 +33,9 @@ export const metadata: Metadata = {
   },
 };
 
+/** Aplica o tema antes da primeira pintura, evitando flash de tema errado. */
+const themeScript = `(function(){try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="light"||t==="dark"?t:"dark")}catch(e){document.documentElement.setAttribute("data-theme","dark")}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,6 +44,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={inter.className}>
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: script estático, sem entrada de usuário */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <ThemeProvider>
           <AppLayout>{children}</AppLayout>
         </ThemeProvider>
