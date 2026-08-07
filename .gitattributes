@@ -1,0 +1,13 @@
+# LF no repositorio e no working tree.
+# Tem precedencia sobre core.autocrlf, que esta como true no gitconfig do sistema.
+* text=auto eol=lf
+
+# Binarios: nunca converter
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.gif   binary
+*.ico   binary
+*.ttf   binary
+*.woff  binary
+*.woff2 binary
