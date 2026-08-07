@@ -12,8 +12,8 @@ const ExperienciasPage = () => {
     <div className="contentPage">
       <h1>Experiência profissional</h1>
       <p>
-        Navegue pelas minhas principais experiências profissionais, projetos e
-        competências técnicas.
+        Minha trajetória como desenvolvedor, do desenvolvimento de sistemas de
+        gestão de alta complexidade ao ensino de programação.
       </p>
 
       <section id="wegen-coop">
