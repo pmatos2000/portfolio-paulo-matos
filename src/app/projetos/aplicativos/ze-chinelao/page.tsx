@@ -126,7 +126,7 @@ const ZeChinelaoPage = () => {
       <ul>
         <li>
           <a
-            href="https-github.com-pmatos2000-ze_chinelao-"
+            href="https://github.com/pmatos2000/ze_chinelao"
             target="_blank"
             rel="noopener noreferrer"
           >

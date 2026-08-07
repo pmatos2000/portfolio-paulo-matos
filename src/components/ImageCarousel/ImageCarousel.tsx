@@ -68,6 +68,7 @@ const ImageCarousel = ({ images, interval = 5000 }: ImageCarouselProps) => {
           src={images[currentIndex].src}
           alt={images[currentIndex].alt}
           fill
+          sizes="(max-width: 768px) calc(100vw - 2rem), 800px"
           style={{ objectFit: "contain" }}
           className={`${styles.carouselImage} ${styles.active}`}
         />

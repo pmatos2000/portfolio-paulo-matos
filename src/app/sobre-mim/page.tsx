@@ -16,7 +16,13 @@ const SobreMimPage = () => {
     <div className="contentPage">
       <div className={styles.aboutContainer}>
         <div className={styles.photoContainer}>
-          <Image src={profileImage} alt="Foto de Paulo Matos" priority />
+          <Image
+            src={profileImage}
+            alt="Foto de Paulo Matos"
+            width={180}
+            height={180}
+            priority
+          />
         </div>
 
         <div className={styles.textContainer}>
