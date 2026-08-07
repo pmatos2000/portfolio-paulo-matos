@@ -15,6 +15,7 @@ const ThemeToggle = () => {
           type="checkbox"
           onChange={toggleTheme}
           checked={theme === "light"}
+          aria-label="Tema claro"
         />
         <span className={styles.slider}>
           <BsFillSunFill className={`${styles.icon} ${styles.sun}`} />

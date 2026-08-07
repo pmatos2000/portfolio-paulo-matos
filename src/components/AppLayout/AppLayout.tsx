@@ -54,7 +54,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             type="button"
             className={styles.hamburgerButton}
             onClick={toggleMobileMenu}
-            aria-label="Abrir menu"
+            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <VscClose size={24} /> : <VscMenu size={24} />}
           </button>

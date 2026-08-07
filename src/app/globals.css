@@ -19,7 +19,8 @@
   --background-secondary: #f3f3f3;
   --background-hover: #e3e3e3;
   --border-color: #dddddd;
-  --primary-color: #10b981;
+  /* emerald-700: 5,48:1 sobre branco. O #10b981 do tema escuro da 2,54:1 aqui. */
+  --primary-color: #047857;
   --text-color: #1e1e1e;
   --text-color-secondary: #5e5e5e;
 }
@@ -35,6 +36,12 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .section {
