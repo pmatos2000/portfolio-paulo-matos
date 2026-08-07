@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaReact } from "react-icons/fa";
+import { VscClose } from "react-icons/vsc";
 import { sidebarTree, type TreeItem, type TreeLeaf } from "@/data/sidebarTree";
 import styles from "./TabsBar.module.css";
 
@@ -40,6 +42,13 @@ const TabsBar = () => {
           <IconComponent />
         </span>
         <span className={styles.title}>{tabTitle}</span>
+        <Link
+          href="/"
+          className={styles.closeButton}
+          aria-label="Fechar aba e voltar ao início"
+        >
+          <VscClose size={16} />
+        </Link>
       </div>
     </div>
   );
