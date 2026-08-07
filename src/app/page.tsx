@@ -72,6 +72,7 @@ const Home = () => {
           alt="Paulo Matos"
           width={80}
           height={80}
+          quality={60}
           className={styles.avatar}
           priority
         />
