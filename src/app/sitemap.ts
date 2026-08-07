@@ -4,13 +4,14 @@ import { type TreeItem, sidebarTree } from "@/data/sidebarTree";
 
 const collectRoutes = (nodes: TreeItem[], acc: Set<string>): Set<string> => {
   for (const node of nodes) {
+    if (node.url) {
+      const path = node.url.split("#")[0];
+      if (path.startsWith("/")) {
+        acc.add(path);
+      }
+    }
     if (node.type === "node") {
       collectRoutes(node.children, acc);
-      continue;
-    }
-    const path = node.url.split("#")[0];
-    if (path.startsWith("/")) {
-      acc.add(path);
     }
   }
   return acc;

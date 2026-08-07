@@ -44,7 +44,9 @@ export default function Image() {
         <div style={{ fontSize: 20, letterSpacing: 3, color: COLORS.muted }}>
           EXPLORER
         </div>
-        <div style={{ display: "flex", flexDirection: "column", marginTop: 32 }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", marginTop: 32 }}
+        >
           {FILES.map((file) => (
             <div
               key={file}
@@ -65,7 +67,9 @@ export default function Image() {
           padding: "0 72px",
         }}
       >
-        <div style={{ fontSize: 76, color: COLORS.text }}>{siteConfig.name}</div>
+        <div style={{ fontSize: 76, color: COLORS.text }}>
+          {siteConfig.name}
+        </div>
         <div style={{ fontSize: 38, color: COLORS.accent, marginTop: 20 }}>
           Desenvolvedor Full-Stack
         </div>

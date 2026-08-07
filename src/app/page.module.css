@@ -1,0 +1,130 @@
+.welcome {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.avatar {
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.social {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-color-secondary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+}
+
+.socialLink:hover {
+  color: var(--primary-color);
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 300;
+  margin: 0;
+  color: var(--text-color);
+}
+
+.subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--text-color-secondary);
+  margin: 0.5rem 0 0;
+}
+
+.highlight {
+  margin: 2.5rem 0;
+  padding: 1.5rem;
+  border-left: 3px solid var(--primary-color);
+  background-color: var(--background-primary);
+}
+
+.highlightTitle {
+  font-size: var(--font-size-xl);
+  color: var(--primary-color);
+  margin: 0 0 0.75rem;
+}
+
+.highlight p {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--text-color-secondary);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 2.5rem;
+}
+
+.columnTitle {
+  font-size: var(--font-size-md);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-color-secondary);
+  margin: 0 0 1rem;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem 0.75rem;
+  margin-left: -0.75rem;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.link:hover {
+  background-color: var(--background-hover);
+}
+
+.file {
+  color: var(--primary-color);
+  font-size: var(--font-size-md);
+}
+
+.hint {
+  color: var(--text-color-secondary);
+  font-size: var(--font-size-sm);
+  margin-top: 0.15rem;
+}
+
+@media (max-width: 768px) {
+  .columns {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .header {
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+}

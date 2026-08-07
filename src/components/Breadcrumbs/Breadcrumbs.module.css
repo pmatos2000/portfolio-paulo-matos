@@ -9,6 +9,16 @@
   font-size: var(--font-size-sm);
 }
 
+.root {
+  color: var(--text-color-secondary);
+  text-decoration: none;
+}
+
+.root:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
 .segment {
   display: flex;
   align-items: center;

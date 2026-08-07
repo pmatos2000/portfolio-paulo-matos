@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Breadcrumbs.module.css";
 
@@ -15,7 +16,9 @@ const Breadcrumbs = () => {
 
   return (
     <nav className={styles.breadcrumbs}>
-      <span>src</span>
+      <Link href="/" className={styles.root} aria-label="Voltar para o início">
+        src
+      </Link>
       <span className={styles.separator}>&gt;</span>
       {segments.map((segment, index) => (
         <div key={segment.key} className={styles.segment}>

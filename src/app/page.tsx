@@ -1,6 +1,116 @@
-import { redirect } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import profileImage from "@/assets/images/profile.jpg";
+import { pageMetadata, siteConfig, socialLinks } from "@/data/site";
+import styles from "./page.module.css";
 
-export default function Home() {
-  redirect("/sobre-mim");
-  return null;
-}
+export const metadata = pageMetadata({
+  title: siteConfig.title,
+  description:
+    "Desenvolvedor Full-Stack especializado em C#, ASP.NET Core e React, formado em Engenharia de Sistemas pela UFMG. Atualmente construindo Leaf, uma linguagem de script embarcável em Rust.",
+  path: "/",
+  absoluteTitle: true,
+});
+
+const SOCIAL = [
+  { href: socialLinks.linkedin, label: "LinkedIn", Icon: FaLinkedin },
+  { href: socialLinks.github, label: "GitHub", Icon: FaGithub },
+];
+
+const START_LINKS = [
+  { href: "/sobre-mim", file: "sobre-mim.css", hint: "Quem eu sou" },
+  { href: "/experiencias", file: "experiencias.tsx", hint: "Onde trabalhei" },
+  { href: "/competencias", file: "competências.css", hint: "O que eu uso" },
+  { href: "/formacao", file: "formacao.ts", hint: "Onde estudei" },
+];
+
+const PROJECTS = [
+  {
+    href: "/projetos/jogos/rosa-polar",
+    file: "rosa-polar.app",
+    hint: "Curva de Rhodonea na Godot Engine",
+  },
+  {
+    href: "/projetos/aplicativos/ze-chinelao",
+    file: "ze-chinelao.app",
+    hint: "MMC e sistemas lineares passo a passo",
+  },
+];
+
+const Home = () => {
+  return (
+    <div className={styles.welcome}>
+      <header className={styles.header}>
+        <Image
+          src={profileImage}
+          alt="Paulo Matos"
+          width={80}
+          height={80}
+          className={styles.avatar}
+          priority
+        />
+        <div>
+          <h1 className={styles.title}>Paulo Matos</h1>
+          <p className={styles.subtitle}>
+            Desenvolvedor Full-Stack &amp; Líder Técnico
+          </p>
+          <div className={styles.social}>
+            {SOCIAL.map(({ href, label, Icon }) => (
+              <a
+                key={href}
+                href={href}
+                className={styles.socialLink}
+                target="_blank"
+                rel="me noopener noreferrer"
+              >
+                <Icon size={18} />
+                <span>{label}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </header>
+
+      <section className={styles.highlight}>
+        <h2 className={styles.highlightTitle}>Leaf</h2>
+        <p>
+          Uma linguagem de script embarcável, escrita em Rust. Estou construindo
+          do zero e documentando o processo.
+        </p>
+      </section>
+
+      <div className={styles.columns}>
+        <section>
+          <h2 className={styles.columnTitle}>Começar</h2>
+          <ul className={styles.list}>
+            {START_LINKS.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className={styles.link}>
+                  <span className={styles.file}>{item.file}</span>
+                  <span className={styles.hint}>{item.hint}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2 className={styles.columnTitle}>Projetos</h2>
+          <ul className={styles.list}>
+            {PROJECTS.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className={styles.link}>
+                  <span className={styles.file}>{item.file}</span>
+                  <span className={styles.hint}>{item.hint}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default Home;

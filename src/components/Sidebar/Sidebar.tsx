@@ -3,20 +3,20 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { SidebarContext } from "@/contexts/SidebarContext";
-import { sidebarTree, type TreeItem, type TreeLeaf } from "@/data/sidebarTree";
+import { sidebarTree, type TreeItem } from "@/data/sidebarTree";
 import TreeNodeComponent from "../TreeNodeComponent/TreeNodeComponent";
 import styles from "./Sidebar.module.css";
 
-const findLeaf = (
+const findItem = (
   nodes: TreeItem[],
-  predicate: (leaf: TreeLeaf) => boolean,
-): TreeLeaf | null => {
+  predicate: (item: TreeItem) => boolean,
+): TreeItem | null => {
   for (const node of nodes) {
-    if (node.type === "leaf" && predicate(node)) {
+    if (predicate(node)) {
       return node;
     }
     if (node.type === "node") {
-      const found = findLeaf(node.children, predicate);
+      const found = findItem(node.children, predicate);
       if (found) return found;
     }
   }
@@ -38,9 +38,9 @@ const Sidebar = ({ onCloseMenu }: SidebarProps) => {
 
   const activeUrl = useMemo(() => {
     const fullPath = pathname + hash;
-    let activeNode = findLeaf(sidebarTree, (leaf) => leaf.url === fullPath);
+    let activeNode = findItem(sidebarTree, (item) => item.url === fullPath);
     if (!activeNode) {
-      activeNode = findLeaf(sidebarTree, (leaf) => leaf.url === pathname);
+      activeNode = findItem(sidebarTree, (item) => item.url === pathname);
     }
     return activeNode?.url || null;
   }, [pathname, hash]);

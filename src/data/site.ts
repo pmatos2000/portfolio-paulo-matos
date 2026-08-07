@@ -10,6 +10,11 @@ export const siteConfig = {
   locale: "pt_BR",
 } as const;
 
+export const socialLinks = {
+  linkedin: "https://www.linkedin.com/in/dev-paulo/",
+  github: "https://github.com/pmatos2000",
+} as const;
+
 /** Rota gerada por src/app/opengraph-image.tsx — mover o arquivo exige mudar isto. */
 export const OG_IMAGE = {
   url: "/opengraph-image",

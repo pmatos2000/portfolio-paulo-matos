@@ -41,8 +41,16 @@
   background-color: var(--background-hover);
 }
 
+.leaf span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .icon {
   color: var(--primary-color);
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
