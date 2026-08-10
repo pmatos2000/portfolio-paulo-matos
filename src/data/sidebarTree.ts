@@ -36,30 +36,24 @@ export const sidebarTree: TreeItem[] = [
     defaultExpanded: true,
     children: [
       {
-        id: "4608d69b-95fe-4e41-a78f-481dbbc29035",
-        type: "node",
-        title: "Inicio",
-        children: [
-          {
-            id: "3e24ab59-1bff-479e-bce2-e3ebc2e83974",
-            type: "leaf",
-            title: "sobre-mim.css",
-            icon: BsHash,
-            url: "/sobre-mim",
-          },
-          {
-            id: "6cf9a0f7-424b-4134-8e5e-845cf0977337",
-            type: "leaf",
-            title: "competências.css",
-            icon: BsHash,
-            url: "/competencias",
-          },
-        ],
+        id: "3e24ab59-1bff-479e-bce2-e3ebc2e83974",
+        type: "leaf",
+        title: "sobre-mim.css",
+        icon: BsHash,
+        url: "/sobre-mim",
+      },
+      {
+        id: "6cf9a0f7-424b-4134-8e5e-845cf0977337",
+        type: "leaf",
+        title: "competências.css",
+        icon: BsHash,
+        url: "/competencias",
       },
       {
         id: "5a276ab2-df22-492c-b83c-51db33c77649",
         type: "node",
         title: "Experiencia",
+        url: "/experiencias",
         children: [
           {
             id: "a42a61c0-56c5-4729-8f5e-7a4ecf929e7b",
@@ -102,6 +96,7 @@ export const sidebarTree: TreeItem[] = [
         id: "6a77236f-bf97-4fb9-b9e6-c0c1eb96db86",
         type: "node",
         title: "Formacao",
+        url: "/formacao",
         children: [
           {
             id: "acc80ca0-4c11-4f02-bfb4-e518dc6dc3da",
@@ -130,11 +125,13 @@ export const sidebarTree: TreeItem[] = [
         id: "362f04e5-325c-42ac-adb7-21b98afa0ff8",
         type: "node",
         title: "Projetos",
+        url: "/projetos",
         children: [
           {
             id: "1e47d46b-1501-4fa5-8448-a6ae26a19ca2",
             type: "node",
             title: "Jogos",
+            url: "/projetos/jogos",
             children: [
               {
                 id: "4a18e88c-1030-4144-8573-aebe63051f2c",
@@ -149,6 +146,7 @@ export const sidebarTree: TreeItem[] = [
             id: "533d77a9-6582-46e5-b82a-465736bb637e",
             type: "node",
             title: "Aplicativos",
+            url: "/projetos/aplicativos",
             children: [
               {
                 id: "9d9380f7-6fe2-410d-8b01-adcbf362c73f",
@@ -165,6 +163,7 @@ export const sidebarTree: TreeItem[] = [
         id: "1a2ff0bd-f99d-4d5a-8854-6adc118c2e52",
         type: "node",
         title: "Prêmios",
+        url: "/premios",
         children: [
           {
             id: "311401dd-838e-4176-871e-e8a79ce61073",

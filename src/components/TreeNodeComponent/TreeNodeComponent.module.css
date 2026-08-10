@@ -16,6 +16,57 @@
   background-color: var(--background-hover);
 }
 
+.nodeRow {
+  display: flex;
+  align-items: center;
+}
+
+.chevronButton {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.25rem;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.chevronButton:hover {
+  background-color: var(--background-hover);
+}
+
+.nodeLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.nodeLink:hover,
+.nodeLink.active {
+  background-color: var(--background-hover);
+}
+
+.nodeLink span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (hover: none) {
+  .chevronButton {
+    padding: 0.5rem 0.35rem;
+  }
+}
+
 .nestedList {
   list-style: none;
   padding: 0;

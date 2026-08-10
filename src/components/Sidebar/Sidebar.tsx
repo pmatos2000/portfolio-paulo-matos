@@ -43,7 +43,6 @@ const Sidebar = ({ onCloseMenu }: SidebarProps) => {
     };
   }, [pathname]);
 
-  
   const handleNavigate = (url: string) => {
     const fragment = url.split("#")[1];
     setHash(fragment ? `#${fragment}` : "");
