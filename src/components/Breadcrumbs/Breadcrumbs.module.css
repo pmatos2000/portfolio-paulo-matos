@@ -9,22 +9,22 @@
   font-size: var(--font-size-sm);
 }
 
-.root {
+.crumb {
   color: var(--text-color-secondary);
   text-decoration: none;
 }
 
-.root:hover {
+.crumb:hover {
   color: var(--primary-color);
   text-decoration: underline;
+}
+
+.crumb[aria-current="page"] {
+  color: var(--text-color);
 }
 
 .segment {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.segment:last-child span {
-  color: var(--text-color);
 }
