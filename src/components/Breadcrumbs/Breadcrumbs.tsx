@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import JsonLd from "@/components/JsonLd/JsonLd";
+import { siteConfig } from "@/data/site";
 import styles from "./Breadcrumbs.module.css";
 
 const Breadcrumbs = () => {
@@ -17,8 +19,20 @@ const Breadcrumbs = () => {
     href: `/${parts.slice(0, index + 1).join("/")}`,
   }));
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: segments.map((segment, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: segment.text,
+      item: new URL(segment.href, siteConfig.url).toString(),
+    })),
+  };
+
   return (
     <nav className={styles.breadcrumbs} aria-label="Trilha de navegação">
+      <JsonLd data={breadcrumbSchema} />
       <Link href="/" className={styles.crumb} aria-label="Voltar para o início">
         src
       </Link>

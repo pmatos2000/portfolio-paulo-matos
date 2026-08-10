@@ -23,6 +23,11 @@ const personSchema = {
   image: new URL(profileImage.src, siteConfig.url).toString(),
   jobTitle: "Desenvolvedor Full-Stack",
   description: siteConfig.description,
+  worksFor: {
+    "@type": "Organization",
+    name: "Lyncas",
+    url: "https://lyncas.net/",
+  },
   sameAs: [socialLinks.linkedin, socialLinks.github],
   knowsAbout: ["C#", "ASP.NET Core", "React", "TypeScript", "Rust"],
   alumniOf: [

@@ -16,6 +16,42 @@ const ExperienciasPage = () => {
         gestão de alta complexidade ao ensino de programação.
       </p>
 
+      <section id="lyncas">
+        <h2>Lyncas</h2>
+        <p>
+          Desde janeiro de 2026 integro a equipe de sustentação da{" "}
+          <a
+            href="https://lyncas.net/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Lyncas
+          </a>
+          , em modelo remoto, atendendo ao cliente{" "}
+          <a
+            href="https://axia.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Axia
+          </a>
+          .
+        </p>
+        <p>
+          Sustentação é o trabalho de manter em pé software que já está em
+          produção — e que, quase sempre, foi escrito por outras pessoas. Exige
+          ler código desconhecido com rapidez, diagnosticar sob pressão de
+          incidente e alterar o mínimo necessário para resolver sem derrubar o
+          resto. É onde se aprende, na prática, o custo real de decisões de
+          arquitetura tomadas anos antes.
+        </p>
+        <ul>
+          <li>
+            <strong>Stack:</strong> .NET, Angular e SQL Server.
+          </li>
+        </ul>
+      </section>
+
       <section id="wegen-coop">
         <h2>WeGen Coop</h2>
         <p>

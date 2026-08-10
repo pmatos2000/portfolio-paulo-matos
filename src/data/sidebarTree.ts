@@ -56,6 +56,13 @@ export const sidebarTree: TreeItem[] = [
         url: "/experiencias",
         children: [
           {
+            id: "c8b41d92-7a35-4e60-9f18-3ad5e2c71b04",
+            type: "leaf",
+            title: "lyncas.tsx",
+            icon: FaReact,
+            url: "/experiencias#lyncas",
+          },
+          {
             id: "a42a61c0-56c5-4729-8f5e-7a4ecf929e7b",
             type: "leaf",
             title: "wegen-coop.tsx",
