@@ -135,6 +135,13 @@ export const sidebarTree: TreeItem[] = [
         url: "/projetos",
         children: [
           {
+            id: "b2f7c015-9d84-4a3e-8c56-1e0f7a94d3b8",
+            type: "leaf",
+            title: "portfolio.tsx",
+            icon: FaReact,
+            url: "/projetos/portfolio",
+          },
+          {
             id: "1e47d46b-1501-4fa5-8448-a6ae26a19ca2",
             type: "node",
             title: "Jogos",

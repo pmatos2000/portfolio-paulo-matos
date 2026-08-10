@@ -36,6 +36,11 @@ const ProjetosPage = () => {
       <h2>O que há aqui</h2>
       <ul>
         <li>
+          <Link href="/projetos/portfolio">portfolio.tsx</Link> — este site.
+          Como a metáfora do editor de código foi construída, o que ela custa em
+          SEO e as decisões de acessibilidade e performance por trás dela.
+        </li>
+        <li>
           <Link href="/projetos/jogos">Jogos e simulações</Link> — usando game
           engines como laboratório de visualização matemática. Hoje: Rosa Polar,
           na Godot Engine.
