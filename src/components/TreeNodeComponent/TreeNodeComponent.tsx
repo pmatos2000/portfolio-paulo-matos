@@ -22,7 +22,12 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
   const context = useContext(SidebarContext);
   if (!context) return null;
 
-  const { activeUrl, closeMobileMenu } = context;
+  const { activeUrl, closeMobileMenu, onNavigate } = context;
+
+  const handleClick = (url: string) => {
+    onNavigate(url);
+    closeMobileMenu();
+  };
 
   if (node.type === "node") {
     const children = isExpanded ? (
@@ -40,7 +45,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
             href={node.url}
             title={node.title}
             className={`${styles.leaf} ${activeUrl === node.url ? styles.active : ""}`}
-            onClick={closeMobileMenu}
+            onClick={() => handleClick(node.url)}
           >
             <span className={styles.icon}>
               <VscFolderOpened size={20} aria-hidden="true" />
@@ -81,7 +86,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
         href={node.url}
         title={node.title}
         className={`${styles.leaf} ${isActive ? styles.active : ""}`}
-        onClick={closeMobileMenu}
+        onClick={() => handleClick(node.url)}
       >
         <span className={styles.icon}>
           <IconComponent size={20} aria-hidden="true" />

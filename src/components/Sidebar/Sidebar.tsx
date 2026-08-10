@@ -33,8 +33,21 @@ const Sidebar = ({ onCloseMenu }: SidebarProps) => {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Nós realmente queremos que este efeito rode novamente sempre que o pathname mudar.
   useEffect(() => {
-    setHash(window.location.hash);
+    const sync = () => setHash(window.location.hash);
+    sync();
+    window.addEventListener("hashchange", sync);
+    window.addEventListener("popstate", sync);
+    return () => {
+      window.removeEventListener("hashchange", sync);
+      window.removeEventListener("popstate", sync);
+    };
   }, [pathname]);
+
+  
+  const handleNavigate = (url: string) => {
+    const fragment = url.split("#")[1];
+    setHash(fragment ? `#${fragment}` : "");
+  };
 
   const activeUrl = useMemo(() => {
     const fullPath = pathname + hash;
@@ -47,7 +60,11 @@ const Sidebar = ({ onCloseMenu }: SidebarProps) => {
 
   return (
     <SidebarContext.Provider
-      value={{ activeUrl, closeMobileMenu: onCloseMenu }}
+      value={{
+        activeUrl,
+        closeMobileMenu: onCloseMenu,
+        onNavigate: handleNavigate,
+      }}
     >
       <aside className={styles.sidebar} aria-label="Explorador de arquivos">
         <p className={styles.title}>EXPLORER</p>
