@@ -41,6 +41,15 @@ const ProjetosPage = () => {
           SEO e as decisões de acessibilidade e performance por trás dela.
         </li>
         <li>
+          <Link href="/projetos/leaf">leaf.rs</Link> — uma linguagem de script
+          estaticamente tipada, sem coletor de lixo, embarcável em Rust. Por que
+          escrever uma em vez de usar uma pronta.
+        </li>
+        <li>
+          <Link href="/projetos/rustle">rustle.rs</Link> — a engine de jogos 2D
+          em Rust que motivou a linguagem, onde a cena é um documento JSON.
+        </li>
+        <li>
           <Link href="/projetos/jogos">Jogos e simulações</Link> — usando game
           engines como laboratório de visualização matemática. Hoje: Rosa Polar,
           na Godot Engine.

@@ -4,7 +4,7 @@ import { FaReact } from "react-icons/fa";
 import { GiSlippers } from "react-icons/gi";
 import { MdOutlineStar } from "react-icons/md";
 import { PiCompassRoseDuotone } from "react-icons/pi";
-import { SiTypescript } from "react-icons/si";
+import { SiRust, SiTypescript } from "react-icons/si";
 
 export type TreeLeaf = {
   id: string;
@@ -140,6 +140,20 @@ export const sidebarTree: TreeItem[] = [
             title: "portfolio.tsx",
             icon: FaReact,
             url: "/projetos/portfolio",
+          },
+          {
+            id: "7c3d5b81-2e64-4f19-9a07-b5d8e1f34a26",
+            type: "leaf",
+            title: "leaf.rs",
+            icon: SiRust,
+            url: "/projetos/leaf",
+          },
+          {
+            id: "e91a4f0d-8b73-4c25-a6de-30f7c982b514",
+            type: "leaf",
+            title: "rustle.rs",
+            icon: SiRust,
+            url: "/projetos/rustle",
           },
           {
             id: "1e47d46b-1501-4fa5-8448-a6ae26a19ca2",

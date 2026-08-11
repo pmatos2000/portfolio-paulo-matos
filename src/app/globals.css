@@ -99,6 +99,34 @@ body {
   text-decoration: underline;
 }
 
+.contentPage code {
+  font-family: Consolas, "SF Mono", Menlo, "Courier New", monospace;
+  font-size: 0.9em;
+  background-color: var(--background-secondary);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+/* Sem realce de sintaxe ainda; o bloco é neutro de propósito. */
+.contentPage pre {
+  background-color: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--primary-color);
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  overflow-x: auto;
+  line-height: 1.6;
+  tab-size: 4;
+}
+
+.contentPage pre code {
+  background: none;
+  padding: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+}
+
 .videoContainer {
   width: 100%;
   max-width: 800px;

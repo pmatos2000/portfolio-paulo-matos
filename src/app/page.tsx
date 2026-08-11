@@ -134,25 +134,20 @@ const Home = () => {
       </div>
 
       <section className={styles.highlight}>
-        <h2 className={styles.highlightTitle}>Leaf</h2>
+        <h2 className={styles.highlightTitle}>
+          <Link href="/projetos/leaf">Leaf</Link>
+        </h2>
         <p>
           Criar um componente novo no{" "}
-          <a
-            href="https://github.com/pmatos2000/rustle"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Rustle
-          </a>{" "}
-          — um motor gráfico que estou escrevendo em Rust — hoje exige
-          recompilar o projeto inteiro. Leaf é a linguagem de script que elimina
-          esse ciclo.
+          <Link href="/projetos/rustle">Rustle</Link> — a engine de jogos 2D que
+          estou escrevendo em Rust — hoje exige recompilar o projeto inteiro.
+          Leaf é a linguagem de script que elimina esse ciclo.
         </p>
         <p>
-          Tipagem estática, compilada para uma VM própria, integração nativa com
-          Rust, sem coletor de lixo e sem panic. Avaliei Lua, Rhai e Rune antes
-          de decidir escrever a minha — nenhuma atendia a tudo isso ao mesmo
-          tempo.
+          Tipagem estática, compilada para uma VM de registradores, integração
+          nativa com Rust, sem coletor de lixo e sem panic. Construí a camada de
+          script da prova de conceito em Rune antes de decidir escrever a minha
+          — foi usando que os limites apareceram.
         </p>
       </section>
     </div>
