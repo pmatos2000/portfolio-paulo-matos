@@ -54,8 +54,8 @@ const PortfolioPage = () => {
       </p>
 
       <p>
-        <strong>O tema piscava a cada carregamento.</strong> A preferência ficava
-        no <code>localStorage</code> e era aplicada dentro de um{" "}
+        <strong>O tema piscava a cada carregamento.</strong> A preferência
+        ficava no <code>localStorage</code> e era aplicada dentro de um{" "}
         <code>useEffect</code> — que, por definição, roda depois da primeira
         pintura. Quem escolhia tema claro via um flash escuro em toda navegação.
         Não existe solução dentro do ciclo de vida do React: a correção é um
@@ -94,8 +94,8 @@ const PortfolioPage = () => {
         <li>
           <strong>Server Components por padrão:</strong> só há{" "}
           <code>&quot;use client&quot;</code> onde existe estado ou evento — a
-          árvore, as abas, o carrossel e o alternador de tema. O conteúdo é
-          todo renderizado no servidor.
+          árvore, as abas, o carrossel e o alternador de tema. O conteúdo é todo
+          renderizado no servidor.
         </li>
         <li>
           <strong>Fonte única de navegação:</strong> a árvore do explorador, o
