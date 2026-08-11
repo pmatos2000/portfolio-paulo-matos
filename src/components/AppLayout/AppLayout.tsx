@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { VscClose, VscMenu } from "react-icons/vsc";
 import ActivityBar, {
@@ -9,13 +10,23 @@ import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import TabsBar from "@/components/TabsBar/TabsBar";
 import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import ViewPanel from "@/components/ViewPanel/ViewPanel";
+import { postSlugFromPath } from "@/data/sidebarTree";
 import styles from "./AppLayout.module.css";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const postSlug = postSlugFromPath(pathname);
+  const [lastPostSlug, setLastPostSlug] = useState<string | null>(postSlug);
   const [activeView, setActiveView] = useState<ActivityView | null>("Explorer");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  useEffect(() => {
+    if (postSlug) {
+      setLastPostSlug(postSlug);
+    }
+  }, [postSlug]);
 
   useEffect(() => {
     if (!isMobileMenuOpen) {
@@ -53,7 +64,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div
         className={`${styles.viewPanelContainer} ${isMobileMenuOpen ? styles.mobileMenuOpen : ""}`}
       >
-        <ViewPanel activeView={activeView} onCloseMenu={closeMobileMenu} />
+        <ViewPanel
+          activeView={activeView}
+          onCloseMenu={closeMobileMenu}
+          lastPostSlug={lastPostSlug}
+        />
         <div className={styles.mobileSettings}>
           <ThemeToggle />
         </div>

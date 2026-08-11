@@ -25,9 +25,10 @@ const findItem = (
 
 type SidebarProps = {
   onCloseMenu: () => void;
+  lastPostSlug: string | null;
 };
 
-const Sidebar = ({ onCloseMenu }: SidebarProps) => {
+const Sidebar = ({ onCloseMenu, lastPostSlug }: SidebarProps) => {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
 
@@ -48,21 +49,35 @@ const Sidebar = ({ onCloseMenu }: SidebarProps) => {
     setHash(fragment ? `#${fragment}` : "");
   };
 
-  const tree = useMemo(() => buildTree(pathname), [pathname]);
+  const tree = useMemo(
+    () => buildTree(pathname, lastPostSlug),
+    [pathname, lastPostSlug],
+  );
 
-  const activeUrl = useMemo(() => {
-    const fullPath = pathname + hash;
-    let activeNode = findItem(tree, (item) => item.url === fullPath);
-    if (!activeNode) {
-      activeNode = findItem(tree, (item) => item.url === pathname);
+  const activeId = useMemo(() => {
+    const paths = hash ? [pathname + hash, pathname] : [pathname];
+    for (const path of paths) {
+      const leaf = findItem(
+        tree,
+        (item) => item.type === "leaf" && item.url === path,
+      );
+      if (leaf) {
+        return leaf.id;
+      }
     }
-    return activeNode?.url || null;
+    for (const path of paths) {
+      const node = findItem(tree, (item) => item.url === path);
+      if (node) {
+        return node.id;
+      }
+    }
+    return null;
   }, [tree, pathname, hash]);
 
   return (
     <SidebarContext.Provider
       value={{
-        activeUrl,
+        activeId,
         closeMobileMenu: onCloseMenu,
         onNavigate: handleNavigate,
       }}

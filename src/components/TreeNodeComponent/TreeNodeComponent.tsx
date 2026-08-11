@@ -22,7 +22,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
   const context = useContext(SidebarContext);
   if (!context) return null;
 
-  const { activeUrl, closeMobileMenu, onNavigate } = context;
+  const { activeId, closeMobileMenu, onNavigate } = context;
 
   const handleClick = (url: string) => {
     onNavigate(url);
@@ -78,7 +78,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
             <Link
               href={nodeUrl}
               title={node.title}
-              className={`${styles.nodeLink} ${activeUrl === nodeUrl ? styles.active : ""}`}
+              className={`${styles.nodeLink} ${activeId === node.id ? styles.active : ""}`}
               onClick={() => handleClick(nodeUrl)}
             >
               <span className={styles.icon}>
@@ -109,7 +109,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
   }
 
   const IconComponent = node.icon;
-  const isActive = activeUrl === node.url;
+  const isActive = activeId === node.id;
 
   return (
     <li>

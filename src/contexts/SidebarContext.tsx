@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 type SidebarContextType = {
-  activeUrl: string | null;
+  activeId: string | null;
   closeMobileMenu: () => void;
   onNavigate: (url: string) => void;
 };

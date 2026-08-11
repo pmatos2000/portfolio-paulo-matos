@@ -4,7 +4,7 @@ import { FaReact } from "react-icons/fa";
 import { GiSlippers } from "react-icons/gi";
 import { MdOutlineStar } from "react-icons/md";
 import { PiCompassRoseDuotone } from "react-icons/pi";
-import { SiRust, SiTypescript } from "react-icons/si";
+import { SiHtml5, SiRust, SiTypescript } from "react-icons/si";
 import { VscMarkdown } from "react-icons/vsc";
 
 const BLOG_NODE_ID = "b8e1f4c3-7d29-4a56-9e08-1c3f5b7a2d64";
@@ -58,7 +58,15 @@ export const sidebarTree: TreeItem[] = [
         type: "node",
         title: "Blog",
         url: "/blog",
-        children: [],
+        children: [
+          {
+            id: "e5c1a7d4-3b62-4f18-9a05-7d2e8c4b1f39",
+            type: "leaf",
+            title: "index.html",
+            icon: SiHtml5,
+            url: "/blog",
+          },
+        ],
       },
       {
         id: "5a276ab2-df22-492c-b83c-51db33c77649",
@@ -251,8 +259,14 @@ const injectPost = (nodes: TreeItem[], post: TreeLeaf): TreeItem[] =>
     return { ...node, children: injectPost(node.children, post) };
   });
 
-export const buildTree = (pathname: string): TreeItem[] => {
-  const slug = POST_PATH.exec(pathname)?.[1];
+export const postSlugFromPath = (pathname: string): string | null =>
+  POST_PATH.exec(pathname)?.[1] ?? null;
+
+export const buildTree = (
+  pathname: string,
+  rememberedSlug: string | null = null,
+): TreeItem[] => {
+  const slug = postSlugFromPath(pathname) ?? rememberedSlug;
   if (!slug) {
     return sidebarTree;
   }
@@ -261,7 +275,7 @@ export const buildTree = (pathname: string): TreeItem[] => {
     type: "leaf",
     title: `${slug}.mdx`,
     icon: VscMarkdown,
-    url: pathname,
+    url: `/blog/${slug}`,
     transient: true,
   });
 };
