@@ -15,16 +15,19 @@ const SkillBar = ({ level }: SkillBarProps) => {
   const filledSegments = levelMap[level] || 0;
 
   return (
-    <div className={styles.skillBar} role="img" aria-label={`Nível: ${level}`}>
-      <div
-        className={`${styles.barSegment} ${filledSegments >= 1 ? styles.filled : ""}`}
-      />
-      <div
-        className={`${styles.barSegment} ${filledSegments >= 2 ? styles.filled : ""}`}
-      />
-      <div
-        className={`${styles.barSegment} ${filledSegments >= 3 ? styles.filled : ""}`}
-      />
+    <div className={styles.container}>
+      <div className={styles.skillBar} aria-hidden="true">
+        <div
+          className={`${styles.barSegment} ${filledSegments >= 1 ? styles.filled : ""}`}
+        />
+        <div
+          className={`${styles.barSegment} ${filledSegments >= 2 ? styles.filled : ""}`}
+        />
+        <div
+          className={`${styles.barSegment} ${filledSegments >= 3 ? styles.filled : ""}`}
+        />
+      </div>
+      <span className={styles.level}>{level}</span>
     </div>
   );
 };

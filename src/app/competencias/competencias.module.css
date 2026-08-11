@@ -25,6 +25,7 @@
 @media (max-width: 768px) {
   .skillsGrid {
     grid-template-columns: 1fr auto;
+    gap: 1rem 0.75rem;
   }
 
   .skillName {
