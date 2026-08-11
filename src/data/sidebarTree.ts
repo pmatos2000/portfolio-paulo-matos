@@ -5,6 +5,9 @@ import { GiSlippers } from "react-icons/gi";
 import { MdOutlineStar } from "react-icons/md";
 import { PiCompassRoseDuotone } from "react-icons/pi";
 import { SiRust, SiTypescript } from "react-icons/si";
+import { VscMarkdown } from "react-icons/vsc";
+
+const BLOG_NODE_ID = "b8e1f4c3-7d29-4a56-9e08-1c3f5b7a2d64";
 
 export type TreeLeaf = {
   id: string;
@@ -12,6 +15,7 @@ export type TreeLeaf = {
   title: string;
   icon: IconType;
   url: string;
+  transient?: boolean;
 };
 
 export type TreeNode = {
@@ -48,6 +52,13 @@ export const sidebarTree: TreeItem[] = [
         title: "competências.css",
         icon: BsHash,
         url: "/competencias",
+      },
+      {
+        id: BLOG_NODE_ID,
+        type: "node",
+        title: "Blog",
+        url: "/blog",
+        children: [],
       },
       {
         id: "5a276ab2-df22-492c-b83c-51db33c77649",
@@ -226,3 +237,31 @@ export const sidebarTree: TreeItem[] = [
     ],
   },
 ];
+
+const POST_PATH = /^\/blog\/([\w-]+)$/;
+
+const injectPost = (nodes: TreeItem[], post: TreeLeaf): TreeItem[] =>
+  nodes.map((node) => {
+    if (node.type !== "node") {
+      return node;
+    }
+    if (node.id === BLOG_NODE_ID) {
+      return { ...node, children: [post] };
+    }
+    return { ...node, children: injectPost(node.children, post) };
+  });
+
+export const buildTree = (pathname: string): TreeItem[] => {
+  const slug = POST_PATH.exec(pathname)?.[1];
+  if (!slug) {
+    return sidebarTree;
+  }
+  return injectPost(sidebarTree, {
+    id: `${BLOG_NODE_ID}:${slug}`,
+    type: "leaf",
+    title: `${slug}.mdx`,
+    icon: VscMarkdown,
+    url: pathname,
+    transient: true,
+  });
+};

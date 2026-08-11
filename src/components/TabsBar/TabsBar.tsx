@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import type { IconType } from "react-icons";
 import { VscClose, VscFile, VscFolderOpened } from "react-icons/vsc";
 import {
-  sidebarTree,
+  buildTree,
   type TreeItem,
   type TreeLeaf,
   type TreeNode,
@@ -54,8 +54,9 @@ const TabsBar = () => {
     return null;
   }
 
-  const activeLeaf = findLeafByUrl(sidebarTree, pathname);
-  const ownerNode = activeLeaf ? null : findOwnerNode(sidebarTree, pathname);
+  const tree = buildTree(pathname);
+  const activeLeaf = findLeafByUrl(tree, pathname);
+  const ownerNode = activeLeaf ? null : findOwnerNode(tree, pathname);
 
   let IconComponent: IconType = VscFile;
   let tabTitle = pathname.split("/").pop() ?? "";

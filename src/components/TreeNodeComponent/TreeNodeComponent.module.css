@@ -37,6 +37,10 @@
   background-color: var(--background-hover);
 }
 
+.chevronSpacer {
+  visibility: hidden;
+}
+
 .nodeLink {
   display: flex;
   align-items: center;
@@ -97,6 +101,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.transient {
+  font-style: italic;
 }
 
 .icon {

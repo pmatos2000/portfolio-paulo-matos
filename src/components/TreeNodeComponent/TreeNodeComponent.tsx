@@ -30,13 +30,16 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
   };
 
   if (node.type === "node") {
-    const children = isExpanded ? (
-      <ul className={styles.nestedList}>
-        {node.children.map((child) => (
-          <TreeNodeComponent key={child.id} node={child} />
-        ))}
-      </ul>
-    ) : null;
+    const hasChildren = node.children.length > 0;
+
+    const children =
+      isExpanded && hasChildren ? (
+        <ul className={styles.nestedList}>
+          {node.children.map((child) => (
+            <TreeNodeComponent key={child.id} node={child} />
+          ))}
+        </ul>
+      ) : null;
 
     const chevron = isExpanded ? (
       <VscChevronDown aria-hidden="true" />
@@ -50,17 +53,28 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
       return (
         <li>
           <div className={styles.nodeRow}>
-            <button
-              type="button"
-              className={styles.chevronButton}
-              aria-expanded={isExpanded}
-              aria-label={
-                isExpanded ? `Recolher ${node.title}` : `Expandir ${node.title}`
-              }
-              onClick={() => setIsExpanded(!isExpanded)}
-            >
-              {chevron}
-            </button>
+            {hasChildren ? (
+              <button
+                type="button"
+                className={styles.chevronButton}
+                aria-expanded={isExpanded}
+                aria-label={
+                  isExpanded
+                    ? `Recolher ${node.title}`
+                    : `Expandir ${node.title}`
+                }
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                {chevron}
+              </button>
+            ) : (
+              <span
+                className={`${styles.chevronButton} ${styles.chevronSpacer}`}
+                aria-hidden="true"
+              >
+                <VscChevronRight />
+              </span>
+            )}
             <Link
               href={nodeUrl}
               title={node.title}
@@ -102,7 +116,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
       <Link
         href={node.url}
         title={node.title}
-        className={`${styles.leaf} ${isActive ? styles.active : ""}`}
+        className={`${styles.leaf} ${isActive ? styles.active : ""} ${node.transient ? styles.transient : ""}`}
         onClick={() => handleClick(node.url)}
       >
         <span className={styles.icon}>

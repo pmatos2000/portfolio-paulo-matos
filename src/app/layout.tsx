@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={inter.className}>
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: script estático, sem entrada de usuário */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />

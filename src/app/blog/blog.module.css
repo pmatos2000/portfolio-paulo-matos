@@ -1,0 +1,34 @@
+.index .postList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.index .post {
+  margin-bottom: 2rem;
+}
+
+.postTitle {
+  font-size: var(--font-size-md);
+  margin: 0 0 0.35rem;
+}
+
+.postTitle a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.postTitle a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.date {
+  font-family: Consolas, "SF Mono", Menlo, "Courier New", monospace;
+  font-size: var(--font-size-xs);
+  color: var(--text-color-secondary);
+}
+
+.index .description {
+  margin: 0.5rem 0 0;
+}

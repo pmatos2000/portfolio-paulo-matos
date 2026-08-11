@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { SidebarContext } from "@/contexts/SidebarContext";
-import { sidebarTree, type TreeItem } from "@/data/sidebarTree";
+import { buildTree, type TreeItem } from "@/data/sidebarTree";
 import TreeNodeComponent from "../TreeNodeComponent/TreeNodeComponent";
 import styles from "./Sidebar.module.css";
 
@@ -48,14 +48,16 @@ const Sidebar = ({ onCloseMenu }: SidebarProps) => {
     setHash(fragment ? `#${fragment}` : "");
   };
 
+  const tree = useMemo(() => buildTree(pathname), [pathname]);
+
   const activeUrl = useMemo(() => {
     const fullPath = pathname + hash;
-    let activeNode = findItem(sidebarTree, (item) => item.url === fullPath);
+    let activeNode = findItem(tree, (item) => item.url === fullPath);
     if (!activeNode) {
-      activeNode = findItem(sidebarTree, (item) => item.url === pathname);
+      activeNode = findItem(tree, (item) => item.url === pathname);
     }
     return activeNode?.url || null;
-  }, [pathname, hash]);
+  }, [tree, pathname, hash]);
 
   return (
     <SidebarContext.Provider
@@ -68,7 +70,7 @@ const Sidebar = ({ onCloseMenu }: SidebarProps) => {
       <aside className={styles.sidebar} aria-label="Explorador de arquivos">
         <p className={styles.title}>EXPLORER</p>
         <ul className={styles.fileList}>
-          {sidebarTree.map((node) => (
+          {tree.map((node) => (
             <TreeNodeComponent key={node.id} node={node} />
           ))}
         </ul>
