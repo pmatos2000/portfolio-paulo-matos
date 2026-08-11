@@ -25,9 +25,11 @@ export const skillsData: SkillGroup[] = [
       { name: "TypeScript", level: "Avançado" },
       { name: "HTML5/CSS3", level: "Intermediário" },
       { name: "Next.js", level: "Intermediário" },
+      { name: "Angular", level: "Básico" },
       { name: "C++", level: "Básico" },
       { name: "SAP ABAP", level: "Básico" },
       { name: "Node.js", level: "Básico" },
+      { name: "Rust", level: "Básico" },
     ],
   },
   {
