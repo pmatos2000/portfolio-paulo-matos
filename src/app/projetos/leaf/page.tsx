@@ -22,6 +22,19 @@ pub def atualizar(dt: float) -> void:
 pub def dano(v: int) -> void:
 \tvida = vida - v`;
 
+const ANNOTATIONS = `@implements(Atualizavel)
+
+@export(min=0, max=100, step=1) let vida: int = 100
+@export(values=["copas", "paus", "ouro", "espada"]) let naipe: string`;
+
+const TRAIT_ERROR = `error: script "inimigo" declara @implements(Atualizavel)
+       mas não satisfaz a trait
+  --> inimigo.leaf:1:1
+  - método faltando: atualizar(float) -> void
+  - assinatura incorreta: obter_descricao
+      esperado:    () -> string
+      encontrado: (int) -> string`;
+
 const LeafPage = () => {
   return (
     <div className="contentPage">
@@ -113,11 +126,65 @@ const LeafPage = () => {
         <code>{EXAMPLE}</code>
       </pre>
       <p>
-        O <code>@export(min=0, max=100)</code> não é decoração. É a mesma ideia
-        que faz o editor do Rustle gerar campos sozinho, agora do lado do
-        script: o tipo do campo decide o widget e os limites decidem a faixa. Um
-        componente escrito em Leaf ganha seu painel de propriedades sem que
-        ninguém escreva interface.
+        A sintaxe é próxima da de Python — <code>def</code>, dois-pontos, blocos
+        por indentação — só que com o tipo de tudo escrito explicitamente. As
+        linhas que começam com <code>@</code> são anotações, e elas merecem
+        seção própria.
+      </p>
+
+      <h2>Anotações</h2>
+      <p>
+        Uma anotação é um prefixo de declaração, e pode marcar um módulo, uma
+        variável, uma função ou um tipo. Parece detalhe de sintaxe, mas é a peça
+        que resolve três problemas diferentes de uma vez só.
+      </p>
+      <pre>
+        <code>{ANNOTATIONS}</code>
+      </pre>
+
+      <p>
+        <strong>Fazem a ponte entre o script e o editor.</strong>{" "}
+        <code>@export(min=0, max=100, step=1)</code> não é decoração: é a
+        descrição do campo que o editor vai desenhar. O tipo da variável decide
+        o widget, os limites decidem a faixa, e <code>values</code> transforma
+        uma string num seletor de opções. É a mesma ideia que faz o editor do
+        Rustle gerar painéis sozinho a partir dos tipos em Rust, agora
+        disponível para quem escreve script — um componente em Leaf ganha sua
+        interface de propriedades sem que ninguém escreva interface.
+      </p>
+
+      <p>
+        <strong>Substituem código repetitivo.</strong>{" "}
+        <code>@implements(Atualizavel)</code> declara que o arquivo inteiro é a
+        implementação de uma interface. Não há bloco de implementação, não há
+        método para encaixar numa estrutura: as funções públicas do script já
+        são os métodos. E a economia não é só de digitação — o compilador
+        transforma isso numa tabela de despacho, então o motor chama o script
+        por índice, sem procurar função por nome em tempo de execução.
+      </p>
+
+      <p>
+        <strong>Validam.</strong> Como as anotações são tipadas, o compilador
+        checa o que elas dizem. <code>min</code> maior que <code>max</code> é
+        erro; <code>step</code> zero é erro; cada elemento de{" "}
+        <code>values</code> é verificado contra o tipo da variável. E{" "}
+        <code>@implements</code> vira uma promessa que o compilador cobra,
+        listando tudo o que falta de uma vez em vez de parar no primeiro
+        problema:
+      </p>
+      <pre>
+        <code>{TRAIT_ERROR}</code>
+      </pre>
+
+      <p>
+        O vocabulário também não é fixo. O programa que hospeda a VM registra as
+        próprias anotações, com alvo e parâmetros declarados — é assim que uma
+        engine ensina aos scripts os conceitos que só ela conhece. E anotação
+        desconhecida é <strong>erro de compilação</strong>, o oposto do que
+        costuma acontecer com decoradores por aí, onde uma anotação que ninguém
+        trata é silenciosamente ignorada e o erro de digitação só aparece
+        quando o comportamento esperado não acontece. Para metadados que a VM
+        deve mesmo ignorar existe um espaço reservado, <code>@meta</code>.
       </p>
 
       <h2>Sem coletor de lixo, e sem vazamento</h2>
