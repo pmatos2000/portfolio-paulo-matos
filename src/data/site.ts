@@ -29,6 +29,13 @@ type PageMetadataInput = {
   path: string;
   /** Ignora o template de título do layout raiz. */
   absoluteTitle?: boolean;
+  /** A rota tem opengraph-image próprio; não injetar o card do site. */
+  routeImage?: boolean;
+  article?: {
+    publishedTime: string;
+    modifiedTime: string;
+    tags: string[];
+  };
 };
 
 export const pageMetadata = ({
@@ -36,23 +43,32 @@ export const pageMetadata = ({
   description,
   path,
   absoluteTitle = false,
+  routeImage = false,
+  article,
 }: PageMetadataInput): Metadata => ({
   title: absoluteTitle ? { absolute: title } : title,
   description,
   alternates: { canonical: path },
   openGraph: {
-    type: "website",
+    ...(article
+      ? {
+          type: "article",
+          publishedTime: article.publishedTime,
+          modifiedTime: article.modifiedTime,
+          tags: article.tags,
+        }
+      : { type: "website" }),
     siteName: siteConfig.name,
     locale: siteConfig.locale,
     url: path,
     title,
     description,
-    images: [OG_IMAGE],
+    ...(routeImage ? {} : { images: [OG_IMAGE] }),
   },
   twitter: {
     card: "summary_large_image",
     title,
     description,
-    images: [OG_IMAGE.url],
+    ...(routeImage ? {} : { images: [OG_IMAGE.url] }),
   },
 });

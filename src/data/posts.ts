@@ -5,6 +5,8 @@ export type PostMeta = {
   description: string;
   /** ISO 8601, ex.: "2026-08-11" */
   date: string;
+  /** ISO 8601. Ausente = nunca editado depois de publicado. */
+  updated?: string;
   /** Exibição e, no item 9, `keywords` do JSON-LD. Ainda não gera rota. */
   tags: string[];
 };
