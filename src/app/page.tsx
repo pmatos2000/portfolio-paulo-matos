@@ -106,8 +106,23 @@ const Home = () => {
       <section className={styles.highlight}>
         <h2 className={styles.highlightTitle}>Leaf</h2>
         <p>
-          Uma linguagem de script embarcável, escrita em Rust. Estou construindo
-          do zero e documentando o processo.
+          Criar um componente novo no{" "}
+          <a
+            href="https://github.com/pmatos2000/rustle"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Rustle
+          </a>{" "}
+          — um motor gráfico que estou escrevendo em Rust — hoje exige
+          recompilar o projeto inteiro. Leaf é a linguagem de script que elimina
+          esse ciclo.
+        </p>
+        <p>
+          Tipagem estática, compilada para uma VM própria, integração nativa com
+          Rust, sem coletor de lixo e sem panic. Avaliei Lua, Rhai e Rune antes
+          de decidir escrever a minha — nenhuma atendia a tudo isso ao mesmo
+          tempo.
         </p>
       </section>
 
