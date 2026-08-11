@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Code from "@/components/CodeBlock/Code";
 import { pageMetadata } from "@/data/site";
 
 export const metadata = pageMetadata({
@@ -120,9 +121,7 @@ const LeafPage = () => {
       <p>Cada linguagem que avaliei atende algumas. Nenhuma atende todas.</p>
 
       <h2>Como Leaf se parece</h2>
-      <pre>
-        <code>{EXAMPLE}</code>
-      </pre>
+      <Code lang="leaf">{EXAMPLE}</Code>
       <p>
         A sintaxe é próxima da de Python — <code>def</code>, dois-pontos, blocos
         por indentação — só que com o tipo de tudo escrito explicitamente. As
@@ -136,9 +135,7 @@ const LeafPage = () => {
         variável, uma função ou um tipo. Parece detalhe de sintaxe, mas é a peça
         que resolve três problemas diferentes de uma vez só.
       </p>
-      <pre>
-        <code>{ANNOTATIONS}</code>
-      </pre>
+      <Code lang="leaf">{ANNOTATIONS}</Code>
 
       <p>
         <strong>Fazem a ponte entre o script e o editor.</strong>{" "}

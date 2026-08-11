@@ -37,7 +37,7 @@ const patch = (
 
 let instance: Promise<HighlighterCore> | null = null;
 
-export const getHighlighter = (): Promise<HighlighterCore> => {
+const getHighlighter = (): Promise<HighlighterCore> => {
   if (!instance) {
     instance = createHighlighterCore({
       langs: [
@@ -52,4 +52,21 @@ export const getHighlighter = (): Promise<HighlighterCore> => {
     });
   }
   return instance;
+};
+
+export const renderCode = async (
+  source: string,
+  lang: string,
+): Promise<string | null> => {
+  const highlighter = await getHighlighter();
+
+  if (!highlighter.getLoadedLanguages().includes(lang)) {
+    return null;
+  }
+
+  return highlighter.codeToHtml(source, {
+    lang,
+    themes: { light: "light-plus", dark: "dark-plus" },
+    defaultColor: false,
+  });
 };

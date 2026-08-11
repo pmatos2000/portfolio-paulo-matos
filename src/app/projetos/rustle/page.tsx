@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Code from "@/components/CodeBlock/Code";
 import { pageMetadata } from "@/data/site";
 
 export const metadata = pageMetadata({
@@ -37,9 +38,7 @@ const RustlePage = () => {
         A cena é um documento JSON. O editor edita o JSON; a engine apenas
         carrega e desenha.
       </p>
-      <pre>
-        <code>{SCENE}</code>
-      </pre>
+      <Code lang="json">{SCENE}</Code>
       <p>
         Parece um detalhe de serialização, mas é a decisão que simplifica tudo o
         que vem depois. Salvar, recarregar a quente, desfazer, versionar em Git,
