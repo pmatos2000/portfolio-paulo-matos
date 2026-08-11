@@ -117,9 +117,7 @@ const LeafPage = () => {
           derrubar o editor
         </li>
       </ul>
-      <p>
-        Cada linguagem que avaliei atende algumas. Nenhuma atende todas.
-      </p>
+      <p>Cada linguagem que avaliei atende algumas. Nenhuma atende todas.</p>
 
       <h2>Como Leaf se parece</h2>
       <pre>
@@ -182,9 +180,9 @@ const LeafPage = () => {
         engine ensina aos scripts os conceitos que só ela conhece. E anotação
         desconhecida é <strong>erro de compilação</strong>, o oposto do que
         costuma acontecer com decoradores por aí, onde uma anotação que ninguém
-        trata é silenciosamente ignorada e o erro de digitação só aparece
-        quando o comportamento esperado não acontece. Para metadados que a VM
-        deve mesmo ignorar existe um espaço reservado, <code>@meta</code>.
+        trata é silenciosamente ignorada e o erro de digitação só aparece quando
+        o comportamento esperado não acontece. Para metadados que a VM deve
+        mesmo ignorar existe um espaço reservado, <code>@meta</code>.
       </p>
 
       <h2>Sem coletor de lixo, e sem vazamento</h2>
