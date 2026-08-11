@@ -1,11 +1,9 @@
 import type { MDXComponents } from "mdx/types";
+import CodeBlock from "@/components/CodeBlock/CodeBlock";
 
-/**
- * Componentes aplicados a todo MDX do site. Vazio por enquanto: os estilos de
- * prosa vêm de `.contentPage` no globals.css. É daqui que o realce de sintaxe
- * (item 12) e o tratamento de imagem vão pendurar.
- */
-const components: MDXComponents = {};
+const components: MDXComponents = {
+  pre: CodeBlock,
+};
 
 export function useMDXComponents(): MDXComponents {
   return components;
