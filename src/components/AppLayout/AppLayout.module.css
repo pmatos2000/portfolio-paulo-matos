@@ -16,6 +16,9 @@
 
 .contentWrapper {
   flex-grow: 1;
+  /* Sem isto, min-width: auto faz o wrapper crescer até o mínimo do <pre>
+     (932px numa tela de 375) e o overflow: hidden do .mainLayout corta a página. */
+  min-width: 0;
   display: flex;
   flex-direction: column;
   position: relative;
