@@ -1,0 +1,194 @@
+export const meta = {
+  title: "O número que me faria mudar de ideia",
+  description:
+    "Escolhi de propósito a representação de valor mais lenta da VM do Leaf, e escrevi no plano, antes de existir qualquer medição, o número exato que autorizaria trocar.",
+  date: "2026-08-11",
+  tags: ["leaf", "rust", "compiladores"],
+};
+
+Estou escrevendo o [Leaf](/projetos/leaf), uma linguagem de script tipada e sem
+coletor de lixo, embarcável em Rust. Nenhuma linha do compilador existe ainda. O
+que existe é um plano de 27 etapas — e a primeira decisão técnica dele foi
+tomada contra o meu instinto.
+
+## A decisão
+
+Em execução, a linguagem inteira se resume a mover valores entre os
+registradores de uma máquina virtual:
+
+```leaf
+@export(min=0, max=100) let vida: int = 100
+let nome: string = "inimigo"
+let alvo: Entidade? = None
+```
+
+Cada um desses valores vira um `Raw`, o tipo mais quente do interpretador. Ele é
+lido e escrito milhões de vezes por segundo, e a forma de representá-lo decide o
+teto de desempenho do projeto inteiro.
+
+Há duas saídas óbvias. Uma união de 8 bytes, que guarda o valor cru e confia que
+o código gerado sabe o que está lá. Ou um enum com tag, de 16 bytes, que carrega
+junto a informação de qual variante é:
+
+```rust
+#[derive(Copy, Clone, PartialEq)]
+pub enum Raw {
+    I(i64),
+    F(f64),
+    B(bool),
+    H(Handle),
+    Unit,
+}
+```
+
+A união é mais rápida. Metade do espaço, o dobro de densidade na cache, e nenhum
+`match` a cada acesso — algo entre 10% e 30% no laço aritmético. Ela também
+exige `unsafe`.
+
+Escolhi o enum.
+
+## Por que a versão lenta
+
+O argumento não é "segurança é bom". Ele é mais específico, e depende de uma
+propriedade do projeto.
+
+O Leaf é estaticamente tipado, e a VM nunca pergunta que tipo é um valor: o
+código gerado já sabe. A tag é, portanto, informação redundante. Esse é
+exatamente o argumento a favor da união — e ele está correto.
+
+Só que ela é redundante **quando o codegen está certo**. E durante os meses em
+que o codegen está sendo escrito, a classe de bug dominante é justamente ele pôr
+a coisa errada no registrador errado.
+
+Com a união, esse bug é comportamento indefinido. Você lê um `f64` como se fosse
+um handle, indexa a arena com lixo, e o programa segue — até quebrar em outro
+lugar, muito depois, sem relação aparente com a causa. É a pior classe de bug
+que existe num interpretador, porque o sintoma e a origem ficam a quilômetros um
+do outro.
+
+Com a tag, o mesmo bug é um `panic` com stack trace do Rust, apontando a linha
+que leu errado. A tag deixa de ser custo e passa a ser asserção.
+
+É por isso que a v1 inteira é escrita com `#![forbid(unsafe_code)]` em todos os
+crates. Não como bandeira — como ferramenta de depuração.
+
+## A regra que mantém a porta aberta
+
+Escolher a versão lenta só é defensável se a escolha for reversível. E ela só é
+reversível por causa de uma regra que parece burocrática:
+
+```rust
+impl Raw {
+    pub fn as_int(self) -> i64 {
+        match self {
+            Raw::I(v) => v,
+            _ => panic!("registrador não contém int"),
+        }
+    }
+}
+```
+
+Todo acesso passa por função. Nenhum lugar do projeto lê a variante diretamente.
+
+É uma regra chata de seguir e trivial de quebrar — basta um `match` solto no
+meio do loop da VM, num dia em que você está com pressa. E o custo de quebrá-la
+não aparece na hora: aparece meses depois, quando trocar a representação deixa
+de ser mexer num arquivo e passa a ser mexer em nove crates.
+
+## O plano já contém a própria revisão
+
+A parte que me interessa não é ter escolhido a versão segura. É que a etapa que
+revisa essa escolha já está escrita, com os critérios fechados, antes de existir
+uma única medição.
+
+As duas implementações ficam atrás da mesma API, escolhidas por feature de
+Cargo:
+
+```toml
+[features]
+default = []
+raw-union = []
+```
+
+```rust
+#[cfg(not(feature = "raw-union"))]
+mod raw_tagged;
+
+#[cfg(feature = "raw-union")]
+mod raw_union;
+```
+
+Feature, e não genérico. Parametrizar por `V: Value` funciona, mas o parâmetro é
+viral: contamina a VM, a arena, o estado local, e acaba vazando para a API
+pública. Em troca você ganha ter as duas no mesmo binário — o que só importa
+para um teste A/B que roda algumas dezenas de vezes na vida do projeto.
+
+## O número
+
+A união só entra se, ao mesmo tempo:
+
+- o ganho médio for **maior ou igual a 15%** nas cargas de aritmética e de
+  acesso a campo do benchmark;
+- o teste diferencial rodar todo o corpus nas duas features e produzir os mesmos
+  resultados, os mesmos erros e os mesmos avisos;
+- o `miri` passar na feature nova, incluindo o laço da VM;
+- o fuzzing com bytecode arbitrário não divergir entre as duas versões.
+
+Abaixo de 15%, fica a segura. Dez por cento de throughput não compensa
+reintroduzir comportamento indefinido num interpretador.
+
+E então a cláusula que, para mim, é o ponto do post inteiro: **o número medido
+tem que ser registrado no repositório.** Adotada com o ganho anotado, ou
+recusada com o ganho anotado.
+
+## Por que registrar o número importa mais que o número
+
+Sem o registro, essa discussão volta. Ela volta a cada semestre, a cada pessoa
+nova no projeto, a cada vez que alguém lê um artigo sobre NaN boxing num
+domingo. E volta como opinião, porque a medição de dois anos atrás está na
+cabeça de alguém que já saiu, ou na sua, desbotada.
+
+Com o número no repositório, a conversa muda de natureza. Não é mais "acho que
+seria mais rápido" contra "acho que não vale". É "medimos 9% em março de 2027" —
+e quem discorda tem um caminho claro, que é medir de novo e mostrar outro
+número.
+
+Isso transforma uma questão de gosto numa questão de fato. É barato: um arquivo
+de texto versionado. E é a diferença entre uma decisão e uma trégua.
+
+## Por que escrever o critério antes
+
+Porque depois eu não sou imparcial.
+
+Se eu deixar para definir o limiar quando os números chegarem, terei acabado de
+passar uma semana implementando a união. Vou ter lido sobre ela, contornado três
+problemas dela, ficado orgulhoso dela. Onze por cento vai parecer muito. O
+mesmo eu, em janeiro, sem nada investido, olha para onze por cento e vê pouco.
+
+O único momento em que sou honesto sobre esse trade-off é agora, quando as duas
+opções ainda me custam igual. Escrever o critério antes não é disciplina — é
+aproveitar a única janela em que a minha opinião não está comprada.
+
+## O que isso não é
+
+Não é "depois a gente otimiza". "Depois" sem critério é briga adiada: quando o
+depois chega, ninguém lembra qual era o padrão de comparação, e vence quem tem
+mais energia para discutir naquele dia.
+
+Também não vale se o critério for vago. "Se ficar significativamente mais
+rápido" é opinião com modos melhores. O critério precisa nomear a carga, o
+número e o que acontece nos dois lados — inclusive, e principalmente, o que
+acontece quando ele não é atingido.
+
+E ele precisa poder falhar. Um critério que você sabe de antemão que vai passar
+não é um critério, é uma formalidade.
+
+## Uma etapa de vinte e sete
+
+Isso é a etapa E1, e existe uma E25 que a revisita. Entre as duas há um plano
+inteiro, organizado por uma regra só: a primeira fase entrega o pipeline
+completo — fonte, bytecode, execução, retorno ao Rust — suportando apenas `int`.
+Tudo depois é acrescentar tipo a uma máquina que já roda.
+
+O resto das decisões da linguagem, e por que ela precisa existir, está em
+[leaf.rs](/projetos/leaf).

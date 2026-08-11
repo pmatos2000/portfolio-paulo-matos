@@ -20,7 +20,8 @@ export type PostModule = {
  * o corpo dos posts — tudo resolvido em build.
  */
 export const postLoaders = {
-  "hello-leaf": () => import("@/content/blog/hello-leaf.mdx"),
+  "o-numero-que-me-faria-mudar-de-ideia": () =>
+    import("@/content/blog/o-numero-que-me-faria-mudar-de-ideia.mdx"),
 } satisfies Record<string, () => Promise<PostModule>>;
 
 export type PostSlug = keyof typeof postLoaders;
