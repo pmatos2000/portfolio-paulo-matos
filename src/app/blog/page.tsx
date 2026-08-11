@@ -5,13 +5,12 @@ import {
   postLoaders,
   postSlugs,
 } from "@/data/posts";
-import { pageMetadata } from "@/data/site";
+import { blogConfig, pageMetadata } from "@/data/site";
 import styles from "./blog.module.css";
 
 export const metadata = pageMetadata({
   title: "Blog",
-  description:
-    "Notas sobre a construção do Leaf, uma linguagem de script tipada e sem coletor de lixo, embarcável em Rust.",
+  description: blogConfig.description,
   path: "/blog",
 });
 
@@ -55,6 +54,9 @@ const BlogPage = async () => {
   return (
     <div className={`contentPage ${styles.index}`}>
       <h1>Blog</h1>
+      <p className={styles.feed}>
+        <a href={blogConfig.feedPath}>Assinar por RSS</a>
+      </p>
 
       {groups.map(([year, posts]) => (
         <section key={year}>

@@ -1,3 +1,8 @@
+.index .feed {
+  margin-top: -0.75rem;
+  font-size: var(--font-size-sm);
+}
+
 .index .postList {
   list-style: none;
   margin: 0;

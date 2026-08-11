@@ -10,6 +10,14 @@ export const siteConfig = {
   locale: "pt_BR",
 } as const;
 
+/** Fonte única do índice /blog e do canal RSS — os dois divergiriam sozinhos. */
+export const blogConfig = {
+  title: `Blog de ${siteConfig.name}`,
+  description:
+    "Notas sobre a construção do Leaf, uma linguagem de script tipada e sem coletor de lixo, embarcável em Rust.",
+  feedPath: "/rss.xml",
+} as const;
+
 export const socialLinks = {
   linkedin: "https://www.linkedin.com/in/dev-paulo/",
   github: "https://github.com/pmatos2000",
@@ -48,7 +56,10 @@ export const pageMetadata = ({
 }: PageMetadataInput): Metadata => ({
   title: absoluteTitle ? { absolute: title } : title,
   description,
-  alternates: { canonical: path },
+  alternates: {
+    canonical: path,
+    types: { "application/rss+xml": blogConfig.feedPath },
+  },
   openGraph: {
     ...(article
       ? {
