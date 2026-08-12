@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AppLayout from "@/components/AppLayout/AppLayout";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { getBlogYears } from "@/data/blogTree";
 import { OG_IMAGE, siteConfig } from "@/data/site";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -36,18 +37,20 @@ export const metadata: Metadata = {
 /** Aplica o tema antes da primeira pintura, evitando flash de tema errado. */
 const themeScript = `(function(){try{var t=localStorage.getItem("theme");document.documentElement.setAttribute("data-theme",t==="light"||t==="dark"?t:"dark")}catch(e){document.documentElement.setAttribute("data-theme","dark")}})();`;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const blogYears = await getBlogYears();
+
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={inter.className}>
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: script estático, sem entrada de usuário */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <ThemeProvider>
-          <AppLayout>{children}</AppLayout>
+          <AppLayout blogYears={blogYears}>{children}</AppLayout>
         </ThemeProvider>
       </body>
     </html>

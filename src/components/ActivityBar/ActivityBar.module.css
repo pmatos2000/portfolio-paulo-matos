@@ -10,6 +10,15 @@
   align-items: center;
 }
 
+/* Antes eram .iconGroupTop e .iconGroupBottom, que nunca existiram aqui:
+   o alinhamento funcionava por acidente, com exatamente dois filhos. */
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 .activityBar button {
   background: none;
   border: none;

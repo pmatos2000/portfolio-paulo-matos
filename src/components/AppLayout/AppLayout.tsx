@@ -3,17 +3,22 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { VscClose, VscMenu } from "react-icons/vsc";
-import ActivityBar, {
-  type ActivityView,
-} from "@/components/ActivityBar/ActivityBar";
+import ActivityBar from "@/components/ActivityBar/ActivityBar";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
+import MobileViewBar from "@/components/MobileViewBar/MobileViewBar";
 import TabsBar from "@/components/TabsBar/TabsBar";
-import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import ViewPanel from "@/components/ViewPanel/ViewPanel";
+import type { ActivityView } from "@/data/activityViews";
+import type { BlogYear } from "@/data/blogTree";
 import { postSlugFromPath } from "@/data/sidebarTree";
 import styles from "./AppLayout.module.css";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+type AppLayoutProps = {
+  children: React.ReactNode;
+  blogYears: BlogYear[];
+};
+
+export default function AppLayout({ children, blogYears }: AppLayoutProps) {
   const pathname = usePathname();
   const postSlug = postSlugFromPath(pathname);
   const [lastPostSlug, setLastPostSlug] = useState<string | null>(postSlug);
@@ -54,6 +59,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     closeMobileMenu();
   };
 
+  /** No rodapé, alternar para null deixaria a gaveta aberta e vazia. */
+  const handleFooterClick = (view: ActivityView) => {
+    setActiveView(view);
+  };
+
   return (
     <div className={styles.mainLayout}>
       <ActivityBar
@@ -68,9 +78,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           activeView={activeView}
           onCloseMenu={closeMobileMenu}
           lastPostSlug={lastPostSlug}
+          blogYears={blogYears}
         />
-        <div className={styles.mobileSettings}>
-          <ThemeToggle />
+        <div className={styles.mobileViews}>
+          <MobileViewBar activeView={activeView} onSelect={handleFooterClick} />
         </div>
       </div>
 

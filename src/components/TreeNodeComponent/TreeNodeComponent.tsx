@@ -101,6 +101,9 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {chevron}
+          <span className={styles.icon}>
+            <VscFolderOpened size={20} aria-hidden="true" />
+          </span>
           <span>{node.title}</span>
         </button>
         {children}
