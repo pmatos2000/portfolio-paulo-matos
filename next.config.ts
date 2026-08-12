@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.18.22"],
 };
 
-const withMDX = createMDX({});
+/** Plugin declarado como string, não como função importada: o Turbopack
+    serializa a configuração do loader e não atravessa referência de módulo.
+    Passando `remarkGfm` importado, o `next dev` quebra e o build não. */
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [["remark-gfm", {}]],
+  },
+});
 
 export default withMDX(nextConfig);

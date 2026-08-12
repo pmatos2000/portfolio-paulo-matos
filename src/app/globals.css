@@ -152,6 +152,40 @@ body {
   color: var(--shiki-light);
 }
 
+/* Tabela fica fora do cap de 40rem, como o código: comparação de cinco
+   linguagens em seis colunas a 640px vira uma palavra por linha. O wrapper
+   vem do mdx-components, porque o GFM não gera contêiner. */
+.contentPage .tableWrap {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.contentPage table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: var(--text-color-prose);
+}
+
+.contentPage th,
+.contentPage td {
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* Cabeçalho não quebra: com seis colunas estreitas, "Sem marshalling" em duas
+   linhas dobra a altura da faixa inteira. Quem não couber, rola. */
+.contentPage th {
+  background-color: var(--background-secondary);
+  color: var(--text-color);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .videoContainer {
   width: 100%;
   max-width: 800px;

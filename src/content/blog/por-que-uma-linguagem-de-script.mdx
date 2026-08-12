@@ -74,17 +74,40 @@ o host registra é responsabilidade do host.
 
 ## As cinco que eu avaliei
 
-| Linguagem | Tipagem estática | VM (bytecode) | Sem marshalling | Sem GC | Sem panic |
+| Linguagem | Estática | VM | Sem marshalling | Sem GC | Sem panic |
 |---|---|---|---|---|---|
-| **Rhai** | não, dinâmica | não, interpretador de AST | sim, `Dynamic` no heap Rust | sim, só `Rc`/`Arc` | parcial, `Result` sem garantia |
-| **Rune** | não, dinâmica | sim, VM de pilha | sim, `Shared`, mesmo heap | parcial, refcount e ciclos vazam | parcial, `VmError` + budget |
-| **Lua** (mlua) | não, dinâmica | sim, registradores | não, pilha C com push/pop | não, mark-sweep incremental | parcial, `longjmp` convertido |
-| **Luau** (mlua) | parcial, gradual e opcional | sim, próprio | não, mesma fronteira C | não, GC | parcial |
-| **Piccolo** | não, dinâmica | sim, stackless e interrompível | sim, Rust puro | não, `gc-arena` incremental | sim, desenhada para isso |
+| **Rhai** | não | não | sim | sim | parcial |
+| **Rune** | não | sim | sim | parcial | parcial |
+| **Lua** (mlua) | não | sim | não | não | parcial |
+| **Luau** (mlua) | parcial | sim | não | não | parcial |
+| **Piccolo** | não | sim | sim | não | sim |
+
+**Rhai** interpreta a árvore sintática direto, sem passo de bytecode. A fronteira
+com o Rust é boa — `Dynamic` vive no heap do Rust — e não há coletor, só `Rc` e
+`Arc`. Perde nos dois primeiros critérios, e o primeiro deles não tem conserto
+por configuração.
+
+**Rune** tem VM de pilha e a melhor integração da lista: `Shared`, mesmo heap. É
+dinâmica, e a contagem de referências dela deixa ciclo vazar. Foi com ela que eu
+construí a prova de conceito, então o que eu sei dela não vem de documentação.
+
+**Lua**, via `mlua`, tem a VM de registradores mais testada que existe e um
+mark-sweep incremental maduro. A fronteira é a pilha do C, com push e pop a cada
+valor que atravessa — é aí que ela sai, não na tipagem.
+
+**Luau** acrescenta tipagem gradual e opcional e uma VM própria bem mais rápida
+que a de referência. Continua atravessando a mesma fronteira C e continua com
+coletor.
+
+**Piccolo** é a mais interessante do ponto de vista de projeto: stackless,
+interrompível a qualquer instante, Rust puro, desenhada desde o início para não
+derrubar o hospedeiro. Só que é dinâmica, e o `gc-arena` é coletor incremental —
+melhor que parar o mundo, mas ainda é um coletor decidindo quando rodar.
 
 Cada uma atende algumas. Nenhuma atende as cinco. E a coluna que mais elimina é
-a terceira, não a primeira: assim que a fronteira é a pilha do C, todo valor que
-atravessa é copiado e reempacotado, e a integração "nativa" vira um protocolo.
+a do marshalling, não a da tipagem: assim que a fronteira é a pilha do C, todo
+valor que atravessa é copiado e reempacotado, e a integração "nativa" vira um
+protocolo.
 
 Vale dizer o que essa tabela **não** é. Não é ranking de qualidade. Piccolo é um
 projeto melhor desenhado que qualquer coisa que eu vá escrever tão cedo, e Lua é
