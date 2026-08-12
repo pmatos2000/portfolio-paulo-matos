@@ -7,7 +7,7 @@ export type PostMeta = {
   date: string;
   /** ISO 8601. Ausente = nunca editado depois de publicado. */
   updated?: string;
-  /** Exibição e, no item 9, `keywords` do JSON-LD. Ainda não gera rota. */
+  /** Exibição e `keywords` do JSON-LD. Ainda não gera rota. */
   tags: string[];
 };
 
@@ -24,6 +24,8 @@ export type PostModule = {
 export const postLoaders = {
   "o-numero-que-me-faria-mudar-de-ideia": () =>
     import("@/content/blog/o-numero-que-me-faria-mudar-de-ideia.mdx"),
+  "recusado-nao-e-adiado": () =>
+    import("@/content/blog/recusado-nao-e-adiado.mdx"),
 } satisfies Record<string, () => Promise<PostModule>>;
 
 export type PostSlug = keyof typeof postLoaders;

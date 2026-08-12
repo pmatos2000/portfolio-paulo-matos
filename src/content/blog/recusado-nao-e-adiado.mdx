@@ -1,0 +1,154 @@
+export const meta = {
+  title: "Recusado não é adiado: o escopo da v1 do Leaf",
+  description:
+    "Toda lista de fora-da-v1 costuma significar não deu tempo. No Leaf, duas coisas estão fora para sempre — e essa diferença é o que dá forma ao projeto.",
+  date: "2026-08-12",
+  tags: ["leaf", "design de linguagem"],
+};
+
+A especificação do [Leaf](/projetos/leaf) está fechada, e a lista do que
+ficou de fora da primeira versão é longa. A maior parte dela não é "não deu
+tempo".
+
+Isso importa porque existem duas listas dentro de uma. Há o que está
+**adiado** — vem na v2, quando houver motivo. E há o que está **recusado** —
+não vem nunca, porque a linguagem seria pior com aquilo dentro. Roteiro que
+só sabe adiar é lista de desejos.
+
+## Recusa 1: não existe try/catch
+
+O Leaf tem `try`. Ele é prefixo de expressão, propaga `Result`, e não abre
+bloco nenhum:
+
+```leaf
+def carregar(s: string) -> Result<Config, string>:
+	let n: int = try int.parse(s)
+	return Ok({ tamanho: n })
+```
+
+Se `int.parse` devolver `Err`, a função inteira retorna aquele `Err` ali
+mesmo — a linha seguinte não executa. É palavra-chave em vez de símbolo por
+causa disso: o efeito é fluxo de controle não-local, e uma palavra no começo
+da linha avisa de longe. Um sufixo se perde no fim da expressão.
+
+O que não existe é o `catch`. E o motivo é que há **dois** mecanismos de
+falha, com propósitos diferentes.
+
+Falha da VM é operação sem resultado representável: `int / 0`, overflow,
+índice fora de faixa, combustível esgotado. Ela aborta a chamada e sobe como
+`Err` para o Rust que chamou o script. Não é capturável de dentro.
+
+`Result` é falha de domínio — aquela que o autor do script previu e quer
+tratar. É um valor comum, resolvido com `match` ou com `try`.
+
+Um `catch` deixaria o script engolir a primeira. E é exatamente isso que não
+se pode permitir num motor de jogo: script que esconde um overflow é script
+produzindo número errado em silêncio pelo resto do frame. Quem hospeda a VM
+precisa saber.
+
+A aritmética, por isso, continua simples: `a + b` é `int`, não
+`Result<int, _>`. Sem isso, `a + b + c` viraria um exercício de paciência.
+Quem quiser tratar uma operação específica pede a versão explícita, que
+devolve `int?`:
+
+```leaf
+let d: int? = a.checked_div(b)
+let s: int? = a.checked_add(b)
+```
+
+## Recusa 2: não existe operador de identidade
+
+`==` é sempre estrutural, comparando por valor em toda profundidade:
+
+```leaf
+[1, 2, 3] == [1, 2, 3]
+{ nome: "a", idade: 1 } == { nome: "a", idade: 1 }
+Some(4) == Some(4)
+```
+
+Os três são verdadeiros. E não existe um segundo operador perguntando "é a
+mesma referência?".
+
+O motivo é o melhor argumento da especificação inteira, e não tem nada a ver
+com ergonomia.
+
+Todo valor composto é imutável. Logo, "mesma referência" é detalhe de
+implementação: dois literais iguais podem compartilhar o mesmo handle ou não,
+conforme o compilador tenha internado um deles. E isso **muda** — quando o
+compartilhamento estrutural entrar, valores que hoje são cópias separadas
+passam a compartilhar memória.
+
+Se identidade fosse exposta, uma otimização viraria semântica observável.
+Algum script dependeria de dois valores serem distintos, e ligar o
+compartilhamento estrutural quebraria esse script. A otimização se tornaria
+impossível de aplicar — não por limite técnico, mas porque alguém escreveu
+código contra o acidente.
+
+Internamente, `==` compara handles primeiro e só desce ao conteúdo se forem
+diferentes. Isso é um atalho invisível, não uma garantia da linguagem. A
+diferença entre essas duas coisas é o post inteiro.
+
+## Restrições que parecem mesquinhez e não são
+
+Três regras da especificação parecem autor implicando com o usuário:
+
+- uma struct não pode conter a si mesma, em forma nenhuma
+- `Closure` só aparece em posição de argumento — não pode ser retornada,
+  guardada em campo nem colocada numa coleção
+- builder não é valor de primeira classe
+
+São a mesma regra vista de três lados.
+
+O Leaf não tem coletor de lixo. A memória é contagem de referências **sem
+detector de ciclo**, e isso só funciona se ciclo for impossível. Três
+invariantes combinadas o tornam impossível:
+
+Valor composto é imutável, então ele não consegue passar a apontar para si
+mesmo depois de criado — para construir o filho, o pai já teria que existir.
+O ambiente capturado por um `Closure` vive na pilha do frame e morre com ele,
+então nunca chega à arena e nunca entra na contagem. E o builder tem dono
+único e não é valor, então não há como dois lugares apontarem para ele.
+
+Quebre qualquer uma e o ciclo volta. Permita `Closure` guardada num campo e
+você tem um valor que captura outro valor que pode contê-lo. Torne o builder
+primeira classe e você tem um buffer mutável com dois donos.
+
+```leaf
+struct No:
+	prox: No?
+	filhos: Array<No>
+```
+
+As duas linhas são erro de compilação, e a mensagem nomeia o caminho da
+recursão: `No → prox → No`. Para árvore e lista na v1, o padrão é índice
+numa `Array` mantida à parte — arena, que é o que motor de jogo faz de
+qualquer jeito.
+
+Essas três estão na lista de adiadas, não na de recusadas. Mas desfazer
+qualquer uma custa pagar pelo que ela compra: ou entra um tipo indireto com
+detecção de ciclo, ou some o "sem coletor de lixo". Adiado, não de graça.
+
+## O que é só adiado mesmo
+
+Inferência de tipos, genéricos definidos pelo usuário, trait de iteração,
+funções geradoras, formatação dentro de interpolação. Custo-benefício comum:
+cada uma custa implementação e nenhuma impede a v1 de ser usável.
+
+A inferência merece uma linha. Escrever todo tipo explicitamente significa um
+verificador sem unificação, sem variável de tipo, checando de baixo para
+cima. É mais para digitar e muito menos para errar — e, quando erra, o erro
+aponta a linha que você escreveu, não um ponto três funções acima onde a
+inferência começou a divergir.
+
+## Por que fechar escopo antes de escrever código
+
+Fechar escopo não é teatro de disciplina. É o que torna barato dizer não
+depois.
+
+Enquanto a especificação está aberta, toda boa ideia é candidata, e recusar
+custa uma discussão. Com a lista escrita, recusar custa um link. A ideia não
+é rejeitada — ela é v2. E essa reformulação é o que impede um projeto de uma
+pessoa só de virar uma especificação infinita que nunca compila nada.
+
+As decisões da linguagem e por que ela precisa existir estão em
+[leaf.rs](/projetos/leaf).
