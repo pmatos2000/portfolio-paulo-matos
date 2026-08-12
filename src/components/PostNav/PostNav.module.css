@@ -16,21 +16,9 @@
   text-align: right;
 }
 
-/* Dois seletores porque .contentPage a vence uma classe sozinha. */
-.nav .link {
+.center {
   display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  text-decoration: none;
-  font-weight: 400;
-}
-
-.nav .link:hover {
-  text-decoration: none;
-}
-
-.nav .link:hover .title {
-  text-decoration: underline;
+  align-items: center;
 }
 
 .label {
@@ -45,9 +33,14 @@
   font-weight: 500;
 }
 
-.center {
+/* Dois seletores porque .contentPage a vence uma classe sozinha.
+   Ordem crescente de especificidade: noDescendingSpecificity do Biome. */
+.nav .link {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.2rem;
+  text-decoration: none;
+  font-weight: 400;
 }
 
 .nav .all {
@@ -57,8 +50,16 @@
   text-decoration: none;
 }
 
+.nav .link:hover {
+  text-decoration: none;
+}
+
 .nav .all:hover {
   color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.nav .link:hover .title {
   text-decoration: underline;
 }
 

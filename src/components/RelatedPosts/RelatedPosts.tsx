@@ -45,9 +45,7 @@ const RelatedPosts = async ({ slug, limit = 3 }: RelatedPostsProps) => {
     .filter((post) => !skip.has(post.slug))
     .map((post) => ({ post, score: scoreOf(post, current, frequency) }))
     .filter((entry) => entry.score > 0)
-    .sort(
-      (a, b) => b.score - a.score || b.post.date.localeCompare(a.post.date),
-    )
+    .sort((a, b) => b.score - a.score || b.post.date.localeCompare(a.post.date))
     .slice(0, limit);
 
   if (related.length === 0) {

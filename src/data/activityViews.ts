@@ -1,7 +1,7 @@
 import type { IconType } from "react-icons";
-import { VscBook, VscFiles, VscSettingsGear } from "react-icons/vsc";
+import { VscBook, VscFiles, VscSearch, VscSettingsGear } from "react-icons/vsc";
 
-export type ActivityView = "Explorer" | "Blog" | "Manage";
+export type ActivityView = "Explorer" | "Search" | "Blog" | "Manage";
 
 export type ActivityViewDef = {
   id: ActivityView;
@@ -19,6 +19,7 @@ export const TOP_VIEWS: ActivityViewDef[] = [
     short: "Arquivos",
     Icon: VscFiles,
   },
+  { id: "Search", label: "Buscar no site", short: "Buscar", Icon: VscSearch },
   { id: "Blog", label: "Posts do blog", short: "Blog", Icon: VscBook },
 ];
 

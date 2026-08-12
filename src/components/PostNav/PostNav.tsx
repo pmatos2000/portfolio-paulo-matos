@@ -9,7 +9,8 @@ const PostNav = async ({ slug }: PostNavProps) => {
   const index = posts.findIndex((post) => post.slug === slug);
 
   const newer = index > 0 ? posts[index - 1] : null;
-  const older = index >= 0 && index < posts.length - 1 ? posts[index + 1] : null;
+  const older =
+    index >= 0 && index < posts.length - 1 ? posts[index + 1] : null;
 
   return (
     <nav className={styles.nav} aria-label="Navegação entre posts">

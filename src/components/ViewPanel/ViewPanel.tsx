@@ -1,5 +1,6 @@
 import type { BlogYear } from "@/data/blogTree";
 import BlogPanel from "../BlogPanel/BlogPanel";
+import SearchPanel from "../SearchPanel/SearchPanel";
 import SettingsPanel from "../SettingsPanel/SettingsPanel";
 import Sidebar from "../Sidebar/Sidebar";
 
@@ -19,6 +20,8 @@ const ViewPanel = ({
   switch (activeView) {
     case "Explorer":
       return <Sidebar onCloseMenu={onCloseMenu} lastPostSlug={lastPostSlug} />;
+    case "Search":
+      return <SearchPanel onCloseMenu={onCloseMenu} />;
     case "Blog":
       return <BlogPanel years={blogYears} onCloseMenu={onCloseMenu} />;
     case "Manage":
