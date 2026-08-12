@@ -59,6 +59,17 @@ body {
   margin-right: auto;
 }
 
+/* 79 caracteres por linha, medido com a fonte do site; a 900px eram 116.
+   Código, vídeo e carrossel ficam fora do cap e seguem em 900. */
+.contentPage h1,
+.contentPage h2,
+.contentPage h3,
+.contentPage p,
+.contentPage ul,
+.contentPage ol {
+  max-width: 40rem;
+}
+
 .contentPage h1 {
   font-size: var(--font-size-xl);
   color: var(--text-color);
