@@ -5,6 +5,8 @@
   --border-color: #333333;
   --primary-color: #10b981;
   --text-color: #cccccc;
+  /* Texto de leitura: 7,06 sobre #252526. O secundário dava 4,67. */
+  --text-color-prose: #b0b0b0;
   --text-color-secondary: #8e8e8e;
 
   --font-size-xs: 0.75rem;
@@ -22,6 +24,8 @@
   /* emerald-700: 5,48:1 sobre branco. O #10b981 do tema escuro da 2,54:1 aqui. */
   --primary-color: #047857;
   --text-color: #1e1e1e;
+  /* 7,04 sobre #f3f3f3. */
+  --text-color-prose: #525252;
   --text-color-secondary: #5e5e5e;
 }
 
@@ -87,13 +91,13 @@ body {
 .contentPage p {
   line-height: 1.7;
   margin-bottom: 1rem;
-  color: var(--text-color-secondary);
+  color: var(--text-color-prose);
 }
 
 .contentPage ul {
   padding-left: 1.5rem;
   line-height: 1.7;
-  color: var(--text-color-secondary);
+  color: var(--text-color-prose);
 }
 
 .contentPage li {
@@ -135,7 +139,7 @@ body {
   background: none;
   padding: 0;
   font-size: var(--font-size-sm);
-  color: var(--text-color-secondary);
+  color: var(--text-color-prose);
 }
 
 .contentPage .shiki,
