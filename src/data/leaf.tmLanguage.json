@@ -95,15 +95,11 @@
       "patterns": [
         {
           "name": "keyword.control.leaf",
-          "match": "\\b(if|else|match|for|in|while|break|continue|return|try|is)\\b"
+          "match": "\\b(if|else|match|for|in|while|break|continue|return|try|is|super)\\b"
         },
         {
           "name": "keyword.control.import.leaf",
           "match": "\\b(import|export|from)\\b"
-        },
-        {
-          "name": "storage.modifier.leaf",
-          "match": "\\b(pub|static)\\b"
         },
         {
           "name": "keyword.declaration.leaf",
@@ -131,7 +127,7 @@
         },
         {
           "name": "support.type.leaf",
-          "match": "\\b(Option|Result|Array|Map|Func|Action|Closure|ArrayBuilder|MapBuilder)\\b"
+          "match": "\\b(Option|Result|Array|Map|Func|Closure|ArrayBuilder|MapBuilder|Default|Self)\\b"
         },
         {
           "name": "entity.name.type.leaf",
@@ -147,7 +143,7 @@
     },
     "operator": {
       "name": "keyword.operator.leaf",
-      "match": "(\\?\\.|\\?\\?|\\.\\.\\.|->|=>|[+\\-*/%<>=!]=?|\\?)"
+      "match": "(\\?\\.|\\?\\?|\\?\\(|\\.\\.\\.|->|=>|[+\\-*/%<>=!]=?|\\?)"
     }
   }
 }

@@ -1,0 +1,597 @@
+export const meta = {
+  title: "O Leaf por dentro: as decisões que deram forma à linguagem",
+  description:
+    "Como o Leaf ficou depois da revisão de agosto: tipos, imutabilidade, self obrigatório, traits com implementação default, Default como trait — e as cinco palavras-chave que eu tirei da linguagem.",
+  date: "2026-08-12",
+  tags: ["leaf", "design de linguagem", "compiladores"],
+};
+
+O [post anterior](/blog/por-que-uma-linguagem-de-script) é sobre por que o Leaf
+existe. Este é sobre como ele ficou.
+
+Não é a referência completa — essa vive em [leaf.rs](/projetos/leaf) e continua
+sendo atualizada. Aqui estão as decisões que **têm motivo**, com o motivo junto.
+Onde a escolha foi óbvia eu passo rápido; onde ela custou uma semana de
+discussão comigo mesmo, eu paro.
+
+O que está escrito aqui é o estado de agosto de 2026, depois de uma revisão que
+mudou bastante coisa — inclusive removendo cinco palavras que existiam no
+rascunho anterior.
+
+## Três regras dão forma a todo o resto
+
+**Todo tipo é escrito.** Não há inferência na v1. Isso significa um verificador
+de tipos sem unificação e sem variável de tipo, checando de baixo para cima. É
+mais para digitar e muito menos para errar — e, quando erra, o erro aponta a
+linha que você escreveu, não um ponto três funções acima onde a inferência
+começou a divergir.
+
+**Tudo é imutável, exceto variáveis.** `Array`, `Map`, `string` e `struct` são
+valores imutáveis. O que muda é o vínculo da variável, nunca o conteúdo. Essa é
+a regra que compra o "sem coletor de lixo", e ela reaparece em quase todas as
+seções abaixo.
+
+**Indentação é por tab.** Espaço no início de linha é erro de compilação. Sem
+heurística, sem largura configurável, sem debate de estilo. Um tab, um nível.
+
+A terceira parece trivial ao lado das outras duas, mas ela declara uma
+política: quando há duas formas de escrever a mesma coisa, a linguagem escolhe
+uma. Isso vai voltar mais adiante, no `self`.
+
+## Números
+
+```leaf
+let vida: int = 100        // i64
+let tempo: float = 0.0     // f64
+```
+
+Não existe `number`. O tipo é sempre `int` ou `float`, explicitamente.
+
+A conversão é assimétrica de propósito:
+
+```leaf
+let x: float = 1           // implícito: int sobe para float
+let a: int? = f.to_int()   // None se NaN, infinito ou fora de faixa
+let b: int  = f.trunc_sat() // satura nos limites de i64, nunca falha
+```
+
+Subir é sempre seguro, então é implícito. Descer perde informação e pode falhar,
+então é explícito e você escolhe qual falha quer: `None` ou saturação.
+
+Divisão por zero segue Rust e C#, sem o pânico:
+
+```leaf
+let a: float = 1.0 / 0.0   // inf. IEEE 754 puro, não é erro
+let b: int = x / 0         // erro de compilação: divisor literal zero é sempre bug
+let c: int? = x.checked_div(y)  // None se y == 0
+```
+
+`int / 0` com divisor variável é falha irrecuperável — aborta a chamada. Quem
+quer tratar pede a versão explícita, que devolve `int?`. A aritmética comum
+continua com tipo simples: `a + b` é `int`, não `Result<int, _>`. Sem isso,
+`a + b + c` viraria exercício de paciência.
+
+## Ausência: `Option<T>`
+
+```leaf
+let alvo: Entidade? = None
+let x: int? = Some(4)
+let y: int? = 4            // cast implícito
+```
+
+O valor padrão é `None`. Aninhar é proibido: `Option<Option<T>>` é erro de
+compilação.
+
+O cast implícito `T` → `Option<T>` é unidirecional. O caminho de volta
+(`let n: int = Some(4)`) continua sendo erro, e acessar `.` num `Option` sem `?`
+também. Não existe unwrap silencioso — a coerção só embrulha, nunca desembrulha.
+
+O encadeamento seguro tem a semântica do C#: se o alvo é `None`, **toda a
+cadeia** curto-circuita, não elo por elo.
+
+```leaf
+let b: int? = a?.vida      // se a é None, o resultado é None e .vida não é avaliado
+let c: int? = a?.b.c       // um único teste, não um por elo
+let v: int  = a?.vida ?? 0
+```
+
+O alvo é avaliado uma única vez — `buscar()?.vida` não chama `buscar` duas
+vezes. E atribuição através de `?.` é proibida: `a?.vida = 5` é erro, porque
+struct é imutável. A forma é `a = a?.envelhecer() ?? a`.
+
+## Falha: `Result<T, E>` e `try`
+
+`Result` é para falha de **domínio** — a que o autor do script previu e quer
+tratar. Falha aritmética não usa `Result`.
+
+```leaf
+def carregar(s: string) -> Result<Config, string>:
+	let n: int = try int.parse(s)
+	return Ok({ tamanho: n })
+```
+
+`try` é prefixo. Devolve o valor se for `Ok`; se for `Err`, **abandona a função
+ali mesmo** e retorna aquele `Err`.
+
+É palavra-chave em vez de símbolo por causa disso: o efeito é fluxo de controle
+não-local, e a linha seguinte pode não executar. Uma palavra no começo avisa de
+longe; um sufixo se perde no fim da expressão.
+
+Não existe `catch`, e isso é recusa, não adiamento. Há **dois** mecanismos de
+falha, com propósitos diferentes:
+
+| | Falha irrecuperável | `Result<T, E>` |
+|---|---|---|
+| Origem | operação sem resultado representável | falha que o autor previu |
+| Exemplos | `int / 0`, overflow, índice fora de faixa, combustível esgotado | `parse`, validação, busca |
+| Efeito | aborta a chamada | é um valor, tratado com `match` ou `try` |
+| Capturável no script | não | sim |
+
+Um `catch` deixaria o script engolir a primeira. E é exatamente isso que não se
+pode permitir num motor de jogo: script que esconde um overflow é script
+produzindo número errado em silêncio pelo resto do frame.
+
+Duas regras menores que custaram discussão:
+
+`Result<void, E>` é válido — "pode falhar, e em caso de sucesso não devolve
+nada" é comum demais para não ter. É a única posição, além de retorno, onde
+`void` aparece.
+
+E **`Result` não tem valor padrão**. Uma variável `Result` sem inicializador é
+erro de compilação. A tentação de dar um default é grande, porque quase todo
+tipo tem um — mas o único candidato seria `Ok(Default(T))`, e isso significa uma
+variável não inicializada **afirmando sucesso**. Numa linguagem cujo tema é
+"toda falha vira `Result`", é o pior valor possível de escolher.
+
+## Coleções
+
+Imutáveis. Qualquer operação devolve uma nova.
+
+```leaf
+let a: Array<int> = [1, 2, 3]
+let b: Array<int> = a.push(4)   // a continua [1, 2, 3]
+let c: int? = a.get(10)         // None, nunca panic
+```
+
+`Map` tem a mesma semântica e uma garantia extra: **a ordem de inserção é
+preservada**. Iterar o mesmo `Map` duas vezes dá a mesma ordem, e dois `Map`
+construídos pela mesma sequência de operações iteram igual.
+
+Isso custa um índice por entrada e compra determinismo — necessário para replay,
+lockstep de rede, serialização estável e teste reproduzível. Num motor de jogo,
+"a ordem do dicionário varia entre execuções" é a origem de uma categoria
+inteira de bug que só reproduz uma vez em vinte.
+
+Coleção imutável tem um custo óbvio: `a = a.push(x)` num laço é O(n²). O builder
+resolve:
+
+```leaf
+let b: ArrayBuilder<int> = ArrayBuilder.with_capacity(100)
+for i: int in fonte:
+	b = b.push(i)          // O(1) amortizado, sem cópia
+let a: Array<int> = b.build()   // consome: vira Array sem copiar
+```
+
+O builder **não é valor de primeira classe**: só variável local, nunca
+argumento, retorno, campo ou elemento de coleção. Parece arbitrário. Não é — é a
+terceira das invariantes que tornam o ciclo impossível, e eu volto nisso na
+seção do `self`.
+
+E o spread tem a semântica do JavaScript:
+
+```leaf
+let b: Array<int> = [...a, 4]
+let m2: Map<string, int> = { ...m, "x": 1 }   // chave da direita vence
+let p2: Pessoa = { ...p, idade: 19 }          // campo da direita vence
+let copia: Array<int> = [...a]                // no-op: só refcount++
+```
+
+## Igualdade
+
+`==` é sempre estrutural, comparando por valor em toda profundidade. E não
+existe um segundo operador perguntando "é a mesma referência?".
+
+```leaf
+[1, 2, 3] == [1, 2, 3]                                // true
+{ nome: "a", idade: 1 } == { nome: "a", idade: 1 }    // true
+Some(4) == Some(4)                                    // true
+Some(4) == 4                                          // true, via coerção
+```
+
+A ausência do operador de identidade é o argumento mais sutil da linguagem.
+Como todo valor composto é imutável, "mesma referência" é detalhe de
+implementação: dois literais iguais podem ou não compartilhar o mesmo handle,
+conforme o compilador tenha internado um deles. E isso **muda** — quando o
+compartilhamento estrutural entrar, valores que hoje são cópias separadas
+passam a compartilhar memória.
+
+Expor identidade transformaria uma otimização em semântica observável. Algum
+script dependeria de dois valores serem distintos, e ligar o compartilhamento
+quebraria esse script — não por limite técnico, mas porque alguém escreveu
+código contra o acidente.
+
+## Funções como valor
+
+```leaf
+const soma: Func<int, int, int> = (a: int, b: int) => a + b
+const log:  Func<string, void>  = (s: string) => console.log(s)
+
+let f: Func<int, int> = minha_fn    // função nomeada é atribuível
+```
+
+O último parâmetro de tipo é **sempre** o retorno. `Func<int, void>` recebe um
+`int` e não devolve nada; `Func<int>` não recebe nada e devolve um `int`;
+`Func<void>` não recebe nem devolve.
+
+No rascunho anterior existia um segundo tipo, `Action`, para o caso sem retorno.
+Ele morreu nessa revisão: duas regras onde cabia uma.
+
+Lambda não captura variável externa e o corpo é uma expressão. Quem precisa
+capturar usa `Closure`, e paga por isso:
+
+```leaf
+let limite: int = 10
+let pares: Array<int> = lista.filter((x: int) => x < limite)   // captura limite
+```
+
+| | `Func` | `Closure` |
+|---|---|---|
+| captura variável local | não | **sim** |
+| argumento de chamada | sim | sim |
+| retorno, campo de struct, elemento de coleção | sim | **não** |
+| representação | `u32` | `u32` + ambiente na pilha |
+
+`Closure` só aparece em **posição de argumento**. Ela não escapa. O ambiente
+capturado vive na pilha do frame e morre com ele — por isso não há arena, não há
+contagem de referência e não há risco de ciclo. É essa restrição que preserva a
+garantia de "refcount sem detector de ciclo".
+
+`Func` **não tem valor padrão**, nem quando o retorno é `void`. Um callback não
+atribuído que devolve zero em silêncio é a mesma classe de bug que a linguagem
+recusa em todo lugar. Callback opcional se escreve com o tipo dizendo isso:
+
+```leaf
+let ao_morrer: Func<void>? = None
+ao_morrer?()               // roda só se estiver definido
+let vazio: Func<void> = () => void
+```
+
+## Struct
+
+Imutável. Não existe atribuição a campo.
+
+```leaf
+struct Pessoa:
+	nome: string
+	idade: int
+
+let a: Pessoa = { nome: "Paulo", idade: 18 }
+let b: Pessoa = Pessoa { nome: "Ana", idade: 22 }
+let c: Pessoa = { ...a, idade: 19 }
+```
+
+As duas primeiras formas existem por um motivo prático. A regra de
+desambiguação é o tipo esperado: havendo tipo struct esperado, `{ }` é literal
+de struct; sem tipo esperado, `{ }` é sempre `Map`. A forma com o nome na frente
+resolve os casos em que não há tipo esperado.
+
+Campo faltando, campo extra ou tipo errado é erro. Campos ausentes **não**
+recebem valor padrão — a construção é sempre completa.
+
+```leaf
+impl Pessoa:
+	def apresentar(self) -> string:
+		return $"Olá, meu nome é {self.nome} e tenho {self.idade} anos!"
+
+	def envelhecer(self) -> Pessoa:
+		return { ...self, idade: self.idade + 1 }
+
+	def novo(nome: string) -> Pessoa:
+		return { nome: nome, idade: 0 }
+```
+
+**A presença de `self` decide.** Método com `self` é de instância
+(`p.apresentar()`); método sem `self` é associado ao tipo (`Pessoa.novo("Ana")`).
+Chamar um pelo outro é erro com mensagem indicando a forma correta.
+
+Struct não pode conter a si mesma, direta ou indiretamente — nem por `No?`, nem
+por `Array<No>`. O motivo é tamanho (sem tipo indireto o layout não fecha) e
+ciclo (`Array<No>` traria de volta o que a imutabilidade elimina). Para árvore e
+lista na v1, o padrão é índice numa `Array` mantida à parte — arena, que é o que
+motor de jogo faz de qualquer jeito.
+
+## Enum e `match`
+
+```leaf
+enum SistemaOperacional:
+	Nenhum
+	Windows(versao: int)
+	Linux(versao: string, distro: string)
+
+match so:
+	Windows(v) => console.log($"Windows {v}")
+	Linux(v, d):
+		console.log(d)
+		console.log(v)
+	Nenhum => console.log("nenhum")
+```
+
+Payload é nomeado — sem campo posicional, para casar com a regra de tipagem
+explícita. Braço de uma expressão usa `=>`; braço de bloco usa `:` e indentação.
+
+`match` é exaustivo: sem `_`, todas as variantes precisam estar cobertas, e o
+compilador lista as que faltam. Braço depois de `_` é inalcançável, e isso é
+erro, não aviso.
+
+## O estado: `self` e `Self`
+
+Esta é a parte que mais mudou na revisão, e a que eu acho mais interessante.
+
+Um script com estado é assim:
+
+```leaf
+@implements(Atualizavel)
+
+let vida: int = 100
+let tempo: float = 0.0
+
+def atualizar(self, dt: float) -> void:
+	self.tempo = self.tempo + dt
+	if self.vida <= 0:
+		console.log("morreu")
+
+def dano(self, v: int) -> void:
+	self.vida = self.vida - v
+```
+
+A ideia nova é simples de enunciar: **um script com estado define um tipo
+implícito, `Self`, cujos campos são os `let` do topo.** Cada entidade tem uma
+instância dele.
+
+O que me convenceu não foi elegância, foi que isso não inventa nada. A VM já
+guardava exatamente isso — um bloco de globais por instância, com a arena junto —
+e já passava esse bloco em toda chamada. `self` só dá nome do lado do script a
+uma coisa que já existia do lado do Rust.
+
+E aí três coisas caem de graça.
+
+**Uma regra em vez de duas.** Antes, `impl` decidia método de instância pela
+presença de `self`, e o nível de módulo tinha uma palavra-chave `static` para
+dizer "sem acesso a estado". Agora é a mesma regra nos dois lugares: quem
+declara `self` acessa estado, quem não declara, não acessa. `static` foi
+aposentada.
+
+**Trait com `self` passa a funcionar em script.** Antes, uma trait que
+declarasse `def atualizar(self, dt: float)` não podia ser implementada por um
+módulo, porque módulo não tinha `self`. Agora pode, e as duas rotas de
+implementação — `impl Trait for Tipo` e `@implements` no arquivo — passam a
+falar a mesma língua.
+
+**Lambda continua correta sem regra nova.** A regra já era "não pode ler
+variável externa, exceto `const`". Como `self` é estado da instância, ele está
+fora dessa lista por construção.
+
+### Por que `self.` é obrigatório também no uso
+
+Essa foi a decisão que eu mais demorei a tomar, e eu comecei do lado errado.
+
+O argumento contra é bom: sombreamento é erro na linguagem, então `vida` no
+corpo não pode ser outra coisa senão o campo. `self.` não desambigua nada, e é
+ruído.
+
+O argumento a favor é melhor, e é outro: **`self.` não serve para desambiguar,
+serve para marcar a única mutação que a linguagem tem.** Olhe o que sobrou de
+mutável no Leaf — struct imutável, `Array` imutável, `Map` imutável, `string`
+imutável, captura de closure imutável. Campo de `self` é o único ponto de
+escrita real do sistema, e o único cujo efeito atravessa frames. Escrever isso
+como `vida = vida - v` faz a única coisa perigosa da linguagem parecer
+atribuição de variável local.
+
+Tem um segundo efeito que eu não tinha previsto. Com `self.` obrigatório, nome
+com ponto e nome solto param de disputar: `self.x` só resolve campo de
+instância, e nome solto resolve local, `const`, função ou símbolo importado.
+Isso dá uma propriedade boa de modularidade — **acrescentar um `let` no topo de
+um script nunca quebra nenhuma função existente**, porque nome solto jamais
+resolve para campo.
+
+E há o argumento de consistência, que talvez seja o decisivo: dentro de `impl`,
+`self.nome` já era a única forma. Deixar módulo aceitar nome solto faria do
+módulo a exceção justamente na regra que eu estava unificando.
+
+### `Self` não é valor de primeira classe
+
+Você não pode passar `self` como argumento, devolver, guardar em campo ou
+colocar numa coleção.
+
+Isso não é conservadorismo. Se `Self` fosse um valor comum, você teria uma
+referência mutável e compartilhável ao estado — e o ciclo, que a imutabilidade
+elimina, voltaria pela porta dos fundos. A contagem de referências sem detector
+de ciclo depende de **quatro** invariantes combinadas:
+
+1. valor composto é imutável
+2. `Closure` não escapa do frame
+3. builder não é valor de primeira classe
+4. `Self` não é valor de primeira classe
+
+Quebre qualquer uma e o ciclo volta. As quatro parecem restrições sem relação —
+são a mesma decisão vista de quatro lados.
+
+## Traits
+
+```leaf
+trait Atualizavel:
+	def atualizar(self, dt: float) -> void
+	def obter_descricao(self) -> string
+	def ao_nascer(self) -> void:
+		return
+```
+
+Método sem corpo é abstrato; método com `:` e bloco é implementação default.
+Não há modificador nenhum — o dois-pontos é o que distingue, como em todo o
+resto da linguagem.
+
+Implementação default é novidade dessa revisão, e vem com `super`:
+
+```leaf
+impl Atualizavel for Pessoa:
+	def ao_nascer(self) -> void:
+		super()
+		console.log("e mais isso")
+```
+
+`super(...)` chama a implementação da trait. Só vale dentro de um método que
+sobrescreve um default; se não houver default, é erro de compilação. Como não
+existe herança entre traits, `super` nunca é ambíguo — refere-se sempre à trait
+do bloco `impl` onde está.
+
+Um script inteiro também pode ser a implementação, via `@implements`. E a
+validação é feita de uma vez só, não uma mensagem por erro:
+
+```
+error: script "inimigo" declara @implements(Atualizavel)
+       mas não satisfaz a trait
+  --> inimigo.leaf:1:1
+  - método faltando: atualizar(self, float) -> void
+  - assinatura incorreta: obter_descricao
+      esperado:   (self) -> string
+      encontrado: (self, int) -> string
+```
+
+Trait desconhecida é erro; método extra é permitido. O resultado vira tabela de
+despacho no bytecode — chamada por índice, sem procurar nome em runtime.
+
+Uma regra que entrou junto: **só se implementa trait para tipo declarado no
+próprio script.** Isso vale para tipo do host, para genérico embutido e para
+tipo importado de outro módulo. É a regra órfã do Rust, e sem ela dois scripts
+podem implementar a mesma trait para o mesmo tipo importado e produzir tabelas
+conflitantes.
+
+## `Default` é uma trait
+
+Toda struct ganha um `Default` derivado, campo a campo. A novidade é poder
+substituí-lo:
+
+```leaf
+impl Default for Pessoa:
+	def default() -> Self:
+		return { nome: "", idade: 18 }
+```
+
+O derivado continua existindo para quem não escreve nada, e o explícito vence
+quando existe. E `Pessoa.default()` passa a ser chamável — inclusive o derivado
+— o que faz `{ ...Pessoa.default(), nome: "x" }` funcionar sem sintaxe nova.
+
+Tem uma restrição que parece burocrática e que segura a arquitetura inteira: **o
+corpo de `default()` precisa ser expressão constante.** Literais, construção de
+struct, outros `default()`, `const`. Sem chamada de função qualquer, sem
+aritmética com variável.
+
+O motivo: hoje declarar variável sem inicializador é infalível — o compilador
+conhece o valor e ele vira uma constante no bytecode. Se o corpo do `default()`
+pudesse ser código arbitrário, `let p: Pessoa` passaria a poder dividir por
+zero, esgotar combustível ou recursar. E criar uma instância de script deixaria
+de ser cópia de um bloco pronto e passaria a executar script, precisando de
+frame de execução. Uma linha de restrição preserva tudo isso, e o caso real que
+alguém quer escrever — `idade: 18` — continua permitido.
+
+Nem todo tipo tem `Default`, e a lista é fechada: `Result`, `Func`, e `enum`
+cujas variantes todas têm payload (que se resolve com `@default(Variante)`).
+
+A falta se propaga só por `struct`. `Array`, `Map`, `Option` e `enum` não
+herdam, porque nenhum deles constrói o `T` no valor padrão. O que dá uma saída
+prática quando um campo atrapalha:
+
+```leaf
+struct Estado:
+	resultado: Result<int, string>?    // default None, e a struct volta a ter Default
+```
+
+## Módulos e anotações
+
+Biblioteca é um arquivo sem estado por instância: só `const`, função sem `self`,
+`struct`, `enum` e `trait`.
+
+```leaf
+@mod_name("Matematica")
+
+const PI: float = 3.1415
+
+def soma(a: int, b: int) -> int:
+	return a + b
+
+export { PI, soma }
+```
+
+```leaf
+import { PI, soma } from @mod("Matematica")
+```
+
+`export { }` é o **único** eixo de visibilidade da linguagem, e ele é entre
+scripts. Sobre isso, ver a próxima seção.
+
+Anotação é prefixo de declaração, com parâmetros nomeados e tipados. A
+linguagem tem três embutidas — `@implements`, `@mod_name` e `@default` — e o
+programa que hospeda a VM registra as suas, com alvo e parâmetros declarados. É
+assim que uma engine ensina aos scripts os conceitos que só ela conhece: no
+Rustle, `@export(min=0, max=100)` é uma anotação da engine, não da linguagem, e
+é ela que faz o editor desenhar o painel de propriedades do componente.
+
+Anotação desconhecida é **erro de compilação** — o oposto do que costuma
+acontecer com decorador por aí, onde uma anotação que ninguém trata é ignorada
+em silêncio e o erro de digitação só aparece quando o comportamento esperado não
+acontece.
+
+## O que eu tirei da linguagem
+
+Essa revisão removeu mais do que acrescentou, e o critério que apareceu no meio
+do caminho vale mais que qualquer uma das remoções:
+
+> Nenhuma palavra da linguagem deve existir só para descrever o embedding.
+
+Foi o que matou `pub`. Ele marcava "esta função é chamável pelo Rust", e era a
+única palavra da linguagem que não fazia sentido nenhum sem falar da VM. Hoje
+toda função é visível para o host, e a curadoria de interface é feita por
+`@implements`, que é o contrato real. `export { }` ficou como único eixo, e ele
+descreve uma relação entre scripts — que é assunto da linguagem.
+
+O mesmo raciocínio, por outro caminho, matou `static`: ele duplicava uma regra
+que o `self` já dava. E `@export` saiu junto — anotação de engine, não de
+linguagem.
+
+Também morreram `Action`, que era duas regras onde cabia uma, e `@no_self`, que
+virou redundante no instante em que `self` passou a ser obrigatório na
+declaração.
+
+Cinco palavras a menos, e a linguagem diz a mesma coisa. Uma sexta chegou a ser
+considerada e não entrou: `pass`, para corpo vazio, até eu perceber que `return`
+sozinho já resolvia.
+
+## E o que ficou de fora
+
+A lista de fora-da-v1 é longa, e a maior parte dela não é "não deu tempo". Vale
+separar as duas coisas.
+
+**Recusado por projeto:** `try`/`catch`, operador de identidade de referência,
+variável global mutável. Nenhum volta.
+
+O último entrou nessa lista agora. Estado compartilhado entre scripts parece
+óbvio até você perguntar onde o valor mora: um `Array` vive numa arena, e arena
+pertence a uma instância. Um global de tipo composto guardaria um ponteiro para
+uma arena que pode desaparecer quando uma entidade não relacionada morrer.
+Existem saídas — um tipo atômico para escalares, ou uma instância singleton
+acessada por chamada — e as duas ficaram anotadas para a v2, com a análise
+junto, para não ter que refazer a discussão daqui a seis meses.
+
+**Adiado:** inferência de tipos, genéricos definidos pelo usuário, tipo indireto
+que destravaria struct recursiva, trait de iteração, funções geradoras,
+formatação dentro de interpolação. Custo-benefício comum: cada uma custa
+implementação e nenhuma impede a v1 de ser usável.
+
+A diferença entre as duas listas é o que dá forma ao projeto. Roteiro que só
+sabe adiar é lista de desejos.
+
+---
+
+A referência completa e atualizada está em [leaf.rs](/projetos/leaf). O
+compilador ainda não existe — o plano tem 27 etapas em 6 fases, e a primeira
+entrega o pipeline inteiro suportando só `int`.

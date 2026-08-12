@@ -1,0 +1,218 @@
+export const meta = {
+  title: "Por que eu decidi escrever uma linguagem de script",
+  description:
+    "A página do Leaf vai ser editada até deixar de parecer com o que é hoje. Este post não. É o registro de por que a linguagem existe, com as cinco linguagens que eu avaliei antes e o motivo de cada recusa.",
+  date: "2026-08-12",
+  tags: ["leaf", "rustle", "design de linguagem"],
+};
+
+A página do [Leaf](/projetos/leaf) descreve o estado atual da linguagem, e por
+isso ela vai ser editada muitas vezes — até, em algum momento, não parecer mais
+com o que é hoje. Este post é a outra metade: o registro de **por que** ela
+existe, escrito enquanto a decisão ainda está fresca. Decisão datada continua
+verdadeira para sempre; especificação envelhece em uma semana.
+
+## O ciclo que eu queria quebrar
+
+No [Rustle](/projetos/rustle), a engine de jogos que estou escrevendo em Rust,
+criar um componente novo exige recompilar o projeto inteiro.
+
+A causa está numa decisão anterior, e correta. Para integrar componentes ao
+editor eu escolhi WebAssembly em vez de biblioteca nativa, porque a ABI do Rust
+não é estável — um plugin compilado com uma versão do compilador pode
+simplesmente não carregar em outra. E essa instabilidade não é descuido: ela é
+proposital, é o que permite ao compilador reorganizar as coisas entre versões.
+Apostar numa ABI estável do Rust é apostar contra o projeto do Rust.
+
+O WebAssembly resolveu isso e trouxe de brinde algo que não estava no plano:
+ele carrega o schema junto. O editor inspeciona o módulo, descobre quais campos
+ele exporta, de que tipo, com quais limites, e monta o painel de propriedades
+sozinho. Nunca precisei escrever interface para um componente.
+
+O preço foi o ciclo. Toda alteração passa pelo compilador.
+
+Para código de engine isso é aceitável — sistema de renderização não muda dez
+vezes por hora. Para código de jogo, não é. Ajustar o dano de um inimigo não
+pode custar um build.
+
+## Eu tentei antes de escrever
+
+"Por que não usa uma linguagem pronta" é a pergunta óbvia, e eu não a respondi
+lendo documentação. Respondi construindo.
+
+A prova de conceito da engine tem uma camada de script inteira em **Rune**: ciclo
+de vida completo, schema para o editor, módulos carregados sem recompilar.
+Funcionou. E foi usando que os limites apareceram.
+
+Um módulo em Rune não pode segurar uma referência à cena. A consequência é que
+ele não executa ações no mundo — ele **retorna** uma lista de efeitos
+(`despawn`, `emit`) que o hospedeiro traduz e aplica. Todo componente vira um
+tradutor de intenções. Além disso, não dá para registrar tipos Rust próprios na
+VM, então tudo atravessa a fronteira como dado genérico. O README que eu mesmo
+escrevi na época já avisava para deixar o trabalho pesado no núcleo nativo.
+
+Nada disso é falha do Rune. São consequências de um projeto que não foi feito
+para esse uso. Mas foram elas que transformaram "seria legal escrever uma
+linguagem" em "eu preciso de uma linguagem que não existe".
+
+## Os cinco requisitos
+
+O que eu precisava, ao mesmo tempo:
+
+1. **Tipagem estática** — requisito, não preferência estética
+2. **Compilada para uma VM**, não interpretada a partir da árvore sintática
+3. **Integração nativa com Rust**, sem marshalling de dados na fronteira
+4. **Sem coletor de lixo** — pausa imprevisível é inaceitável num loop de frame
+5. **Sem panic na VM** — script mal escrito não pode derrubar o editor
+
+Uma observação honesta antes da tabela: o requisito 5 não é garantido em 100%,
+porque ele contradiz o 3. Integração nativa significa que código Rust do host
+roda dentro da chamada do script, e a VM não tem como impedir que esse código
+entre em pânico. O que dá para garantir é que **nada que a linguagem faz** causa
+pânico — divisão por zero, índice fora de faixa, overflow, laço infinito. O que
+o host registra é responsabilidade do host.
+
+## As cinco que eu avaliei
+
+| Linguagem | Tipagem estática | VM (bytecode) | Sem marshalling | Sem GC | Sem panic |
+|---|---|---|---|---|---|
+| **Rhai** | não, dinâmica | não, interpretador de AST | sim, `Dynamic` no heap Rust | sim, só `Rc`/`Arc` | parcial, `Result` sem garantia |
+| **Rune** | não, dinâmica | sim, VM de pilha | sim, `Shared`, mesmo heap | parcial, refcount e ciclos vazam | parcial, `VmError` + budget |
+| **Lua** (mlua) | não, dinâmica | sim, registradores | não, pilha C com push/pop | não, mark-sweep incremental | parcial, `longjmp` convertido |
+| **Luau** (mlua) | parcial, gradual e opcional | sim, próprio | não, mesma fronteira C | não, GC | parcial |
+| **Piccolo** | não, dinâmica | sim, stackless e interrompível | sim, Rust puro | não, `gc-arena` incremental | sim, desenhada para isso |
+
+Cada uma atende algumas. Nenhuma atende as cinco. E a coluna que mais elimina é
+a terceira, não a primeira: assim que a fronteira é a pilha do C, todo valor que
+atravessa é copiado e reempacotado, e a integração "nativa" vira um protocolo.
+
+Vale dizer o que essa tabela **não** é. Não é ranking de qualidade. Piccolo é um
+projeto melhor desenhado que qualquer coisa que eu vá escrever tão cedo, e Lua é
+a linguagem embarcável mais bem-sucedida da história. A tabela mede uma coisa
+só: encaixe num conjunto de requisitos que eu escolhi.
+
+## Por que tipagem estática
+
+Três motivos, em ordem crescente de especificidade.
+
+O primeiro é de manutenção, e é o mais chato de defender porque parece opinião.
+Depois de anos mantendo sistemas grandes, com muita gente, a ausência de tipos
+cobra caro. Tipagem é uma barreira de entrada no começo e uma economia no resto
+do tempo. E não é opinião isolada: linguagens que nasceram sem tipos
+construíram mecanismos para adicioná-los depois. Python ganhou anotações;
+JavaScript ganhou o TypeScript. Ninguém fez o caminho inverso.
+
+O segundo é de desempenho. Tipo conhecido em tempo de compilação permite ligar
+o tipo à instrução — o conjunto de instruções da VM deixa de ter uma operação
+"somar" que descobre o tipo em runtime e passa a ter uma "somar inteiros". A VM
+nunca pergunta "que tipo é isso?", porque o código gerado já sabe. Isso não é
+uma otimização que se acrescenta depois; é uma propriedade que existe ou não
+desde o desenho.
+
+O terceiro é específico do meu caso: quero que scripts implementem traits, e
+quero que o editor gere painel de propriedades a partir do script como já gera a
+partir dos tipos em Rust. As duas coisas precisam de tipo. Eu poderia ter
+seguido tipagem pato e confiado na convenção — mas num sistema onde o editor
+desenha interface a partir do que ele acha que o script expõe, confiar em
+convenção é um tiro no pé com hora marcada.
+
+## Por que compilada para uma VM
+
+Uma engine tem orçamento de milissegundos por frame, e o script não pode ser o
+gargalo. Interpretar a árvore sintática significa caminhar ponteiros e decidir o
+que fazer em cada nó, toda vez. Compilar para bytecode de uma VM de
+registradores significa decidir isso uma vez, na compilação, e depois só
+executar.
+
+A escolha de registradores em vez de pilha é a mesma da Lua: menos instruções
+para o mesmo trabalho, porque operandos são endereçados diretamente em vez de
+empurrados e retirados.
+
+## Por que integração nativa com Rust
+
+Quero que a linguagem seja uma biblioteca que você importa no projeto, registra
+os seus tipos, os seus métodos e as suas anotações, e usa. Sem camada de
+compatibilidade, sem serialização na fronteira, sem `Box<dyn Any>` viajando de
+um lado para o outro.
+
+E, embora ela tenha nascido da necessidade do Rustle, o objetivo é que seja de
+uso geral. A engine importa a linguagem e faz as configurações dela — não o
+contrário. Se o Leaf só servir para o Rustle, ele falhou em algo que dava para
+ter feito certo desde o início.
+
+## Por que sem coletor de lixo
+
+Coletor de lixo executa quando quer. Ele varre, verifica ciclo, libera o que
+ninguém usa — e enquanto faz isso, o mundo espera. Num aplicativo comum isso é
+invisível. Num jogo, é o frame que engasga sem motivo aparente, e é o tipo de
+problema que só aparece na máquina do jogador.
+
+A alternativa mais simples é contagem de referências: cada valor sabe quantos o
+apontam e some quando ninguém mais aponta. Determinístico, sem pausa. O problema
+clássico é o ciclo — se A aponta para B e B volta a apontar para A, a contagem
+de nenhum dos dois chega a zero, e os dois vazam.
+
+A resposta usual é acrescentar um detector de ciclos. Só que um detector de
+ciclos é um coletor de lixo pequeno, com o mesmo defeito de origem.
+
+O Leaf resolve isso por construção, e este é o melhor argumento da linguagem
+inteira:
+
+> `Array`, `Map`, `string` e `struct` são imutáveis. Um valor imutável não
+> consegue passar a apontar para si mesmo depois de criado, porque para
+> construir o filho o pai já teria que existir. Sem mutação não há ciclo; sem
+> ciclo, a contagem de referências basta sozinha.
+
+É por isso que a imutabilidade aqui é decisão estrutural e não gosto pessoal.
+Ela é o que compra o "sem coletor de lixo" sem pagar em vazamento. E é por isso
+que várias restrições da linguagem que parecem mesquinhez — struct não pode
+conter a si mesma, closure com captura não pode ser guardada, builder não é
+valor de primeira classe — são a mesma regra vista de ângulos diferentes.
+Quebre qualquer uma e o ciclo volta.
+
+## Por que sem pânico
+
+A ideia é que a VM capture o que puder capturar e devolva uma estrutura
+descrevendo o erro, deixando o hospedeiro decidir o que fazer. Divisão inteira
+por zero, índice fora de faixa, overflow: nenhuma derruba o processo, todas
+sobem como erro com nome do script, função e linha.
+
+Duas proteções entram junto:
+
+- **Combustível.** Um contador cai a cada volta de laço e a cada chamada.
+  Zerou, a execução para. Sem isso, um `while true` num script travaria o frame
+  inteiro, e o editor junto.
+- **Limite de arena por instância.** Script que aloca sem parar falha com erro
+  em vez de depender do sistema operacional matar o processo.
+
+E uma decisão que difere de C e de Rust: verificação de overflow **não é
+removida em release**. Modo otimizado não altera semântica. Num script de jogo,
+um erro localizado é sempre melhor que um número errado silencioso — porque o
+número errado vira comportamento estranho três sistemas adiante, e você passa a
+tarde procurando no lugar errado.
+
+## O nome
+
+O motor se chama Rustle, que lembra Rust e, traduzido, significa farfalhar — o
+barulho de folhas ao vento. Daí Leaf: folha. As folhas são os componentes que
+o motor movimenta.
+
+Extensão `.leaf`.
+
+## Por que a linguagem antes do motor
+
+A ordem é deliberada, e o motivo é sobre mim, não sobre o projeto.
+
+Meu conhecimento de linguagens, estruturas de dados e algoritmos é bem mais
+sólido que meu conhecimento de computação gráfica. Começar pelo Leaf significa
+trabalhar em terreno onde consigo julgar minhas próprias decisões — onde eu sei
+diferenciar uma escolha ruim de uma escolha que eu só não entendi ainda.
+
+Rasterização e pipeline de renderização vêm depois, e vão vir com a experiência
+de ter levado um projeto grande do começo ao fim uma vez.
+
+---
+
+A outra metade está em [O Leaf por dentro](/blog/o-leaf-por-dentro): como a
+linguagem ficou, tipo por tipo e decisão por decisão, com o motivo de cada
+escolha.

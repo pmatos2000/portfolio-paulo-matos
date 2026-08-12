@@ -13,29 +13,31 @@ export const metadata = pageMetadata({
 
 const EXAMPLE = `@implements(Atualizavel)
 
-@export(min=0, max=100) let vida: int = 100
+let vida: int = 100
 let tempo: float = 0.0
 
-pub def atualizar(dt: float) -> void:
-\ttempo = tempo + dt
-\tif vida <= 0:
+def atualizar(self, dt: float) -> void:
+\tself.tempo = self.tempo + dt
+\tif self.vida <= 0:
 \t\tconsole.log("morreu")
 
-pub def dano(v: int) -> void:
-\tvida = vida - v`;
+def dano(self, v: int) -> void:
+\tself.vida = self.vida - v`;
 
-const ANNOTATIONS = `@implements(Atualizavel)
-
-@export(min=0, max=100, step=1) let vida: int = 100
+const ANNOTATIONS = `@export(min=0, max=100, step=1) let vida: int = 100
 @export(values=["copas", "paus", "ouro", "espada"]) let naipe: string`;
 
 const TRAIT_ERROR = `error: script "inimigo" declara @implements(Atualizavel)
        mas não satisfaz a trait
   --> inimigo.leaf:1:1
-  - método faltando: atualizar(float) -> void
+  - método faltando: atualizar(self, float) -> void
   - assinatura incorreta: obter_descricao
-      esperado:    () -> string
-      encontrado: (int) -> string`;
+      esperado:   (self) -> string
+      encontrado: (self, int) -> string`;
+
+const IMMUTABLE = `let a: Array<int> = [1, 2, 3]
+let b: Array<int> = a.push(4)   // a continua [1, 2, 3]
+let c: int? = a.get(10)         // None, nunca panic`;
 
 const LeafPage = () => {
   return (
@@ -125,9 +127,36 @@ const LeafPage = () => {
       <Code lang="leaf">{EXAMPLE}</Code>
       <p>
         A sintaxe é próxima da de Python — <code>def</code>, dois-pontos, blocos
-        por indentação — só que com o tipo de tudo escrito explicitamente. As
-        linhas que começam com <code>@</code> são anotações, e elas merecem
-        seção própria.
+        por indentação — só que com o tipo de tudo escrito explicitamente. Não há
+        modificador nenhum antes do <code>def</code>: o que decide se uma função
+        acessa o estado da instância é a presença de <code>self</code>. A linha
+        que começa com <code>@</code> é uma anotação, e elas merecem seção
+        própria.
+      </p>
+
+      <h2>O estado de um script</h2>
+      <p>
+        Um script com estado define um tipo implícito, <code>Self</code>, cujos
+        campos são os <code>let</code> declarados no topo do arquivo. Cada
+        entidade do jogo tem uma instância desse tipo, e é ela que a VM passa em
+        toda chamada.
+      </p>
+      <p>
+        Isso não inventa um conceito novo — a máquina já guardava exatamente
+        isso, um bloco de estado por instância com a arena de memória junto. O{" "}
+        <code>self</code> só dá nome, do lado do script, a algo que já existia do
+        lado do Rust. E o efeito é que uma regra só passa a valer nos dois
+        lugares onde antes havia duas: em script e em bloco de implementação de
+        struct, quem declara <code>self</code> acessa estado, quem não declara,
+        não acessa.
+      </p>
+      <p>
+        Escrever <code>self.</code> também é obrigatório no acesso, e o motivo
+        não é desambiguação — sombreamento já é erro na linguagem. É que campo de{" "}
+        <code>self</code> é a <strong>única mutação que a linguagem tem</strong>:
+        struct, <code>Array</code>, <code>Map</code> e <code>string</code> são
+        todos imutáveis. Deixar a única coisa perigosa parecer atribuição de
+        variável local seria esconder justamente o que precisa ser visto.
       </p>
 
       <h2>Anotações</h2>
@@ -136,27 +165,34 @@ const LeafPage = () => {
         variável, uma função ou um tipo. Parece detalhe de sintaxe, mas é a peça
         que resolve três problemas diferentes de uma vez só.
       </p>
+      <p>
+        A linguagem tem três embutidas — <code>@implements</code>,{" "}
+        <code>@mod_name</code> e <code>@default</code>. Todas as outras são
+        registradas pelo programa que hospeda a VM, com alvo e parâmetros
+        declarados. É assim que uma engine ensina aos scripts os conceitos que só
+        ela conhece:
+      </p>
       <Code lang="leaf">{ANNOTATIONS}</Code>
 
       <p>
         <strong>Fazem a ponte entre o script e o editor.</strong>{" "}
-        <code>@export(min=0, max=100, step=1)</code> não é decoração: é a
-        descrição do campo que o editor vai desenhar. O tipo da variável decide
-        o widget, os limites decidem a faixa, e <code>values</code> transforma
-        uma string num seletor de opções. É a mesma ideia que faz o editor do
-        Rustle gerar painéis sozinho a partir dos tipos em Rust, agora
-        disponível para quem escreve script — um componente em Leaf ganha sua
-        interface de propriedades sem que ninguém escreva interface.
+        <code>@export(min=0, max=100, step=1)</code> é uma anotação do Rustle,
+        não do Leaf, e não é decoração: é a descrição do campo que o editor vai
+        desenhar. O tipo da variável decide o widget, os limites decidem a faixa,
+        e <code>values</code> transforma uma string num seletor de opções. É a
+        mesma ideia que faz o editor gerar painéis sozinho a partir dos tipos em
+        Rust, agora disponível para quem escreve script — um componente em Leaf
+        ganha sua interface de propriedades sem que ninguém escreva interface.
       </p>
 
       <p>
         <strong>Substituem código repetitivo.</strong>{" "}
         <code>@implements(Atualizavel)</code> declara que o arquivo inteiro é a
         implementação de uma interface. Não há bloco de implementação, não há
-        método para encaixar numa estrutura: as funções públicas do script já
-        são os métodos. E a economia não é só de digitação — o compilador
-        transforma isso numa tabela de despacho, então o motor chama o script
-        por índice, sem procurar função por nome em tempo de execução.
+        método para encaixar numa estrutura: as funções do script já são os
+        métodos. E a economia não é só de digitação — o compilador transforma
+        isso numa tabela de despacho, então o motor chama o script por índice,
+        sem procurar função por nome em tempo de execução.
       </p>
 
       <p>
@@ -173,14 +209,11 @@ const LeafPage = () => {
       </pre>
 
       <p>
-        O vocabulário também não é fixo. O programa que hospeda a VM registra as
-        próprias anotações, com alvo e parâmetros declarados — é assim que uma
-        engine ensina aos scripts os conceitos que só ela conhece. E anotação
-        desconhecida é <strong>erro de compilação</strong>, o oposto do que
-        costuma acontecer com decoradores por aí, onde uma anotação que ninguém
-        trata é silenciosamente ignorada e o erro de digitação só aparece quando
-        o comportamento esperado não acontece. Para metadados que a VM deve
-        mesmo ignorar existe um espaço reservado, <code>@meta</code>.
+        Anotação desconhecida é <strong>erro de compilação</strong>, o oposto do
+        que costuma acontecer com decoradores por aí, onde uma anotação que
+        ninguém trata é silenciosamente ignorada e o erro de digitação só aparece
+        quando o comportamento esperado não acontece. Para metadados que a VM
+        deve mesmo ignorar existe um espaço reservado, <code>@meta</code>.
       </p>
 
       <h2>Sem coletor de lixo, e sem vazamento</h2>
@@ -196,6 +229,7 @@ const LeafPage = () => {
         de ciclos é um coletor de lixo pequeno, com o mesmo defeito: roda quando
         quer e para o mundo enquanto roda.
       </p>
+      <Code lang="leaf">{IMMUTABLE}</Code>
       <p>
         Leaf resolve por construção. <code>Array</code>, <code>Map</code>,{" "}
         <code>string</code> e <code>struct</code> são imutáveis — só o vínculo
@@ -207,7 +241,11 @@ const LeafPage = () => {
       <p>
         É por isso que a imutabilidade aqui é decisão estrutural, e não gosto
         pessoal. Ela é o que compra o "sem coletor de lixo" sem pagar em
-        vazamento.
+        vazamento. E é por isso que quatro restrições que parecem sem relação —
+        struct não pode conter a si mesma, closure com captura não escapa do
+        frame, builder não é valor de primeira classe e <code>Self</code> não é
+        valor de primeira classe — são a mesma decisão vista de quatro lados.
+        Quebre qualquer uma e o ciclo volta.
       </p>
 
       <h2>A VM não entra em pânico</h2>
@@ -266,7 +304,8 @@ const LeafPage = () => {
         estrutural, layout de cada tipo na VM. O que ficou de fora da primeira
         versão está listado explicitamente, e a maior parte ficou de fora por
         projeto, não por prazo: não há <code>try</code>/<code>catch</code>, não
-        há inferência de tipos, não há operador de identidade de referência.
+        há inferência de tipos, não há operador de identidade de referência e não
+        há variável global mutável.
       </p>
       <p>
         O plano de implementação tem 27 etapas em 6 fases, distribuídas em nove

@@ -20,12 +20,14 @@ export type PostModule = {
  * Fonte única do blog. Alimenta /blog/[slug], o índice, o RSS e o nó Blog
  * do sidebarTree. Import preguiçoso: o índice lê só os `meta`, sem arrastar
  * o corpo dos posts — tudo resolvido em build.
+ *
+ * A ordenação é por data, decrescente. Entre posts da mesma data, vale a
+ * ordem daqui — por isso a série do Leaf está na ordem de leitura.
  */
 export const postLoaders = {
-  "o-numero-que-me-faria-mudar-de-ideia": () =>
-    import("@/content/blog/o-numero-que-me-faria-mudar-de-ideia.mdx"),
-  "recusado-nao-e-adiado": () =>
-    import("@/content/blog/recusado-nao-e-adiado.mdx"),
+  "por-que-uma-linguagem-de-script": () =>
+    import("@/content/blog/por-que-uma-linguagem-de-script.mdx"),
+  "o-leaf-por-dentro": () => import("@/content/blog/o-leaf-por-dentro.mdx"),
 } satisfies Record<string, () => Promise<PostModule>>;
 
 export type PostSlug = keyof typeof postLoaders;
