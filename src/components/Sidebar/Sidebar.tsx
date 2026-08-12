@@ -3,25 +3,9 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { SidebarContext } from "@/contexts/SidebarContext";
-import { buildTree, type TreeItem } from "@/data/sidebarTree";
+import { buildTree, findItem } from "@/data/sidebarTree";
 import TreeNodeComponent from "../TreeNodeComponent/TreeNodeComponent";
 import styles from "./Sidebar.module.css";
-
-const findItem = (
-  nodes: TreeItem[],
-  predicate: (item: TreeItem) => boolean,
-): TreeItem | null => {
-  for (const node of nodes) {
-    if (predicate(node)) {
-      return node;
-    }
-    if (node.type === "node") {
-      const found = findItem(node.children, predicate);
-      if (found) return found;
-    }
-  }
-  return null;
-};
 
 type SidebarProps = {
   onCloseMenu: () => void;

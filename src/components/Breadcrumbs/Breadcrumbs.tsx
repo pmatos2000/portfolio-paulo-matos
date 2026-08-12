@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import JsonLd from "@/components/JsonLd/JsonLd";
+import { buildTree, findItem } from "@/data/sidebarTree";
 import { siteConfig } from "@/data/site";
 import styles from "./Breadcrumbs.module.css";
 
@@ -13,11 +14,24 @@ const Breadcrumbs = () => {
     return null;
   }
 
+  const tree = buildTree(pathname);
+
+  const titleFor = (href: string, fallback: string) => {
+    const leaf = findItem(
+      tree,
+      (item) => item.type === "leaf" && item.url === href,
+    );
+    if (leaf) {
+      return leaf.title;
+    }
+    return findItem(tree, (item) => item.url === href)?.title ?? fallback;
+  };
+
   // Cada segmento acumula o caminho: /projetos, /projetos/jogos, ...
-  const segments = parts.map((text, index) => ({
-    text,
-    href: `/${parts.slice(0, index + 1).join("/")}`,
-  }));
+  const segments = parts.map((text, index) => {
+    const href = `/${parts.slice(0, index + 1).join("/")}`;
+    return { text: titleFor(href, text), href };
+  });
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",

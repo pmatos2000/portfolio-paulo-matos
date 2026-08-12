@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
   padding: 0.5rem 1rem;
   background-color: var(--background-secondary);
   border-bottom: 1px solid var(--border-color);
@@ -27,4 +28,19 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
+}
+
+/* Só o último encolhe: nome de arquivo longo vira reticências em vez de
+   quebrar a barra em duas linhas (49px contra 33px, medido a 375px). */
+.segment:last-child {
+  flex-shrink: 1;
+}
+
+.segment:last-child .crumb {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

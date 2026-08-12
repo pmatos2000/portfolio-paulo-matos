@@ -259,6 +259,24 @@ const injectPost = (nodes: TreeItem[], post: TreeLeaf): TreeItem[] =>
     return { ...node, children: injectPost(node.children, post) };
   });
 
+export const findItem = (
+  nodes: TreeItem[],
+  predicate: (item: TreeItem) => boolean,
+): TreeItem | null => {
+  for (const node of nodes) {
+    if (predicate(node)) {
+      return node;
+    }
+    if (node.type === "node") {
+      const found = findItem(node.children, predicate);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
+};
+
 export const postSlugFromPath = (pathname: string): string | null =>
   POST_PATH.exec(pathname)?.[1] ?? null;
 
