@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { postLoaders, postSlugs } from "@/data/posts";
+import { loadPosts } from "@/data/posts";
 import styles from "./PostLinks.module.css";
 
 type PostLinksProps = { tag?: string; limit?: number };
@@ -13,17 +13,10 @@ const formatDate = (iso: string) =>
   }).format(new Date(iso));
 
 const PostLinks = async ({ tag, limit }: PostLinksProps) => {
-  const loaded = await Promise.all(
-    postSlugs.map(async (slug) => {
-      const { meta } = await postLoaders[slug]();
-      return { ...meta, slug };
-    }),
-  );
-
-  const posts = loaded
+  const all = await loadPosts();
+  const posts = all
     .filter((post) => !tag || post.tags.includes(tag))
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, limit ?? loaded.length);
+    .slice(0, limit ?? all.length);
 
   if (posts.length === 0) {
     return null;

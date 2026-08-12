@@ -31,3 +31,16 @@ export const postLoaders = {
 export type PostSlug = keyof typeof postLoaders;
 
 export const postSlugs = Object.keys(postLoaders) as PostSlug[];
+
+export type LoadedPost = PostMeta & { slug: PostSlug };
+
+/** Todos os posts, do mais novo para o mais antigo. Fonte de toda listagem. */
+export const loadPosts = async (): Promise<LoadedPost[]> => {
+  const posts = await Promise.all(
+    postSlugs.map(async (slug) => {
+      const { meta } = await postLoaders[slug]();
+      return { ...meta, slug };
+    }),
+  );
+  return posts.sort((a, b) => b.date.localeCompare(a.date));
+};

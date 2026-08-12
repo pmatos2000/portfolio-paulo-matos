@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd/JsonLd";
+import PostNav from "@/components/PostNav/PostNav";
+import RelatedPosts from "@/components/RelatedPosts/RelatedPosts";
 import { type PostSlug, postLoaders, postSlugs } from "@/data/posts";
 import { pageMetadata, siteConfig } from "@/data/site";
 import styles from "./post.module.css";
@@ -66,21 +68,25 @@ const PostPage = async ({ params }: Props) => {
   };
 
   return (
-    <article className="contentPage">
+    <div className="contentPage">
       <JsonLd data={schema} />
-      <h1>{meta.title}</h1>
-      <div className={styles.postMeta}>
-        <time dateTime={meta.date}>{formatDate(meta.date)}</time>
-        <ul className={styles.tags}>
-          {meta.tags.map((tag) => (
-            <li key={tag} className={styles.tag}>
-              {tag}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <Content />
-    </article>
+      <article>
+        <h1>{meta.title}</h1>
+        <div className={styles.postMeta}>
+          <time dateTime={meta.date}>{formatDate(meta.date)}</time>
+          <ul className={styles.tags}>
+            {meta.tags.map((tag) => (
+              <li key={tag} className={styles.tag}>
+                {tag}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <Content />
+      </article>
+      <PostNav slug={slug} />
+      <RelatedPosts slug={slug} />
+    </div>
   );
 };
 

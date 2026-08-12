@@ -14,7 +14,7 @@ export const siteConfig = {
 export const blogConfig = {
   title: `Blog de ${siteConfig.name}`,
   description:
-    "Notas sobre a construção do Leaf, uma linguagem de script tipada e sem coletor de lixo, embarcável em Rust.",
+    "Notas técnicas sobre o que estou construindo. No momento, o Leaf: uma linguagem de script embarcável em Rust.",
   feedPath: "/rss.xml",
 } as const;
 

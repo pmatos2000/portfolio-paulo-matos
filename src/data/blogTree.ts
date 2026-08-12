@@ -1,4 +1,4 @@
-import { postLoaders, postSlugs } from "@/data/posts";
+import { loadPosts } from "@/data/posts";
 
 export type BlogPostRef = {
   slug: string;
@@ -16,24 +16,18 @@ export type BlogYear = {
  * e não atravessa a fronteira, então ele é acrescentado no cliente.
  */
 export const getBlogYears = async (): Promise<BlogYear[]> => {
-  const posts = await Promise.all(
-    postSlugs.map(async (slug) => {
-      const { meta } = await postLoaders[slug]();
-      return { slug: String(slug), title: meta.title, date: meta.date };
-    }),
-  );
-  posts.sort((a, b) => b.date.localeCompare(a.date));
-
   const years = new Map<string, BlogPostRef[]>();
-  for (const post of posts) {
+
+  for (const post of await loadPosts()) {
     const year = post.date.slice(0, 4);
+    const ref = { slug: String(post.slug), title: post.title, date: post.date };
     const bucket = years.get(year);
     if (bucket) {
-      bucket.push(post);
+      bucket.push(ref);
     } else {
-      years.set(year, [post]);
+      years.set(year, [ref]);
     }
   }
 
-  return [...years].map(([year, list]) => ({ year, posts: list }));
+  return [...years].map(([year, posts]) => ({ year, posts }));
 };

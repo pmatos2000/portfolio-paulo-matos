@@ -1,10 +1,5 @@
 import Link from "next/link";
-import {
-  type PostMeta,
-  type PostSlug,
-  postLoaders,
-  postSlugs,
-} from "@/data/posts";
+import { type LoadedPost, loadPosts } from "@/data/posts";
 import { blogConfig, pageMetadata } from "@/data/site";
 import styles from "./blog.module.css";
 
@@ -13,18 +8,6 @@ export const metadata = pageMetadata({
   description: blogConfig.description,
   path: "/blog",
 });
-
-type LoadedPost = PostMeta & { slug: PostSlug };
-
-const loadPosts = async (): Promise<LoadedPost[]> => {
-  const posts = await Promise.all(
-    postSlugs.map(async (slug) => {
-      const { meta } = await postLoaders[slug]();
-      return { ...meta, slug };
-    }),
-  );
-  return posts.sort((a, b) => b.date.localeCompare(a.date));
-};
 
 const groupByYear = (posts: LoadedPost[]): [string, LoadedPost[]][] => {
   const years = new Map<string, LoadedPost[]>();

@@ -1,4 +1,4 @@
-import { postLoaders, postSlugs } from "@/data/posts";
+import { loadPosts } from "@/data/posts";
 import { blogConfig, siteConfig } from "@/data/site";
 
 export const dynamic = "force-static";
@@ -14,16 +14,10 @@ const escapeXml = (value: string) =>
     .replace(/"/g, "&quot;");
 
 export async function GET() {
-  const posts = await Promise.all(
-    postSlugs.map(async (slug) => {
-      const { meta } = await postLoaders[slug]();
-      return {
-        ...meta,
-        url: new URL(`/blog/${slug}`, siteConfig.url).toString(),
-      };
-    }),
-  );
-  posts.sort((a, b) => b.date.localeCompare(a.date));
+  const posts = (await loadPosts()).map((post) => ({
+    ...post,
+    url: new URL(`/blog/${post.slug}`, siteConfig.url).toString(),
+  }));
 
   const items = posts.map((post) =>
     [

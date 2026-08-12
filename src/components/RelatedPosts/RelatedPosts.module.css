@@ -1,0 +1,34 @@
+.related {
+  margin-top: 2.5rem;
+}
+
+.heading {
+  font-size: var(--font-size-md);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-color-secondary);
+  margin: 0 0 0.75rem;
+  padding: 0;
+  border: none;
+}
+
+/* Dois seletores: .contentPage ul e .contentPage li vencem uma classe só. */
+.related .list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.related .item {
+  margin: 0 0 0.4rem;
+}
+
+.related .link {
+  color: var(--primary-color);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+}
+
+.related .link:hover {
+  text-decoration: underline;
+}
