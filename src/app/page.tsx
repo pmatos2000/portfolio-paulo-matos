@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import profileImage from "@/assets/images/profile.jpg";
 import JsonLd from "@/components/JsonLd/JsonLd";
+import PostLinks from "@/components/PostLinks/PostLinks";
 import { pageMetadata, siteConfig, socialLinks } from "@/data/site";
 import styles from "./page.module.css";
 
@@ -148,6 +149,11 @@ const Home = () => {
           nativa com Rust, sem coletor de lixo e sem panic. Construí a camada de
           script da prova de conceito em Rune antes de decidir escrever a minha
           — foi usando que os limites apareceram.
+        </p>
+        <h3 className={styles.highlightSub}>Escrevendo sobre isso</h3>
+        <PostLinks tag="leaf" limit={3} />
+        <p className={styles.highlightFooter}>
+          <Link href="/blog">Todos os posts</Link>
         </p>
       </section>
     </div>

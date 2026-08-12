@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Code from "@/components/CodeBlock/Code";
+import PostLinks from "@/components/PostLinks/PostLinks";
 import { pageMetadata } from "@/data/site";
 
 export const metadata = pageMetadata({
@@ -314,6 +315,9 @@ const LeafPage = () => {
           que a VM seja compartilhável entre threads sem trava
         </li>
       </ul>
+
+      <h2>Escrevendo sobre o Leaf</h2>
+      <PostLinks tag="leaf" />
 
       <h2>Onde acompanhar</h2>
       <ul>
