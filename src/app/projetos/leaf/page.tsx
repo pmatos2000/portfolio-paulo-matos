@@ -127,10 +127,10 @@ const LeafPage = () => {
       <Code lang="leaf">{EXAMPLE}</Code>
       <p>
         A sintaxe é próxima da de Python — <code>def</code>, dois-pontos, blocos
-        por indentação — só que com o tipo de tudo escrito explicitamente. Não há
-        modificador nenhum antes do <code>def</code>: o que decide se uma função
-        acessa o estado da instância é a presença de <code>self</code>. A linha
-        que começa com <code>@</code> é uma anotação, e elas merecem seção
+        por indentação — só que com o tipo de tudo escrito explicitamente. Não
+        há modificador nenhum antes do <code>def</code>: o que decide se uma
+        função acessa o estado da instância é a presença de <code>self</code>. A
+        linha que começa com <code>@</code> é uma anotação, e elas merecem seção
         própria.
       </p>
 
@@ -144,19 +144,20 @@ const LeafPage = () => {
       <p>
         Isso não inventa um conceito novo — a máquina já guardava exatamente
         isso, um bloco de estado por instância com a arena de memória junto. O{" "}
-        <code>self</code> só dá nome, do lado do script, a algo que já existia do
-        lado do Rust. E o efeito é que uma regra só passa a valer nos dois
+        <code>self</code> só dá nome, do lado do script, a algo que já existia
+        do lado do Rust. E o efeito é que uma regra só passa a valer nos dois
         lugares onde antes havia duas: em script e em bloco de implementação de
         struct, quem declara <code>self</code> acessa estado, quem não declara,
         não acessa.
       </p>
       <p>
         Escrever <code>self.</code> também é obrigatório no acesso, e o motivo
-        não é desambiguação — sombreamento já é erro na linguagem. É que campo de{" "}
-        <code>self</code> é a <strong>única mutação que a linguagem tem</strong>:
-        struct, <code>Array</code>, <code>Map</code> e <code>string</code> são
-        todos imutáveis. Deixar a única coisa perigosa parecer atribuição de
-        variável local seria esconder justamente o que precisa ser visto.
+        não é desambiguação — sombreamento já é erro na linguagem. É que campo
+        de <code>self</code> é a{" "}
+        <strong>única mutação que a linguagem tem</strong>: struct,{" "}
+        <code>Array</code>, <code>Map</code> e <code>string</code> são todos
+        imutáveis. Deixar a única coisa perigosa parecer atribuição de variável
+        local seria esconder justamente o que precisa ser visto.
       </p>
 
       <h2>Anotações</h2>
@@ -169,8 +170,8 @@ const LeafPage = () => {
         A linguagem tem três embutidas — <code>@implements</code>,{" "}
         <code>@mod_name</code> e <code>@default</code>. Todas as outras são
         registradas pelo programa que hospeda a VM, com alvo e parâmetros
-        declarados. É assim que uma engine ensina aos scripts os conceitos que só
-        ela conhece:
+        declarados. É assim que uma engine ensina aos scripts os conceitos que
+        só ela conhece:
       </p>
       <Code lang="leaf">{ANNOTATIONS}</Code>
 
@@ -178,11 +179,12 @@ const LeafPage = () => {
         <strong>Fazem a ponte entre o script e o editor.</strong>{" "}
         <code>@export(min=0, max=100, step=1)</code> é uma anotação do Rustle,
         não do Leaf, e não é decoração: é a descrição do campo que o editor vai
-        desenhar. O tipo da variável decide o widget, os limites decidem a faixa,
-        e <code>values</code> transforma uma string num seletor de opções. É a
-        mesma ideia que faz o editor gerar painéis sozinho a partir dos tipos em
-        Rust, agora disponível para quem escreve script — um componente em Leaf
-        ganha sua interface de propriedades sem que ninguém escreva interface.
+        desenhar. O tipo da variável decide o widget, os limites decidem a
+        faixa, e <code>values</code> transforma uma string num seletor de
+        opções. É a mesma ideia que faz o editor gerar painéis sozinho a partir
+        dos tipos em Rust, agora disponível para quem escreve script — um
+        componente em Leaf ganha sua interface de propriedades sem que ninguém
+        escreva interface.
       </p>
 
       <p>
@@ -211,9 +213,9 @@ const LeafPage = () => {
       <p>
         Anotação desconhecida é <strong>erro de compilação</strong>, o oposto do
         que costuma acontecer com decoradores por aí, onde uma anotação que
-        ninguém trata é silenciosamente ignorada e o erro de digitação só aparece
-        quando o comportamento esperado não acontece. Para metadados que a VM
-        deve mesmo ignorar existe um espaço reservado, <code>@meta</code>.
+        ninguém trata é silenciosamente ignorada e o erro de digitação só
+        aparece quando o comportamento esperado não acontece. Para metadados que
+        a VM deve mesmo ignorar existe um espaço reservado, <code>@meta</code>.
       </p>
 
       <h2>Sem coletor de lixo, e sem vazamento</h2>
@@ -304,8 +306,8 @@ const LeafPage = () => {
         estrutural, layout de cada tipo na VM. O que ficou de fora da primeira
         versão está listado explicitamente, e a maior parte ficou de fora por
         projeto, não por prazo: não há <code>try</code>/<code>catch</code>, não
-        há inferência de tipos, não há operador de identidade de referência e não
-        há variável global mutável.
+        há inferência de tipos, não há operador de identidade de referência e
+        não há variável global mutável.
       </p>
       <p>
         O plano de implementação tem 27 etapas em 6 fases, distribuídas em nove
