@@ -28,6 +28,8 @@ export const postLoaders = {
   "por-que-uma-linguagem-de-script": () =>
     import("@/content/blog/por-que-uma-linguagem-de-script.mdx"),
   "o-leaf-por-dentro": () => import("@/content/blog/o-leaf-por-dentro.mdx"),
+  "o-plano-em-27-etapas": () =>
+    import("@/content/blog/o-plano-em-27-etapas.mdx"),
 } satisfies Record<string, () => Promise<PostModule>>;
 
 export type PostSlug = keyof typeof postLoaders;

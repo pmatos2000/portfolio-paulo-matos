@@ -1,0 +1,309 @@
+export const meta = {
+  title: "O plano do Leaf em 27 etapas",
+  description:
+    "Nenhuma linha do compilador existe ainda. O que existe é o plano: de onde cada etapa sai, onde ela chega, e como eu vou saber que ela acabou.",
+  date: "2026-08-12",
+  tags: ["leaf", "planejamento", "compiladores"],
+};
+
+Os dois posts anteriores são sobre
+[por que o Leaf existe](/blog/por-que-uma-linguagem-de-script) e
+[como ele é](/blog/o-leaf-por-dentro). Este é sobre o que falta: sair de zero
+linha de código até uma versão 1.0.
+
+Nenhuma linha do compilador existe. O que existe é um plano de 27 etapas, e ele
+foi escrito antes de propósito.
+
+## Por que o plano antes do código
+
+Enquanto o escopo está aberto, toda boa ideia é candidata, e recusar custa uma
+discussão. Com a lista escrita, recusar custa um link — a ideia não é rejeitada,
+ela é v2. É o que impede um projeto de uma pessoa só de virar uma especificação
+infinita que nunca compila nada.
+
+E há um motivo mais desconfortável: **depois eu não sou imparcial.** Se eu
+deixar para definir o critério de "está pronto" quando a etapa estiver quase
+terminando, terei acabado de passar uma semana nela. Vou ter contornado três
+problemas dela e ficado orgulhoso dela. O único momento em que sou honesto sobre
+o que é suficiente é agora, quando ainda não custou nada.
+
+Daí a regra que organiza o plano inteiro: **critério de fim é teste que passa,
+não "está pronto".** Quando não dá para escrever o teste, o critério está mal
+formulado e é o critério que precisa mudar, não o teste.
+
+E a regra que organiza a *ordem*: **esqueleto que anda primeiro.** A primeira
+fase entrega o caminho completo — texto, tradução, execução, resultado de volta
+no Rust — suportando apenas números inteiros. Tudo depois é acrescentar tipo a
+uma máquina que já roda. É a defesa contra o erro clássico de escrever
+analisador de sintaxe por três meses sem nunca ver nada executar.
+
+---
+
+# Fase 0 — Fundação
+
+Três etapas que não entregam linguagem nenhuma, e sem as quais as outras 24
+ficam caras.
+
+**E0 — Onde escrever e como saber que funciona.** Sai de uma pasta vazia e
+chega num projeto que roda testes sozinho, com integração contínua reprovando o
+que quebra.
+*Pronto quando:* um teste trivial passa em cada pedaço do projeto e a esteira
+fica verde num exemplo real.
+
+**E1 — Como um valor é guardado e quando ele some.** Sai de nada e chega na
+peça mais fundamental do projeto: onde os valores vivem e como a memória é
+devolvida sem coletor de lixo.
+*Pronto quando:* uma sequência aleatória de criar e descartar valores termina
+com a memória zerada, e liberar uma lista de cem mil níveis não derruba o
+programa.
+
+**E2 — Erro que aponta onde.** Sai de "deu problema" e chega em mensagem com
+arquivo, linha e coluna — e que **acumula**, porque reportar um erro por vez é
+o que torna um compilador insuportável.
+*Pronto quando:* um arquivo com vários problemas reporta todos, na ordem em que
+aparecem no texto.
+
+---
+
+# Fase 1 — O esqueleto que anda
+
+Seis etapas para fazer o caminho inteiro funcionar com um tipo só. No fim
+dela, o Rust chama uma função escrita em Leaf e recebe um número de volta.
+
+**E3 — Do texto para símbolos.** Sai de um arquivo e chega numa lista de peças
+— nomes, números, palavras da linguagem — com a indentação já transformada em
+estrutura, porque no Leaf é ela que abre e fecha bloco.
+*Pronto quando:* vinte arquivos, bem e mal escritos, produzem exatamente a
+sequência esperada, e espaço no começo da linha vira erro apontando a linha
+certa.
+
+**E4 — Dos símbolos para uma árvore.** Sai da lista de peças e chega na
+estrutura do programa: o que é declaração, o que é expressão, o que está dentro
+de quê. Ainda sem nenhuma verificação de sentido.
+*Pronto quando:* todo exemplo de código da referência é entendido, e um arquivo
+com três erros de escrita reporta os três em vez de parar no primeiro.
+
+**E5 — Dar sentido à árvore.** Sai de uma estrutura sem significado e chega numa
+onde todo nome aponta para alguma coisa e todo valor tem tipo conferido. É a
+etapa mais densa da fase, e onde mora a maior parte das regras da linguagem.
+*Pronto quando:* quinze arquivos com erro de tipo produzem exatamente a
+mensagem esperada — e, o critério de que eu mais gosto do plano inteiro,
+**acrescentar uma variável de estado no topo de um arquivo não muda a
+compilação de nenhuma função que já existia lá.**
+
+**E6 — Da árvore para instruções.** Sai da árvore com sentido e chega numa lista
+de instruções para a máquina virtual executar. É aqui que o programa deixa de
+ser texto.
+*Pronto quando:* existe uma ferramenta que mostra as instruções geradas e a
+linha de origem de cada uma. Sem ela, os meses seguintes são depuração no
+escuro.
+
+**E7 — A máquina.** Sai de uma lista de instruções e chega num resultado.
+*Pronto quando:* trinta scripts produzem o valor esperado, um fibonacci
+recursivo funciona, e estouro de número devolve erro em vez de derrubar o
+processo.
+
+**E8 — A fronteira com o Rust.** Sai de "roda sozinho" e chega em "o programa
+que hospeda chama e recebe de volta", com tipos conferidos dos dois lados.
+
+> **Marco 1 — o caminho completo funciona.** *Pronto quando:* um teste compila
+> um script, cria uma instância, chama `soma(2, 3)` e recebe `5`. Argumento com
+> tipo errado devolve erro, não lê memória errada.
+
+---
+
+# Fase 2 — O mundo do Rust entra
+
+Duas etapas. A linguagem para de ser um universo fechado.
+
+**E9 — A engine ensina seus tipos.** Sai de uma linguagem que só conhece o que
+ela mesma define e chega numa que aprende os tipos, operadores e funções de
+quem a hospeda. É o que separa "linguagem embarcável" de "linguagem que roda ao
+lado".
+*Pronto quando:* um tipo de vetor definido em Rust é registrado com soma,
+multiplicação e um método, e um script usa os três como se fossem nativos.
+
+**E10 — O resto dos números e o texto.** Sai de só inteiros e chega em
+decimais, booleanos e texto, com as conversões entre eles definidas.
+*Pronto quando:* subir de inteiro para decimal acontece sozinho, descer exige
+pedir explicitamente, e concatenar textos não deixa lixo para trás.
+
+> **Marco 2 — a linguagem é usável para lógica.** *Pronto quando:* todos os
+> exemplos de tipos básicos da referência executam e devolvem o resultado certo.
+
+---
+
+# Fase 3 — Os tipos que importam
+
+Cinco etapas. É aqui que o Leaf ganha a cara dele.
+
+**E11 — Ausência.** Sai de "toda variável tem valor" e chega em poder dizer
+"talvez não tenha", com os operadores que lidam com isso sem transformar o
+código numa escada de verificações.
+*Pronto quando:* uma cadeia de acessos sobre um valor ausente não avalia nada
+depois do primeiro elo — verificado por efeito observável, não por leitura do
+código.
+
+**E12 — Registros.** Sai de valores soltos e chega em agrupá-los com nome e
+tipo. Imutáveis: alterar um campo produz um valor novo.
+*Pronto quando:* construção, leitura, cópia com alteração e métodos funcionam —
+e um registro que contém a si mesmo é recusado com o caminho da recursão
+nomeado.
+
+**E13 — Alternativas.** Sai de "este valor é sempre isto" e chega em "este valor
+é uma entre estas opções", com a verificação que garante que você tratou todas.
+*Pronto quando:* esquecer uma opção é erro de compilação que **lista quais**
+faltaram, em vez de dizer só que faltou.
+
+**E14 — Falha prevista.** Sai de "deu errado, e agora?" e chega num tipo que
+carrega ou o resultado ou o motivo da falha, com uma palavra curta para
+repassar a falha adiante.
+*Pronto quando:* repassar a falha realmente interrompe a função, e quem tentar
+escrever um bloco de captura de exceção recebe uma mensagem explicando por que
+ele não existe.
+
+**E15 — Coleções.** Sai de valores individuais e chega em listas e dicionários —
+imutáveis, como todo o resto, com uma ferramenta separada para construir em
+massa sem pagar o custo de copiar a cada item.
+*Pronto quando:* acrescentar um item não altera a coleção original, construir
+cem mil itens roda em tempo proporcional a cem mil, e o dicionário devolve as
+chaves na mesma ordem em cem execuções seguidas.
+
+> **Marco 3 — o sistema de tipos está completo.** *Pronto quando:* uma sequência
+> qualquer de operações de coleção termina com a memória zerada.
+
+---
+
+# Fase 4 — Organização
+
+Quatro etapas. A linguagem deixa de ser um arquivo e passa a ser um sistema.
+
+**E16 — Anotações.** Sai de código puro e chega em declarações que carregam
+informação extra, validada pelo compilador. É o que permite a engine ensinar ao
+script conceitos que só ela conhece — e é como um componente ganha painel de
+propriedades no editor sem ninguém escrever interface.
+*Pronto quando:* uma anotação com parâmetro errado, no alvo errado ou com valor
+incoerente é recusada, cada caso com sua mensagem.
+
+**E17 — Contratos.** Sai de "essas funções existem, espero" e chega em "este
+arquivo cumpre esta interface, e o compilador conferiu".
+*Pronto quando:* um arquivo que promete uma interface e não a cumpre recebe
+**todos** os problemas de uma vez — método faltando e assinatura errada na
+mesma compilação, não um por tentativa.
+
+**E17.a — Valores padrão sob controle.** Sai de valores padrão fixos e chega em
+poder definir o seu, com uma restrição que parece burocrática e segura a
+arquitetura inteira: o valor padrão precisa ser calculável na compilação.
+*Pronto quando:* criar uma instância continua sendo cópia de um bloco pronto e
+não execução de código — o que mantém declarar uma variável uma operação que
+nunca falha.
+
+**E18 — Bibliotecas.** Sai de um arquivo isolado e chega em código que se
+importa entre arquivos, com nomes resolvidos e sem estado escondido.
+*Pronto quando:* dois arquivos que se importam mutuamente compilam, e um tipo
+exportado usado por dois scripts é reconhecido como o mesmo tipo nos dois.
+
+> **Marco 4 — a linguagem está completa.** *Pronto quando:* tudo que a
+> referência descreve compila e executa.
+
+---
+
+# Fase 5 — Função como valor
+
+Duas etapas curtas e de alto risco de sutileza.
+
+**E19 — Passar função adiante.** Sai de funções que só são chamadas pelo nome e
+chega em funções que podem ser guardadas, passadas e devolvidas.
+*Pronto quando:* uma função passa por um campo de registro, volta para o Rust e
+ainda funciona — e uma função guardada de um arquivo recarregado falha em vez
+de chamar o código errado.
+
+**E20 — Função que lembra do contexto.** Sai da função anônima que não vê nada
+em volta e chega na que captura variáveis do lugar onde foi escrita — com a
+restrição de só poder ser usada na hora, nunca guardada.
+*Pronto quando:* a captura funciona, guardá-la é erro de compilação com a
+mensagem explicando por quê, e ela não consome memória do monte.
+
+A restrição não é preguiça: é ela que garante que a linguagem consegue liberar
+memória por contagem simples, sem precisar de um detector de ciclos — que seria
+um coletor de lixo pequeno, com o mesmo defeito do grande.
+
+---
+
+# Fase 6 — Robustez e velocidade
+
+Cinco etapas. Aqui a linguagem para de ser um protótipo.
+
+**E21 — Não travar e não vazar.** Sai de "um laço infinito congela o editor" e
+chega em execução com orçamento: laço que não termina é interrompido, script
+que aloca sem parar é interrompido, e uma falha no meio do caminho devolve toda
+a memória que estava em uso.
+*Pronto quando:* injetar uma falha em ponto aleatório de um script, repetidas
+vezes, sempre termina com a memória zerada.
+
+**E22 — Desenvolver e publicar.** Sai de um modo só e chega em dois: um com
+nomes de variável, pontos de parada e verificações extras; outro enxuto. Com
+uma regra dura — o modo otimizado **não muda o comportamento**.
+*Pronto quando:* todo o conjunto de testes roda nos dois modos e produz
+exatamente o mesmo resultado e exatamente o mesmo erro. Este é o critério mais
+importante da etapa.
+
+**E23 — Trocar o script com o jogo rodando.** Sai de "reiniciar para ver a
+mudança" e chega em recarregar sem derrubar a cena.
+*Pronto quando:* o estado anterior é preservado onde faz sentido, descartado
+onde o tipo mudou, e nada aponta para código velho em silêncio.
+
+**E24 — Ter número em vez de opinião.** Sai de "acho que está rápido" e chega em
+quatro medições comparadas com Lua na mesma máquina, mais a latência de pico —
+que é onde a ausência de coletor de lixo deve aparecer.
+*Pronto quando:* a medição roda por comando, o resultado fica versionado no
+repositório, e a esteira reprova regressão acima de 10%.
+
+**E25 — Otimizar, agora que dá para medir.** Sai da versão simples e honesta e
+chega na versão rápida, em ordem de melhor retorno, **só depois de a etapa
+anterior ter número**.
+*Pronto quando:* nenhuma medição fica mais que duas vezes mais lenta que Lua, a
+chamada para o Rust e a latência de pico ficam **melhores** que Lua, e todo
+teste anterior continua passando. Otimização que muda comportamento é bug, não
+otimização.
+
+> **Marco 5 — versão 1.0.**
+
+---
+
+# E26 — Para as ferramentas
+
+A última etapa é a descrição do que a linguagem oferece, num formato que um
+editor consegue ler sem carregar o compilador junto: quais tipos existem, quais
+funções, quais anotações, o que cada script expõe.
+
+Ela é a última de propósito. O formato é uma projeção de tudo que as 26
+anteriores construíram — escrevê-lo antes significaria reescrevê-lo a cada
+etapa nova.
+
+*Pronto quando:* exportar cem vezes produz bytes idênticos. Sem isso não dá
+para versionar o formato nem comparar duas versões dele, e uma descrição que
+muda sozinha entre execuções é pior que nenhuma.
+
+> **Marco 6.**
+
+---
+
+## O que este plano não é
+
+Não é promessa de prazo. Não tem data em lugar nenhum, de propósito: é uma
+ordem e um conjunto de critérios, não um cronograma.
+
+Também não é imutável. Ele já foi reescrito uma vez, depois de uma revisão da
+linguagem que aposentou cinco palavras-chave e mudou onde o estado de um script
+mora — e a mudança empurrou uma decisão que eu achava tardia para dentro da
+primeira fase. Vai acontecer de novo.
+
+O que eu espero que não mude é o formato: cada etapa dizendo de onde sai, onde
+chega e como eu vou saber que acabou. Um plano que só sabe listar tarefas é uma
+lista de desejos com numeração.
+
+---
+
+O estado atual e a referência da linguagem ficam em [leaf.rs](/projetos/leaf).
+Quando a Fase 1 fechar, o primeiro `soma(2, 3)` que devolver `5` vira post.
