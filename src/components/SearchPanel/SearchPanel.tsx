@@ -89,6 +89,7 @@ const SearchPanel = ({ onCloseMenu }: SearchPanelProps) => {
 
   const term = normalize(query.trim());
   const ready = term.length >= 2;
+  const loading = !entries && !failed;
 
   const found = useMemo(() => {
     if (!ready || !entries) {
@@ -110,6 +111,10 @@ const SearchPanel = ({ onCloseMenu }: SearchPanelProps) => {
   const status = () => {
     if (failed) {
       return "Não foi possível carregar o índice do site.";
+    }
+    /** Sem isto o painel dizia "0 resultados" enquanto o índice não chegava. */
+    if (loading) {
+      return "Carregando o índice do site.";
     }
     if (!ready) {
       return "Digite ao menos dois caracteres.";
@@ -136,7 +141,17 @@ const SearchPanel = ({ onCloseMenu }: SearchPanelProps) => {
         onChange={(event) => setQuery(event.target.value)}
       />
 
-      <p className={styles.status} aria-live="polite">
+      {/* Sempre no DOM, mesmo parada: a faixa reserva os 2px e evita que o
+          conteúdo pule quando o índice chega. */}
+      <div
+        className={`${styles.progress} ${loading ? styles.progressActive : ""}`}
+        aria-hidden="true"
+      />
+
+      {/* Enquanto carrega, o aviso vira só texto para leitor de tela — quem
+          enxerga já tem a barra. O elemento não sai do DOM porque região
+          aria-live trocada na hora do anúncio não é lida de forma confiável. */}
+      <p className={loading ? styles.srOnly : styles.status} aria-live="polite">
         {status()}
       </p>
 

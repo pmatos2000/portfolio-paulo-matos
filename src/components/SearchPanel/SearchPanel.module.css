@@ -1,8 +1,6 @@
 .panel {
-  /* 320 em vez de 280: a 280 o rodapé do celular não comportava o quinto
-     item, e a árvore truncava nomes como professor-particular.tsx. */
-  width: min(320px, 90vw);
-  min-width: min(320px, 90vw);
+  width: min(280px, 85vw);
+  min-width: min(280px, 85vw);
   height: 100%;
   overflow-y: auto;
   background-color: var(--background-primary);
@@ -40,6 +38,50 @@
   color: var(--text-color);
   font: inherit;
   font-size: var(--font-size-sm);
+}
+
+/* Barra indeterminada do VS Code: uma faixa que atravessa em vez de girar. */
+.progress {
+  position: relative;
+  height: 2px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.progress::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  border-radius: 1px;
+  background-color: var(--primary-color);
+  /* Fora do estado ativo o rastro some, mas a faixa segue ocupando o espaço. */
+  opacity: 0;
+}
+
+.progressActive::before {
+  opacity: 1;
+  /* Anima só transform: fica na thread de composição e não força layout. */
+  animation: slide 1.4s ease-in-out infinite;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(350%);
+  }
+}
+
+/* Movimento repetitivo é gatilho para quem tem sensibilidade vestibular; a
+   WCAG 2.3.3 pede respeitar a preferência do sistema. */
+@media (prefers-reduced-motion: reduce) {
+  .progressActive::before {
+    width: 100%;
+    opacity: 0.35;
+    animation: none;
+  }
 }
 
 .status {
@@ -118,7 +160,7 @@
   text-decoration: underline;
 }
 
-@media (max-width: 1067px) {
+@media (max-width: 768px) {
   .panel {
     height: auto;
     flex: 1;
