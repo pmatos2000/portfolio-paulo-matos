@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import type { ComponentProps } from "react";
 import JsonLd from "@/components/JsonLd/JsonLd";
 import PostNav from "@/components/PostNav/PostNav";
+import PostToc from "@/components/PostToc/PostToc";
 import RelatedPosts from "@/components/RelatedPosts/RelatedPosts";
 import { type PostSlug, postLoaders, postSlugs } from "@/data/posts";
+import { getPostToc } from "@/data/postToc";
 import { pageMetadata, siteConfig } from "@/data/site";
 import styles from "./post.module.css";
 
@@ -46,6 +49,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const PostPage = async ({ params }: Props) => {
   const { slug } = await params;
   const { default: Content, meta } = await postLoaders[slug]();
+  const toc = await getPostToc(slug);
+
+  /**
+   * O índice entra logo antes do primeiro h2, ou seja, depois da abertura do
+   * post. Casar pelo id em vez de contar renderizações mantém o componente
+   * puro: o rehype-slug garante um id único por título, então a comparação não
+   * depende da ordem em que o React resolve os nós.
+   */
+  const firstHeadingId = toc[0]?.id ?? null;
+  const H2 = ({ id, ...rest }: ComponentProps<"h2">) =>
+    id === firstHeadingId ? (
+      <>
+        <PostToc headings={toc} />
+        <h2 id={id} {...rest} />
+      </>
+    ) : (
+      <h2 id={id} {...rest} />
+    );
 
   const url = new URL(`/blog/${slug}`, siteConfig.url).toString();
   const schema = {
@@ -82,7 +103,7 @@ const PostPage = async ({ params }: Props) => {
             ))}
           </ul>
         </div>
-        <Content />
+        <Content components={{ h2: H2 }} />
       </article>
       <PostNav slug={slug} />
       <RelatedPosts slug={slug} />

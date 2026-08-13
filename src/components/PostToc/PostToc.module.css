@@ -1,0 +1,66 @@
+.toc {
+  /* Acompanha a coluna de leitura de 40rem que o globals.css impõe à prosa. */
+  max-width: 40rem;
+  /* Colapsa com o margin-bottom do parágrafo de abertura acima e com o
+     margin-top do primeiro h2 abaixo. */
+  margin: 2rem 0 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+  padding: 0.75rem 1rem;
+  font-size: var(--font-size-sm);
+}
+
+.summary {
+  cursor: pointer;
+  color: var(--text-color-secondary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: var(--font-size-xs);
+  /* O marcador padrão desalinha entre navegadores; o ::before abaixo o substitui. */
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 1em;
+  transition: transform 0.15s ease;
+}
+
+.toc[open] .summary::before {
+  transform: rotate(90deg);
+}
+
+/* Especificidade acima de `.contentPage ol` e `.contentPage li` do globals.css,
+   que aplicariam recuo e margem de parágrafo dentro do índice. */
+.toc .list {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.toc .list .list {
+  margin: 0.25rem 0 0;
+  padding-left: 1rem;
+}
+
+.toc .item {
+  margin: 0 0 0.35rem;
+  line-height: 1.4;
+}
+
+.toc .link {
+  color: var(--text-color);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.toc .link:hover {
+  color: var(--primary-color);
+  border-bottom-color: currentColor;
+}

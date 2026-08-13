@@ -1,11 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SiHtml5 } from "react-icons/si";
-import { VscMarkdown } from "react-icons/vsc";
+import { VscMarkdown, VscSymbolString } from "react-icons/vsc";
 import { SidebarContext } from "@/contexts/SidebarContext";
 import type { BlogYear } from "@/data/blogTree";
+import type { TocHeading } from "@/data/postToc";
 import type { TreeItem } from "@/data/sidebarTree";
 import TreeNodeComponent from "../TreeNodeComponent/TreeNodeComponent";
 import styles from "./BlogPanel.module.css";
@@ -17,7 +18,29 @@ type BlogPanelProps = {
 
 const INDEX_ID = "blog-panel:index";
 
-const toTree = (years: BlogYear[]): TreeItem[] => [
+/** h2 com h3 dentro vira nó com url: o chevron abre, o nome navega. */
+const tocToItems = (slug: string, headings: TocHeading[]): TreeItem[] =>
+  headings.map((heading) => {
+    const base = {
+      id: `blog-panel:${slug}#${heading.id}`,
+      title: heading.text,
+      icon: VscSymbolString,
+      url: `/blog/${slug}#${heading.id}`,
+    };
+    return heading.children.length > 0
+      ? {
+          ...base,
+          type: "node" as const,
+          children: tocToItems(slug, heading.children),
+        }
+      : { ...base, type: "leaf" as const };
+  });
+
+/**
+ * Só o post aberto ganha os títulos como filhos — é o que o VS Code faz com o
+ * Outline, e evita despejar as 30 seções dos três posts de uma vez no painel.
+ */
+const toTree = (years: BlogYear[], activeSlug: string | null): TreeItem[] => [
   {
     id: INDEX_ID,
     type: "leaf",
@@ -29,36 +52,68 @@ const toTree = (years: BlogYear[]): TreeItem[] => [
     id: `blog-panel:${entry.year}`,
     type: "node" as const,
     title: entry.year,
-    children: entry.posts.map((post) => ({
-      id: `blog-panel:${post.slug}`,
-      type: "leaf" as const,
-      title: `${post.slug}.mdx`,
-      icon: VscMarkdown,
-      url: `/blog/${post.slug}`,
-    })),
+    children: entry.posts.map((post) => {
+      const base = {
+        id: `blog-panel:${post.slug}`,
+        title: `${post.slug}.mdx`,
+        icon: VscMarkdown,
+        url: `/blog/${post.slug}`,
+      };
+      return post.slug === activeSlug && post.toc.length > 0
+        ? {
+            ...base,
+            type: "node" as const,
+            children: tocToItems(post.slug, post.toc),
+          }
+        : { ...base, type: "leaf" as const };
+    }),
   })),
 ];
 
 const BlogPanel = ({ years, onCloseMenu }: BlogPanelProps) => {
   const pathname = usePathname();
-  const tree = useMemo(() => toTree(years), [years]);
+  const [hash, setHash] = useState("");
+
+  const activeSlug = pathname.startsWith("/blog/")
+    ? pathname.slice("/blog/".length)
+    : null;
+
+  /** Sem isto o título aberto não acende ao chegar por link direto ou voltar. */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: o hash precisa ser relido a cada troca de rota.
+  useEffect(() => {
+    const sync = () => setHash(window.location.hash);
+    sync();
+    window.addEventListener("hashchange", sync);
+    window.addEventListener("popstate", sync);
+    return () => {
+      window.removeEventListener("hashchange", sync);
+      window.removeEventListener("popstate", sync);
+    };
+  }, [pathname]);
+
+  const handleNavigate = (url: string) => {
+    const fragment = url.split("#")[1];
+    setHash(fragment ? `#${fragment}` : "");
+  };
+
+  const tree = useMemo(() => toTree(years, activeSlug), [years, activeSlug]);
 
   const activeId = useMemo(() => {
     if (pathname === "/blog") {
       return INDEX_ID;
     }
-    if (pathname.startsWith("/blog/")) {
-      return `blog-panel:${pathname.slice("/blog/".length)}`;
+    if (!activeSlug) {
+      return null;
     }
-    return null;
-  }, [pathname]);
+    return `blog-panel:${activeSlug}${hash}`;
+  }, [pathname, activeSlug, hash]);
 
   return (
     <SidebarContext.Provider
       value={{
         activeId,
         closeMobileMenu: onCloseMenu,
-        onNavigate: () => undefined,
+        onNavigate: handleNavigate,
       }}
     >
       <aside className={styles.panel} aria-label="Posts do blog">

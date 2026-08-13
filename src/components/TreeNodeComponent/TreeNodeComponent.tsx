@@ -31,6 +31,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
 
   if (node.type === "node") {
     const hasChildren = node.children.length > 0;
+    const NodeIcon = node.icon ?? VscFolderOpened;
 
     const children =
       isExpanded && hasChildren ? (
@@ -82,7 +83,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
               onClick={() => handleClick(nodeUrl)}
             >
               <span className={styles.icon}>
-                <VscFolderOpened size={20} aria-hidden="true" />
+                <NodeIcon size={20} aria-hidden="true" />
               </span>
               <span>{node.title}</span>
             </Link>
@@ -102,7 +103,7 @@ const TreeNodeComponent = ({ node }: TreeNodeProps) => {
         >
           {chevron}
           <span className={styles.icon}>
-            <VscFolderOpened size={20} aria-hidden="true" />
+            <NodeIcon size={20} aria-hidden="true" />
           </span>
           <span>{node.title}</span>
         </button>

@@ -80,6 +80,12 @@ body {
   margin-bottom: 1.5rem;
 }
 
+/* Alvo de âncora do índice: sem isto o título para colado no topo da área. */
+.contentPage h2,
+.contentPage h3 {
+  scroll-margin-top: 1.5rem;
+}
+
 .contentPage h2 {
   font-size: var(--font-size-lg);
   margin-top: 2.5rem;

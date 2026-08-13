@@ -1,9 +1,12 @@
 import { loadPosts } from "@/data/posts";
+import { getPostToc, type TocHeading } from "@/data/postToc";
 
 export type BlogPostRef = {
   slug: string;
   title: string;
   date: string;
+  /** Títulos do post; o painel Blog monta o outline a partir daqui. */
+  toc: TocHeading[];
 };
 
 export type BlogYear = {
@@ -20,7 +23,13 @@ export const getBlogYears = async (): Promise<BlogYear[]> => {
 
   for (const post of await loadPosts()) {
     const year = post.date.slice(0, 4);
-    const ref = { slug: String(post.slug), title: post.title, date: post.date };
+    const slug = String(post.slug);
+    const ref = {
+      slug,
+      title: post.title,
+      date: post.date,
+      toc: await getPostToc(slug),
+    };
     const bucket = years.get(year);
     if (bucket) {
       bucket.push(ref);

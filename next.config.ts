@@ -15,6 +15,8 @@ const nextConfig: NextConfig = {
 const withMDX = createMDX({
   options: {
     remarkPlugins: [["remark-gfm", {}]],
+    /** Injeta id nos títulos: é a âncora que o índice dos posts usa. */
+    rehypePlugins: [["rehype-slug", {}]],
   },
 });
 

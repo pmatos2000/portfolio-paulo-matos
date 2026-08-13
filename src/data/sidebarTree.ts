@@ -24,6 +24,8 @@ export type TreeNode = {
   title: string;
   /** Quando definido, o título da pasta vira link em vez de botão de expandir. */
   url?: string;
+  /** Sobrescreve o ícone de pasta: um post com outline é arquivo, não pasta. */
+  icon?: IconType;
   /** Pastas nascem abertas; use false para começar fechada. */
   defaultExpanded?: boolean;
   children: (TreeNode | TreeLeaf)[];
