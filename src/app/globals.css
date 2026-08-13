@@ -15,6 +15,15 @@
   /* Linha removida no diff do /changelog. 4,58:1 sobre #1e1e1e. */
   --diff-removed: #e06c6c;
 
+  /* Altura da barra de painéis do celular. Declarada em vez de deixar o
+     conteúdo decidir: a gaveta e o overlay precisam do mesmo número para
+     parar acima dela. */
+  --mobile-bar-height: 4.5rem;
+  --mobile-bar-total: calc(
+    var(--mobile-bar-height) +
+    env(safe-area-inset-bottom)
+  );
+
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;

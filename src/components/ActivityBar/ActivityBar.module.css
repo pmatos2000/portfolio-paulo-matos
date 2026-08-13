@@ -57,7 +57,7 @@
   background-color: var(--primary-color);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1067px) {
   .activityBar {
     display: none;
   }

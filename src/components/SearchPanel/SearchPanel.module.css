@@ -1,4 +1,6 @@
 .panel {
+  /* 320 em vez de 280: a 280 o rodapé do celular não comportava o quinto
+     item, e a árvore truncava nomes como professor-particular.tsx. */
   width: min(320px, 90vw);
   min-width: min(320px, 90vw);
   height: 100%;
@@ -116,7 +118,7 @@
   text-decoration: underline;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1067px) {
   .panel {
     height: auto;
     flex: 1;

@@ -32,20 +32,22 @@
   overflow-y: auto;
 }
 
-.mobileHeader {
-  display: none;
-}
-
 .overlay {
   display: none;
 }
 
-@media (max-width: 768px) {
+/* 1067 e não 768: a coluna de leitura de 40rem só cabe com o painel aberto a
+   partir de 1068px (60 da ActivityBar + 320 do painel + 640 da prosa + padding).
+   Entre 769 e 1067 o layout fixo espremia o texto — num tablet de 800px a
+   coluna caía para 372px. Ver o comentário em .contentArea do AppLayout. */
+@media (max-width: 1067px) {
   .viewPanelContainer {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100dvh;
+    /* Para acima da barra de baixo: com height: 100dvh o último item da árvore
+       ficava embaixo dela e não dava para tocar. */
+    bottom: var(--mobile-bar-total);
     display: flex;
     flex-direction: column;
     z-index: 20;
@@ -60,31 +62,26 @@
   }
 
   .contentArea {
-    padding: 1.25rem 1rem;
+    /* O extra embaixo é a altura da barra fixa: sem ele, o fim do texto e o
+       rodapé de cada página ficam escondidos atrás dela. */
+    padding: 1.25rem 1rem calc(1.25rem + var(--mobile-bar-total));
   }
 
+  /* Fixa e acima da gaveta (z-index 30 > 20): é o único controle de abrir e
+     fechar, então precisa continuar alcançável com o painel aberto. */
   .mobileViews {
     display: block;
-    flex-shrink: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    height: var(--mobile-bar-total);
     padding: 0.5rem;
+    /* Barra de gestos do iPhone: sem isto os rótulos ficam por baixo dela. */
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
     border-top: 1px solid var(--border-color);
     background-color: var(--background-primary);
-  }
-
-  .mobileHeader {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    background-color: var(--background-primary);
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .hamburgerButton {
-    background: none;
-    border: none;
-    color: var(--text-color);
-    cursor: pointer;
-    z-index: 30;
   }
 
   .overlay {
@@ -93,7 +90,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    /* Não cobre a barra de baixo, que precisa seguir clicável. */
+    bottom: var(--mobile-bar-total);
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 10;
     border: none;
@@ -102,7 +100,7 @@
   }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 1068px) and (max-width: 1280px) {
   .contentArea {
     padding: 1.5rem;
   }

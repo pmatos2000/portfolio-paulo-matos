@@ -115,3 +115,14 @@
   color: var(--primary-color);
   text-decoration: none;
 }
+
+/* Mesma regra dos outros painéis: dentro da gaveta ele divide a altura com a
+   barra de baixo em vez de forçar 100%. */
+@media (max-width: 1067px) {
+  .panel {
+    height: auto;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}

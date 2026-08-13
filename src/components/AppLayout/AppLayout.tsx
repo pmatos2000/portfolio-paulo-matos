@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { VscClose, VscMenu } from "react-icons/vsc";
 import ActivityBar from "@/components/ActivityBar/ActivityBar";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import MobileViewBar from "@/components/MobileViewBar/MobileViewBar";
@@ -52,22 +51,22 @@ export default function AppLayout({
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [isMobileMenuOpen]);
 
-  const toggleMobileMenu = () => {
-    const willOpen = !isMobileMenuOpen;
-    if (willOpen && !activeView) {
-      setActiveView("Explorer");
-    }
-    setIsMobileMenuOpen(willOpen);
-  };
-
   const handleIconClick = (view: ActivityView) => {
     setActiveView(view === activeView ? null : view);
-    closeMobileMenu();
   };
 
-  /** No rodapé, alternar para null deixaria a gaveta aberta e vazia. */
+  /**
+   * No compacto a barra de baixo é o único controle da gaveta. Tocar no painel
+   * já aberto fecha; nos outros, troca de painel sem fechar. Sem esse alternar
+   * a única saída seria a faixa de overlay, que a 360px tem 40px de largura.
+   */
   const handleFooterClick = (view: ActivityView) => {
+    if (isMobileMenuOpen && view === activeView) {
+      setIsMobileMenuOpen(false);
+      return;
+    }
     setActiveView(view);
+    setIsMobileMenuOpen(true);
   };
 
   return (
@@ -87,40 +86,32 @@ export default function AppLayout({
           blogYears={blogYears}
           commits={commits}
         />
-        <div className={styles.mobileViews}>
-          <MobileViewBar activeView={activeView} onSelect={handleFooterClick} />
-        </div>
       </div>
 
       <div className={styles.contentWrapper}>
-        <header className={styles.mobileHeader}>
-          <button
-            type="button"
-            className={styles.hamburgerButton}
-            onClick={toggleMobileMenu}
-            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? (
-              <VscClose size={24} aria-hidden="true" />
-            ) : (
-              <VscMenu size={24} aria-hidden="true" />
-            )}
-          </button>
-        </header>
-
         <TabsBar />
         <Breadcrumbs />
         <main className={styles.contentArea}>{children}</main>
       </div>
+
       {isMobileMenuOpen && (
         <button
           type="button"
           className={styles.overlay}
-          onClick={() => setIsMobileMenuOpen(false)}
-          aria-label="Fechar menu"
+          onClick={closeMobileMenu}
+          aria-label="Fechar painel"
         />
       )}
+
+      {/* Fora do .viewPanelContainer de propósito: dentro dele, a barra saía da
+          tela junto com a gaveta e não haveria como fechar nem trocar de painel. */}
+      <div className={styles.mobileViews}>
+        <MobileViewBar
+          activeView={activeView}
+          isOpen={isMobileMenuOpen}
+          onSelect={handleFooterClick}
+        />
+      </div>
     </div>
   );
 }
