@@ -50,9 +50,9 @@ const SOCIAL = [
 
 const START_LINKS = [
   { href: "/sobre-mim", file: "sobre-mim.css", hint: "Quem eu sou" },
-  { href: "/experiencias", file: "experiencias.tsx", hint: "Onde trabalhei" },
+  { href: "/experiencias", file: "experiências.tsx", hint: "Onde trabalhei" },
   { href: "/competencias", file: "competências.css", hint: "O que eu uso" },
-  { href: "/formacao", file: "formacao.ts", hint: "Onde estudei" },
+  { href: "/formacao", file: "formação.ts", hint: "Onde estudei" },
 ];
 
 const PROJECTS = [
@@ -63,7 +63,7 @@ const PROJECTS = [
   },
   {
     href: "/projetos/aplicativos/ze-chinelao",
-    file: "ze-chinelao.app",
+    file: "zé-chinelão.app",
     hint: "MMC e sistemas lineares passo a passo",
   },
 ];

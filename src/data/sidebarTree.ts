@@ -71,7 +71,7 @@ export const sidebarTree: TreeItem[] = [
       {
         id: "5a276ab2-df22-492c-b83c-51db33c77649",
         type: "node",
-        title: "Experiencia",
+        title: "Experiência",
         url: "/experiencias",
         children: [
           {
@@ -121,7 +121,7 @@ export const sidebarTree: TreeItem[] = [
       {
         id: "6a77236f-bf97-4fb9-b9e6-c0c1eb96db86",
         type: "node",
-        title: "Formacao",
+        title: "Formação",
         url: "/formacao",
         children: [
           {
@@ -134,14 +134,14 @@ export const sidebarTree: TreeItem[] = [
           {
             id: "79550ad6-ada7-43be-b604-d5b5482cbb20",
             type: "leaf",
-            title: "matematica-computacional.ts",
+            title: "matemática-computacional.ts",
             icon: SiTypescript,
             url: "/formacao#matematica-computacional",
           },
           {
             id: "f4e1e6bf-5ccc-4de7-ac8c-9de0a71de625",
             type: "leaf",
-            title: "eletrotecnica.ts",
+            title: "eletrotécnica.ts",
             icon: SiTypescript,
             url: "/formacao#eletrotecnica",
           },
@@ -156,7 +156,7 @@ export const sidebarTree: TreeItem[] = [
           {
             id: "b2f7c015-9d84-4a3e-8c56-1e0f7a94d3b8",
             type: "leaf",
-            title: "portfolio.tsx",
+            title: "portfólio.tsx",
             icon: FaReact,
             url: "/projetos/portfolio",
           },
@@ -198,7 +198,7 @@ export const sidebarTree: TreeItem[] = [
               {
                 id: "9d9380f7-6fe2-410d-8b01-adcbf362c73f",
                 type: "leaf",
-                title: "ze-chinelao.app",
+                title: "zé-chinelão.app",
                 icon: GiSlippers,
                 url: "/projetos/aplicativos/ze-chinelao",
               },
@@ -222,7 +222,7 @@ export const sidebarTree: TreeItem[] = [
           {
             id: "dbcddfcb-0b90-4f75-808f-a580bfe866da",
             type: "leaf",
-            title: "cases-ageis.md",
+            title: "cases-ágeis.md",
             icon: MdOutlineStar,
             url: "/premios#cases-ageis",
           },
