@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ActivityBar from "@/components/ActivityBar/ActivityBar";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import MobileViewBar from "@/components/MobileViewBar/MobileViewBar";
@@ -11,6 +11,7 @@ import type { ActivityView } from "@/data/activityViews";
 import type { BlogYear } from "@/data/blogTree";
 import type { Commit } from "@/data/gitLog";
 import { postSlugFromPath } from "@/data/sidebarTree";
+import { useDrawerSwipe } from "@/hooks/useDrawerSwipe";
 import styles from "./AppLayout.module.css";
 
 type AppLayoutProps = {
@@ -31,6 +32,21 @@ export default function AppLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  /**
+   * Estáveis de propósito: o useDrawerSwipe registra os ouvintes em document e
+   * refaria o registro a cada render se estas mudassem. Por isso as atualizações
+   * são funcionais, sem ler estado de fora.
+   */
+  const abrirGaveta = useCallback(() => {
+    /** Sem painel escolhido ainda, abre no Explorer. */
+    setActiveView((atual) => atual ?? "Explorer");
+    setIsMobileMenuOpen(true);
+  }, []);
+
+  const fecharGaveta = useCallback(() => setIsMobileMenuOpen(false), []);
+
+  useDrawerSwipe(abrirGaveta, fecharGaveta);
 
   useEffect(() => {
     if (postSlug) {
