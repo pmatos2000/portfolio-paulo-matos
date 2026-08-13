@@ -6,7 +6,7 @@ import { pageMetadata } from "@/data/site";
 export const metadata = pageMetadata({
   title: "Leaf: linguagem de script tipada e sem GC, embarcável em Rust",
   description:
-    "Linguagem de script estaticamente tipada para jogos, compilada para bytecode de uma VM de registradores, sem coletor de lixo e sem panic. Por que escrever uma em vez de usar Lua, Rhai ou Rune.",
+    "Linguagem de script tipada para jogos, compilada para bytecode de uma VM de registradores, sem coletor de lixo e sem panic. Por que não usar Lua ou Rhai.",
   path: "/projetos/leaf",
   absoluteTitle: true,
 });

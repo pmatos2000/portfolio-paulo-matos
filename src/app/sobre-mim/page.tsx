@@ -7,7 +7,7 @@ import styles from "./sobre-mim.module.css";
 export const metadata = pageMetadata({
   title: "Sobre mim",
   description:
-    "Desenvolvedor Full-Stack com mais de 5 anos em sistemas de alta complexidade, especializado em C#, ASP.NET Core e React. Da modificação de jogos em RPG Maker ao ensino de C e C++ na UFMG.",
+    "Mais de 5 anos em sistemas de alta complexidade com C#, ASP.NET Core e React. Da modificação de jogos em RPG Maker ao ensino de C e C++ na UFMG.",
   path: "/sobre-mim",
 });
 

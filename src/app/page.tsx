@@ -10,7 +10,7 @@ import styles from "./page.module.css";
 export const metadata = pageMetadata({
   title: siteConfig.title,
   description:
-    "Desenvolvedor Full-Stack especializado em C#, ASP.NET Core e React, formado em Engenharia de Sistemas pela UFMG. Atualmente construindo Leaf, uma linguagem de script embarcável em Rust.",
+    "Desenvolvedor Full-Stack em C#, ASP.NET Core e React, formado em Engenharia de Sistemas pela UFMG. Construindo o Leaf, linguagem de script em Rust.",
   path: "/",
   absoluteTitle: true,
 });

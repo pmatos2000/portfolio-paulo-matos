@@ -5,7 +5,7 @@ import { pageMetadata } from "@/data/site";
 export const metadata = pageMetadata({
   title: "Rustle: engine de jogos 2D em Rust com a cena como documento JSON",
   description:
-    "Engine de jogos 2D escrita em Rust, projetada para renderizar pixels idênticos no nativo e na web. As decisões de arquitetura e o que uma prova de conceito de 8 mil linhas ensinou.",
+    "Engine de jogos 2D em Rust, projetada para renderizar pixels idênticos no nativo e na web. A arquitetura e o que uma prova de conceito de 8 mil linhas ensinou.",
   path: "/projetos/rustle",
   absoluteTitle: true,
 });
