@@ -2,12 +2,36 @@
 
 import { useEffect } from "react";
 
+/** Mesmo limiar do CSS. Ver o comentário do @media em AppLayout.module.css. */
 const COMPACTO = "(max-width: 1067px)";
+
+/** Distância horizontal mínima para valer como gesto, em px. */
 const DISTANCIA = 60;
+
+/** O horizontal precisa dominar, senão rolagem na diagonal dispararia. */
 const DOMINANCIA = 1.5;
-const BORDA = 28;
 
+/**
+ * Faixa deixada de fora nas duas bordas laterais.
+ *
+ * É onde o sistema captura o gesto de voltar: no iOS só pela esquerda, no
+ * Android por qualquer das duas. Um gesto que comece ali dispararia o voltar do
+ * sistema junto com o nosso — a pessoa sairia da página e ainda veria a gaveta
+ * reagir. Aplicativo nativo resolve com setSystemGestureExclusionRects, que
+ * página web não tem; resta não competir.
+ *
+ * 32 e não 24 porque a sensibilidade do gesto é ajustável pelo usuário no
+ * Android. Numa tela de 360px ainda sobram 296px de área útil.
+ */
+const BORDA = 32;
 
+/**
+ * O alvo, ou algum ancestral dele, rola na horizontal.
+ *
+ * É o caso dos blocos de código e das tabelas do MDX, que têm overflow-x: auto.
+ * Sem esta checagem, arrastar para o lado dentro de um `pre` abriria a gaveta em
+ * vez de rolar o código — e não haveria como ler uma linha longa no celular.
+ */
 const rolaNaHorizontal = (alvo: EventTarget | null): boolean => {
   let elemento = alvo instanceof Element ? alvo : null;
 
@@ -23,7 +47,6 @@ const rolaNaHorizontal = (alvo: EventTarget | null): boolean => {
 
   return false;
 };
-
 
 /**
  * Arrastar para a direita abre a gaveta, para a esquerda fecha.
@@ -63,7 +86,10 @@ export const useDrawerSwipe = (
       }
 
       const toque = event.touches[0];
-      if (toque.clientX < BORDA || rolaNaHorizontal(event.target)) {
+      const naBorda =
+        toque.clientX < BORDA || toque.clientX > window.innerWidth - BORDA;
+
+      if (naBorda || rolaNaHorizontal(event.target)) {
         return;
       }
 
@@ -72,6 +98,7 @@ export const useDrawerSwipe = (
       rastreando = true;
     };
 
+    /** Decide durante o movimento: responde antes de o dedo sair da tela. */
     const onMove = (event: TouchEvent) => {
       if (!rastreando || event.touches.length !== 1) {
         return;
