@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { VscGitCommit } from "react-icons/vsc";
-import { getCommits, repoUrl } from "@/data/gitLog";
+import { getCommits } from "@/data/gitLog";
+import { repoUrl } from "@/data/repo";
 import { pageMetadata } from "@/data/site";
 import styles from "./changelog.module.css";
 

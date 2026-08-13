@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { VscGitCommit, VscRepo } from "react-icons/vsc";
 import type { Commit } from "@/data/gitLog";
-import { repoUrl } from "@/data/gitLog";
+import { repoUrl } from "@/data/repo";
 import styles from "./GitPanel.module.css";
 
 type GitPanelProps = { commits: Commit[] };

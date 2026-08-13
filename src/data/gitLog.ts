@@ -10,7 +10,8 @@ export type Commit = {
   subject: string;
 };
 
-const REPO = "pmatos2000/portfolio-paulo-matos";
+import { REPO } from "@/data/repo";
+
 /** Cinco, não doze: cada commit exibido custa uma chamada a mais no build
     para buscar o diff. O resto do histórico fica a um clique, no GitHub. */
 const LIMIT = 5;
@@ -79,8 +80,6 @@ export const getCommits = async (): Promise<Commit[]> => {
     return [];
   }
 };
-
-export const repoUrl = `https://github.com/${REPO}`;
 
 export type CommitFile = {
   filename: string;
