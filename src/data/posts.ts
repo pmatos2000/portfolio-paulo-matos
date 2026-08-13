@@ -30,6 +30,10 @@ export const postLoaders = {
   "o-leaf-por-dentro": () => import("@/content/blog/o-leaf-por-dentro.mdx"),
   "o-plano-em-27-etapas": () =>
     import("@/content/blog/o-plano-em-27-etapas.mdx"),
+  "o-numero-que-me-faria-mudar-de-ideia": () =>
+    import("@/content/blog/o-numero-que-me-faria-mudar-de-ideia.mdx"),
+  "recusado-nao-e-adiado": () =>
+    import("@/content/blog/recusado-nao-e-adiado.mdx"),
 } satisfies Record<string, () => Promise<PostModule>>;
 
 export type PostSlug = keyof typeof postLoaders;

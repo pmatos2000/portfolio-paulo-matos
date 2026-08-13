@@ -1,154 +1,167 @@
 export const meta = {
-  title: "Recusado não é adiado: o escopo da v1 do Leaf",
+  title: "Recusado não é adiado, e remover é mais difícil que os dois",
   description:
-    "Toda lista de fora-da-v1 costuma significar não deu tempo. No Leaf, duas coisas estão fora para sempre — e essa diferença é o que dá forma ao projeto.",
+    "Toda lista de fora-da-v1 costuma significar não deu tempo. No Leaf há três listas: o que é v2, o que nunca vem — e o que já estava escrito e saiu.",
   date: "2026-08-12",
   tags: ["leaf", "design de linguagem"],
 };
 
-A especificação do [Leaf](/projetos/leaf) está fechada, e a lista do que
-ficou de fora da primeira versão é longa. A maior parte dela não é "não deu
-tempo".
+A referência do [Leaf](/projetos/leaf) ficou fechada por meses, e a lista do que
+não entra na primeira versão é longa. A maior parte dela não é "não deu tempo".
 
-Isso importa porque existem duas listas dentro de uma. Há o que está
-**adiado** — vem na v2, quando houver motivo. E há o que está **recusado** —
-não vem nunca, porque a linguagem seria pior com aquilo dentro. Roteiro que
-só sabe adiar é lista de desejos.
+Isso importa porque existem duas listas dentro de uma. Há o que está **adiado** —
+vem na v2, quando houver motivo. E há o que está **recusado** — não vem nunca,
+porque a linguagem seria pior com aquilo dentro. Roteiro que só sabe adiar é
+lista de desejos.
 
-## Recusa 1: não existe try/catch
+Em agosto eu reabri a referência para uma revisão, e ela produziu uma terceira
+lista que eu não esperava: o que **já estava escrito e saiu**. Essa é a difícil.
 
-O Leaf tem `try`. Ele é prefixo de expressão, propaga `Result`, e não abre
-bloco nenhum:
+## Recusar antes é barato
 
-```leaf
-def carregar(s: string) -> Result<Config, string>:
-	let n: int = try int.parse(s)
-	return Ok({ tamanho: n })
-```
+As duas recusas mais antigas do projeto são o `try`/`catch` e o operador de
+identidade de referência. O [post sobre a linguagem](/blog/o-leaf-por-dentro)
+tem o argumento dos dois por inteiro, então aqui basta o resumo do porquê eles
+são recusa e não adiamento.
 
-Se `int.parse` devolver `Err`, a função inteira retorna aquele `Err` ali
-mesmo — a linha seguinte não executa. É palavra-chave em vez de símbolo por
-causa disso: o efeito é fluxo de controle não-local, e uma palavra no começo
-da linha avisa de longe. Um sufixo se perde no fim da expressão.
+`catch` não existe porque há dois mecanismos de falha com propósitos diferentes,
+e um `catch` deixaria o script engolir o mecanismo errado — o que, num motor de
+jogo, é script escondendo um overflow e produzindo número errado em silêncio
+pelo resto do frame.
 
-O que não existe é o `catch`. E o motivo é que há **dois** mecanismos de
-falha, com propósitos diferentes.
+Operador de identidade não existe porque, sendo todo valor composto imutável,
+"mesma referência" é detalhe de implementação. Expor isso transformaria uma
+otimização futura em semântica observável: alguém escreveria código contra o
+acidente, e a otimização passaria a quebrar código real.
 
-Falha da VM é operação sem resultado representável: `int / 0`, overflow,
-índice fora de faixa, combustível esgotado. Ela aborta a chamada e sobe como
-`Err` para o Rust que chamou o script. Não é capturável de dentro.
+O que as duas têm em comum é o custo: **zero**. Elas foram recusadas antes de
+existir uma linha de código, e recusar uma ideia que ainda não custou nada é a
+coisa mais fácil que existe em projeto de software.
 
-`Result` é falha de domínio — aquela que o autor do script previu e quer
-tratar. É um valor comum, resolvido com `match` ou com `try`.
+## Recusar depois é caro
 
-Um `catch` deixaria o script engolir a primeira. E é exatamente isso que não
-se pode permitir num motor de jogo: script que esconde um overflow é script
-produzindo número errado em silêncio pelo resto do frame. Quem hospeda a VM
-precisa saber.
+Na revisão de agosto saíram cinco coisas que estavam escritas, especificadas e
+com exemplos: `pub`, `static`, `Action`, `@no_self` e `@export`.
 
-A aritmética, por isso, continua simples: `a + b` é `int`, não
-`Result<int, _>`. Sem isso, `a + b + c` viraria um exercício de paciência.
-Quem quiser tratar uma operação específica pede a versão explícita, que
-devolve `int?`:
+Nenhuma delas estava quebrada. Todas funcionavam no papel, todas tinham
+justificativa registrada, e três delas apareciam na primeira página da
+referência. Foi exatamente por isso que doeu.
 
-```leaf
-let d: int? = a.checked_div(b)
-let s: int? = a.checked_add(b)
-```
+O que destravou a decisão foi encontrar um critério, e o critério só apareceu no
+meio da conversa:
 
-## Recusa 2: não existe operador de identidade
+> Nenhuma palavra da linguagem deve existir só para descrever o embedding.
 
-`==` é sempre estrutural, comparando por valor em toda profundidade:
+`pub` marcava "esta função é chamável pelo Rust". Era a única palavra da
+linguagem que não fazia sentido nenhum sem falar da máquina que a hospeda —
+alguém lendo um `.leaf` sem saber o que é uma VM não teria como entender por que
+ela está ali. Com o critério na mão, a discussão parou de ser sobre gosto e
+passou a ser sobre uma regra: ela reprova, então sai.
 
-```leaf
-[1, 2, 3] == [1, 2, 3]
-{ nome: "a", idade: 1 } == { nome: "a", idade: 1 }
-Some(4) == Some(4)
-```
+`static` caiu por um segundo critério, mais simples: ela duplicava uma regra que
+já existia em outro lugar. Duas formas de dizer a mesma coisa é o que a
+linguagem recusa na indentação, na igualdade e no acesso a estado — não fazia
+sentido manter uma exceção justamente numa palavra-chave.
 
-Os três são verdadeiros. E não existe um segundo operador perguntando "é a
-mesma referência?".
+E aí veio a parte que me convenceu de que a revisão valeu: com as duas fora, o
+que sobrou **explica melhor**. Antes eu precisava de dois parágrafos para dizer
+quando um método é de instância e quando é do tipo, porque a resposta era uma em
+bloco de implementação e outra no topo do arquivo. Agora é uma frase, e ela vale
+nos dois lugares.
 
-O motivo é o melhor argumento da especificação inteira, e não tem nada a ver
-com ergonomia.
+Cinco palavras a menos, e a linguagem diz a mesma coisa.
 
-Todo valor composto é imutável. Logo, "mesma referência" é detalhe de
-implementação: dois literais iguais podem compartilhar o mesmo handle ou não,
-conforme o compilador tenha internado um deles. E isso **muda** — quando o
-compartilhamento estrutural entrar, valores que hoje são cópias separadas
-passam a compartilhar memória.
+## A recusa mais recente
 
-Se identidade fosse exposta, uma otimização viraria semântica observável.
-Algum script dependeria de dois valores serem distintos, e ligar o
-compartilhamento estrutural quebraria esse script. A otimização se tornaria
-impossível de aplicar — não por limite técnico, mas porque alguém escreveu
-código contra o acidente.
+Estado compartilhado entre scripts era uma ausência incômoda. Um placar, um
+contador de dificuldade, uma semente de número aleatório comum — coisas que
+qualquer jogo pede, e que sem variável global viram pedido de "escreva em Rust e
+recompile". Que é justamente o problema que o Leaf existe para resolver.
 
-Internamente, `==` compara handles primeiro e só desce ao conteúdo se forem
-diferentes. Isso é um atalho invisível, não uma garantia da linguagem. A
-diferença entre essas duas coisas é o post inteiro.
+Passei um bom tempo tentando fazer caber. Três desenhos diferentes, e todos
+morreram na mesma pergunta: **onde o valor mora?**
 
-## Restrições que parecem mesquinhez e não são
+Um `Array` vive numa arena de memória, e arena pertence a uma instância de
+script. Um global de tipo composto guardaria um ponteiro para uma arena que pode
+desaparecer quando uma entidade não relacionada morrer. O comportamento não é
+inseguro — a máquina detecta e devolve erro. Ele é pior que isso: é
+incompreensível. Seu placar fica inválido porque um inimigo morreu do outro lado
+do mapa.
 
-Três regras da especificação parecem autor implicando com o usuário:
+A saída mais óbvia — restringir globais a números — funciona e é barata. Mas eu
+sabia de antemão o que aconteceria: no dia seguinte alguém pede um texto, depois
+uma lista, e cada pedido é pequeno e razoável, e o terceiro me obriga à
+arquitetura que eu tinha acabado de descartar. Projetar uma feature sabendo que
+vou ser pressionado a estendê-la para onde não quero ir é escolher a briga
+errada.
 
-- uma struct não pode conter a si mesma, em forma nenhuma
-- `Closure` só aparece em posição de argumento — não pode ser retornada,
-  guardada em campo nem colocada numa coleção
-- builder não é valor de primeira classe
+Então virou recusa, com o motivo escrito para não ter que ser redescoberto:
 
-São a mesma regra vista de três lados.
+> Não existe variável global. Valor composto vive numa arena, e arena pertence a
+> uma instância — então estado compartilhado seria uma instância, não uma
+> variável.
 
-O Leaf não tem coletor de lixo. A memória é contagem de referências **sem
-detector de ciclo**, e isso só funciona se ciclo for impossível. Três
-invariantes combinadas o tornam impossível:
+Isso é uma regra que se explica sozinha. A versão anterior — "não existe
+variável global entre scripts" — era um decreto, e decreto tem que ser
+redefendido toda vez que alguém pergunta.
 
-Valor composto é imutável, então ele não consegue passar a apontar para si
-mesmo depois de criado — para construir o filho, o pai já teria que existir.
-O ambiente capturado por um `Closure` vive na pilha do frame e morre com ele,
-então nunca chega à arena e nunca entra na contagem. E o builder tem dono
-único e não é valor, então não há como dois lugares apontarem para ele.
+## Recusar uma conveniência
 
-Quebre qualquer uma e o ciclo volta. Permita `Closure` guardada num campo e
-você tem um valor que captura outro valor que pode contê-lo. Torne o builder
-primeira classe e você tem um buffer mutável com dois donos.
+Uma categoria mais sutil: coisas que tornariam a linguagem mais fácil de escrever
+e que foram recusadas porque a facilidade seria uma mentira.
 
-```leaf
-struct No:
-	prox: No?
-	filhos: Array<No>
-```
+Quase todo tipo do Leaf tem valor padrão, então declarar sem inicializar
+funciona. Dois não têm: o tipo que carrega sucesso-ou-falha, e o tipo que guarda
+uma função.
 
-As duas linhas são erro de compilação, e a mensagem nomeia o caminho da
-recursão: `No → prox → No`. Para árvore e lista na v1, o padrão é índice
-numa `Array` mantida à parte — arena, que é o que motor de jogo faz de
-qualquer jeito.
+Para o primeiro, o único valor padrão possível seria "deu certo". Numa linguagem
+cujo tema é *toda falha vira valor*, uma variável não inicializada afirmando
+sucesso é o pior default imaginável — e a alternativa, "deu errado, sem motivo",
+é igualmente falsa.
 
-Essas três estão na lista de adiadas, não na de recusadas. Mas desfazer
-qualquer uma custa pagar pelo que ela compra: ou entra um tipo indireto com
-detecção de ciclo, ou some o "sem coletor de lixo". Adiado, não de graça.
+Para o segundo, o padrão natural seria uma função que não faz nada e devolve
+zero. É a mesma armadilha: seu cálculo de dano fica valendo zero para sempre,
+sem erro, sem log, sem nada. Você não perde a tarde procurando o bug — você
+perde a tarde procurando no lugar errado.
+
+Nos dois casos, a alternativa recusada era **mais** confortável. É por isso que
+essa categoria é a que mais escapa: nada nela parece errado na hora de escrever.
 
 ## O que é só adiado mesmo
 
-Inferência de tipos, genéricos definidos pelo usuário, trait de iteração,
-funções geradoras, formatação dentro de interpolação. Custo-benefício comum:
-cada uma custa implementação e nenhuma impede a v1 de ser usável.
+Inferência de tipos, genéricos definidos pelo usuário, tipo indireto que
+destravaria estruturas recursivas, iteração sobre tipo do usuário, funções
+geradoras, formatação dentro de interpolação. Custo-benefício comum: cada uma
+custa implementação e nenhuma impede a v1 de ser usável.
 
 A inferência merece uma linha. Escrever todo tipo explicitamente significa um
-verificador sem unificação, sem variável de tipo, checando de baixo para
-cima. É mais para digitar e muito menos para errar — e, quando erra, o erro
-aponta a linha que você escreveu, não um ponto três funções acima onde a
-inferência começou a divergir.
+verificador sem unificação, sem variável de tipo, checando de baixo para cima. É
+mais para digitar e muito menos para errar — e, quando erra, o erro aponta a
+linha que você escreveu, não um ponto três funções acima onde a inferência
+começou a divergir.
 
-## Por que fechar escopo antes de escrever código
+E o estado compartilhado da seção anterior entrou aqui com sobrenome: recusado
+na v1, com dois desenhos anotados para quando houver um caso de uso real
+empurrando. A diferença entre isso e "vamos ver depois" é que a análise já está
+escrita — quem voltar ao assunto começa de onde eu parei, não do zero.
 
-Fechar escopo não é teatro de disciplina. É o que torna barato dizer não
-depois.
+## Por que a distinção importa
 
-Enquanto a especificação está aberta, toda boa ideia é candidata, e recusar
-custa uma discussão. Com a lista escrita, recusar custa um link. A ideia não
-é rejeitada — ela é v2. E essa reformulação é o que impede um projeto de uma
-pessoa só de virar uma especificação infinita que nunca compila nada.
+Fechar escopo não é teatro de disciplina. É o que torna barato dizer não depois.
 
-As decisões da linguagem e por que ela precisa existir estão em
-[leaf.rs](/projetos/leaf).
+Enquanto a referência está aberta, toda boa ideia é candidata, e recusar custa
+uma discussão inteira. Com a lista escrita, recusar custa um link — e a ideia não
+é rejeitada, ela é v2. É essa reformulação que impede um projeto de uma pessoa só
+de virar uma especificação infinita que nunca compila nada.
+
+Mas a revisão de agosto me ensinou o outro lado, que eu não sabia quando escrevi
+a primeira versão dessa lista: **a lista não é uma jaula.** Ela existe para tornar
+barato dizer não, não para tornar impossível dizer "eu errei".
+
+A diferença entre as duas coisas é ter um critério. Sem critério, reabrir escopo
+é ceder à ideia mais recente que alguém teve. Com critério, é aplicar uma regra
+que você escreveu quando estava frio — e descobrir que ela reprova algo que você
+mesmo tinha aprovado antes de ter a regra.
+
+Foi o que aconteceu com as cinco palavras. E é a única forma que eu conheço de
+mudar de ideia sem que mudar de ideia vire hábito.

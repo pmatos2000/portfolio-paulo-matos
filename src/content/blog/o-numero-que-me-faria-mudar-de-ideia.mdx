@@ -2,14 +2,17 @@ export const meta = {
   title: "O número que me faria mudar de ideia",
   description:
     "Escolhi de propósito a representação de valor mais lenta da VM do Leaf, e escrevi no plano, antes de qualquer medição, o número exato que autorizaria trocar.",
-  date: "2026-08-11",
+  date: "2026-08-12",
   tags: ["leaf", "rust", "compiladores"],
 };
 
-Estou escrevendo o [Leaf](/projetos/leaf), uma linguagem de script tipada e sem
-coletor de lixo, embarcável em Rust. Nenhuma linha do compilador existe ainda. O
-que existe é um plano de 27 etapas — e a primeira decisão técnica dele foi
-tomada contra o meu instinto.
+O [post sobre o plano](/blog/o-plano-em-27-etapas) diz que critério de fim é
+escrito antes porque depois eu não sou imparcial. Escrito assim, em geral, é
+barato — ninguém discorda.
+
+Este post é o caso onde essa regra me custa alguma coisa. É a etapa E1, a
+primeira que produz código de verdade, e a decisão dela foi tomada contra o meu
+instinto.
 
 ## A decisão
 
@@ -17,7 +20,7 @@ Em execução, a linguagem inteira se resume a mover valores entre os
 registradores de uma máquina virtual:
 
 ```leaf
-@export(min=0, max=100) let vida: int = 100
+let vida: int = 100
 let nome: string = "inimigo"
 let alvo: Entidade? = None
 ```
@@ -156,39 +159,45 @@ número.
 Isso transforma uma questão de gosto numa questão de fato. É barato: um arquivo
 de texto versionado. E é a diferença entre uma decisão e uma trégua.
 
-## Por que escrever o critério antes
+## Onde a regra do plano cobra
 
-Porque depois eu não sou imparcial.
+Aqui é onde "escrever o critério antes" deixa de ser frase bonita.
 
 Se eu deixar para definir o limiar quando os números chegarem, terei acabado de
 passar uma semana implementando a união. Vou ter lido sobre ela, contornado três
-problemas dela, ficado orgulhoso dela. Onze por cento vai parecer muito. O
-mesmo eu, em janeiro, sem nada investido, olha para onze por cento e vê pouco.
+problemas dela, ficado orgulhoso dela. **Onze por cento vai parecer muito.** O
+mesmo eu, hoje, sem nada investido, olha para onze por cento e vê pouco.
 
 O único momento em que sou honesto sobre esse trade-off é agora, quando as duas
-opções ainda me custam igual. Escrever o critério antes não é disciplina — é
-aproveitar a única janela em que a minha opinião não está comprada.
+opções ainda me custam igual — e o incômodo de fixar 15% sem ter medido nada é
+justamente o sinal de que o critério é real.
 
-## O que isso não é
+Porque um critério precisa **poder falhar**. Um que você já sabe que vai passar
+não é critério, é formalidade. E ele precisa nomear a carga, o número e o que
+acontece nos dois lados — principalmente o que acontece quando ele não é
+atingido. "Se ficar significativamente mais rápido" é opinião com modos
+melhores.
 
-Não é "depois a gente otimiza". "Depois" sem critério é briga adiada: quando o
-depois chega, ninguém lembra qual era o padrão de comparação, e vence quem tem
-mais energia para discutir naquele dia.
+Isso também não é "depois a gente otimiza". "Depois" sem critério é briga
+adiada: quando o depois chega, ninguém lembra qual era o padrão de comparação, e
+vence quem tiver mais energia para discutir naquele dia.
 
-Também não vale se o critério for vago. "Se ficar significativamente mais
-rápido" é opinião com modos melhores. O critério precisa nomear a carga, o
-número e o que acontece nos dois lados — inclusive, e principalmente, o que
-acontece quando ele não é atingido.
+## Uma nota sobre estabilidade
 
-E ele precisa poder falhar. Um critério que você sabe de antemão que vai passar
-não é um critério, é uma formalidade.
+Escrevi essa decisão em janeiro. Desde então a linguagem passou por uma
+[revisão](/blog/o-leaf-por-dentro) que aposentou cinco palavras-chave, mudou
+onde o estado de um script mora e trocou o inteiro de 32 para 64 bits.
 
-## Uma etapa de vinte e sete
+A E1 não se moveu.
 
-Isso é a etapa E1, e existe uma E25 que a revisita. Entre as duas há um plano
-inteiro, organizado por uma regra só: a primeira fase entrega o pipeline
-completo — fonte, bytecode, execução, retorno ao Rust — suportando apenas `int`.
-Tudo depois é acrescentar tipo a uma máquina que já roda.
+E o motivo é pequeno e vale registrar: `Raw::I(i64)` já era de 64 bits desde o
+começo, então a mudança de `int` para 64 bits **eliminou uma inconsistência** em
+vez de criar trabalho. A representação de valor tinha sido decidida sem olhar
+para a ergonomia da linguagem, e por isso sobreviveu quando a ergonomia mudou.
 
-O resto das decisões da linguagem, e por que ela precisa existir, está em
+Não vou fingir que foi previsão. Mas é a primeira evidência de que separar as
+duas coisas — o que a linguagem promete e como a máquina guarda — foi a
+separação certa.
+
+O estado do projeto e a referência da linguagem ficam em
 [leaf.rs](/projetos/leaf).
