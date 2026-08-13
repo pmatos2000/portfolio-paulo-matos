@@ -3,16 +3,20 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { SidebarContext } from "@/contexts/SidebarContext";
+import type { BlogYear } from "@/data/blogTree";
+import { outlineFor } from "@/data/outline";
 import { buildTree, findItem } from "@/data/sidebarTree";
+import OutlinePanel from "../OutlinePanel/OutlinePanel";
 import TreeNodeComponent from "../TreeNodeComponent/TreeNodeComponent";
 import styles from "./Sidebar.module.css";
 
 type SidebarProps = {
   onCloseMenu: () => void;
   lastPostSlug: string | null;
+  blogYears: BlogYear[];
 };
 
-const Sidebar = ({ onCloseMenu, lastPostSlug }: SidebarProps) => {
+const Sidebar = ({ onCloseMenu, lastPostSlug, blogYears }: SidebarProps) => {
   const pathname = usePathname();
   const [hash, setHash] = useState("");
 
@@ -38,11 +42,22 @@ const Sidebar = ({ onCloseMenu, lastPostSlug }: SidebarProps) => {
     [pathname, lastPostSlug],
   );
 
+  const outline = useMemo(
+    () => outlineFor(pathname, blogYears),
+    [pathname, blogYears],
+  );
+
+  /**
+   * Busca na árvore e no outline juntos. Numa página com âncora os dois lados
+   * compartilham a mesma folha, então o id bate e os dois acendem; num post, o
+   * título só existe no outline e é aqui que ele é encontrado.
+   */
   const activeId = useMemo(() => {
+    const items = [...tree, ...outline];
     const paths = hash ? [pathname + hash, pathname] : [pathname];
     for (const path of paths) {
       const leaf = findItem(
-        tree,
+        items,
         (item) => item.type === "leaf" && item.url === path,
       );
       if (leaf) {
@@ -50,13 +65,13 @@ const Sidebar = ({ onCloseMenu, lastPostSlug }: SidebarProps) => {
       }
     }
     for (const path of paths) {
-      const node = findItem(tree, (item) => item.url === path);
+      const node = findItem(items, (item) => item.url === path);
       if (node) {
         return node.id;
       }
     }
     return null;
-  }, [tree, pathname, hash]);
+  }, [tree, outline, pathname, hash]);
 
   return (
     <SidebarContext.Provider
@@ -73,6 +88,7 @@ const Sidebar = ({ onCloseMenu, lastPostSlug }: SidebarProps) => {
             <TreeNodeComponent key={node.id} node={node} />
           ))}
         </ul>
+        <OutlinePanel items={outline} />
       </aside>
     </SidebarContext.Provider>
   );

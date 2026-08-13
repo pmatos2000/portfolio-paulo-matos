@@ -64,7 +64,9 @@ const ZeChinelaoPage = () => {
         lineares.
       </p>
 
-      <h2>O Propósito: Do Livro à Prática</h2>
+      <h2 id="o-proposito-do-livro-a-pratica">
+        O Propósito: Do Livro à Prática
+      </h2>
       <p>
         Este projeto foi a materialização dos meus estudos. Eu o desenvolvi para
         aplicar e testar o conhecimento que estava adquirindo com o livro{" "}
@@ -81,7 +83,9 @@ const ZeChinelaoPage = () => {
         Play Store.
       </p>
 
-      <h2>A Origem do Nome: Uma Homenagem</h2>
+      <h2 id="a-origem-do-nome-uma-homenagem">
+        A Origem do Nome: Uma Homenagem
+      </h2>
       <p>
         O nome "Zé Chinelão" tem uma origem curiosa. Era uma brincadeira interna
         com meus amigos do CEFET-MG, que éramos grandes fãs da banda Legião
@@ -96,12 +100,12 @@ const ZeChinelaoPage = () => {
         brincadeira do nome com o propósito matemático da ferramenta.
       </p>
 
-      <h2>Galeria</h2>
+      <h2 id="galeria">Galeria</h2>
       <div className="centered-container">
         <ImageCarousel images={zeChinelaoImages} />
       </div>
 
-      <h2>Competências em Destaque</h2>
+      <h2 id="competencias-em-destaque">Competências em Destaque</h2>
       <ul>
         <li>
           <strong>Desenvolvimento Mobile:</strong> Android Nativo com Java e
@@ -122,7 +126,7 @@ const ZeChinelaoPage = () => {
         </li>
       </ul>
 
-      <h2>Código Fonte</h2>
+      <h2 id="codigo-fonte">Código Fonte</h2>
       <ul>
         <li>
           <a

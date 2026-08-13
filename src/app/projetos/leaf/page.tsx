@@ -51,7 +51,9 @@ const LeafPage = () => {
         precisa existir e quais decisões já foram tomadas.
       </p>
 
-      <h2>O problema que originou a linguagem</h2>
+      <h2 id="o-problema-que-originou-a-linguagem">
+        O problema que originou a linguagem
+      </h2>
       <p>
         No <Link href="/projetos/rustle">Rustle</Link>, a engine de jogos que
         estou escrevendo em Rust, criar um componente novo exige recompilar o
@@ -72,7 +74,9 @@ const LeafPage = () => {
       </p>
       <p>O preço foi o ciclo. Toda alteração passa pelo compilador.</p>
 
-      <h2>Por que não usar uma linguagem pronta</h2>
+      <h2 id="por-que-nao-usar-uma-linguagem-pronta">
+        Por que não usar uma linguagem pronta
+      </h2>
       <p>
         É a pergunta óbvia, e eu não a respondi lendo documentação — respondi
         construindo. A prova de conceito da engine tem uma camada de script
@@ -94,7 +98,7 @@ const LeafPage = () => {
         feito para esse uso. O mesmo vale para Lua e Rhai, que também avaliei.
       </p>
 
-      <h2>Os cinco requisitos</h2>
+      <h2 id="os-cinco-requisitos">Os cinco requisitos</h2>
       <p>
         Escrever a minha deixou de ser capricho quando ficou claro que eu
         precisava das cinco coisas ao mesmo tempo:
@@ -123,7 +127,7 @@ const LeafPage = () => {
       </ul>
       <p>Cada linguagem que avaliei atende algumas. Nenhuma atende todas.</p>
 
-      <h2>Como Leaf se parece</h2>
+      <h2 id="como-leaf-se-parece">Como Leaf se parece</h2>
       <Code lang="leaf">{EXAMPLE}</Code>
       <p>
         A sintaxe é próxima da de Python — <code>def</code>, dois-pontos, blocos
@@ -134,7 +138,7 @@ const LeafPage = () => {
         própria.
       </p>
 
-      <h2>O estado de um script</h2>
+      <h2 id="o-estado-de-um-script">O estado de um script</h2>
       <p>
         Um script com estado define um tipo implícito, <code>Self</code>, cujos
         campos são os <code>let</code> declarados no topo do arquivo. Cada
@@ -160,7 +164,7 @@ const LeafPage = () => {
         local seria esconder justamente o que precisa ser visto.
       </p>
 
-      <h2>Anotações</h2>
+      <h2 id="anotacoes">Anotações</h2>
       <p>
         Uma anotação é um prefixo de declaração, e pode marcar um módulo, uma
         variável, uma função ou um tipo. Parece detalhe de sintaxe, mas é a peça
@@ -218,7 +222,9 @@ const LeafPage = () => {
         a VM deve mesmo ignorar existe um espaço reservado, <code>@meta</code>.
       </p>
 
-      <h2>Sem coletor de lixo, e sem vazamento</h2>
+      <h2 id="sem-coletor-de-lixo-e-sem-vazamento">
+        Sem coletor de lixo, e sem vazamento
+      </h2>
       <p>
         Contagem de referências é a forma mais simples de gerenciar memória sem
         coletor: cada valor sabe quantos o apontam, e some quando ninguém mais
@@ -250,7 +256,7 @@ const LeafPage = () => {
         Quebre qualquer uma e o ciclo volta.
       </p>
 
-      <h2>A VM não entra em pânico</h2>
+      <h2 id="a-vm-nao-entra-em-panico">A VM não entra em pânico</h2>
       <p>
         Toda falha vira valor de retorno. Divisão inteira por zero, estouro de
         índice, overflow — nenhuma derruba o processo; todas sobem como{" "}
@@ -277,7 +283,7 @@ const LeafPage = () => {
         </li>
       </ul>
 
-      <h2>Por que tipagem estática</h2>
+      <h2 id="por-que-tipagem-estatica">Por que tipagem estática</h2>
       <p>
         Depois de anos mantendo sistemas grandes, a conclusão é difícil de
         escapar: em projeto longo ou com várias pessoas, a ausência de tipos
@@ -299,7 +305,7 @@ const LeafPage = () => {
         essa propriedade em vez de quebrá-la.
       </p>
 
-      <h2>Estado atual</h2>
+      <h2 id="estado-atual">Estado atual</h2>
       <p>
         A referência da linguagem está escrita e as decisões estruturais estão
         fechadas — indentação, resolução de nomes, conversão numérica, igualdade
@@ -327,7 +333,9 @@ const LeafPage = () => {
         </li>
       </ul>
 
-      <h2>Por que a linguagem antes do motor</h2>
+      <h2 id="por-que-a-linguagem-antes-do-motor">
+        Por que a linguagem antes do motor
+      </h2>
       <p>
         A ordem é deliberada. Meu conhecimento de linguagens, estruturas de
         dados e algoritmos é bem mais sólido que meu conhecimento de computação
@@ -336,7 +344,7 @@ const LeafPage = () => {
         linguagem antes de encarar rasterização e pipeline de renderização.
       </p>
 
-      <h2>Competências em destaque</h2>
+      <h2 id="competencias-em-destaque">Competências em destaque</h2>
       <ul>
         <li>
           <strong>Projeto de linguagem:</strong> sistema de tipos sem
@@ -357,10 +365,10 @@ const LeafPage = () => {
         </li>
       </ul>
 
-      <h2>Escrevendo sobre o Leaf</h2>
+      <h2 id="escrevendo-sobre-o-leaf">Escrevendo sobre o Leaf</h2>
       <PostLinks tag="leaf" />
 
-      <h2>Onde acompanhar</h2>
+      <h2 id="onde-acompanhar">Onde acompanhar</h2>
       <ul>
         <li>
           <Link href="/projetos/rustle">rustle.rs</Link> — a engine que motivou

@@ -33,7 +33,9 @@ const RustlePage = () => {
         decisões que sustentam as duas.
       </p>
 
-      <h2>A ideia central: a cena é um documento</h2>
+      <h2 id="a-ideia-central-a-cena-e-um-documento">
+        A ideia central: a cena é um documento
+      </h2>
       <p>
         A cena é um documento JSON. O editor edita o JSON; a engine apenas
         carrega e desenha.
@@ -46,7 +48,7 @@ const RustlePage = () => {
         fonte da verdade é sempre a mesma e é texto legível.
       </p>
 
-      <h2>Três princípios</h2>
+      <h2 id="tres-principios">Três princípios</h2>
 
       <p>
         <strong>
@@ -79,7 +81,9 @@ const RustlePage = () => {
         em sincronia é não ter duas descrições para manter.
       </p>
 
-      <h2>A regra que protege a arquitetura</h2>
+      <h2 id="a-regra-que-protege-a-arquitetura">
+        A regra que protege a arquitetura
+      </h2>
       <p>
         O núcleo da engine depende apenas das próprias macros e de serialização.
         Nada de wgpu, egui ou wasmtime entra ali.
@@ -92,7 +96,9 @@ const RustlePage = () => {
         runtime não carrega código de editor para dentro de um jogo publicado.
       </p>
 
-      <h2>O que a prova de conceito ensinou</h2>
+      <h2 id="o-que-a-prova-de-conceito-ensinou">
+        O que a prova de conceito ensinou
+      </h2>
       <p>
         A reescrita não começou do zero conceitual. Ela herda resultados de uma
         POC que rodou de verdade:
@@ -120,7 +126,9 @@ const RustlePage = () => {
         lê durante a atualização é sempre um estado coerente.
       </p>
 
-      <h2>O que ficou de fora, e virou outro projeto</h2>
+      <h2 id="o-que-ficou-de-fora-e-virou-outro-projeto">
+        O que ficou de fora, e virou outro projeto
+      </h2>
       <p>
         A POC também levou scripting em runtime até o fim, usando Rune.
         Funcionou — e foi usando que os limites apareceram. Por isso o roteiro
@@ -130,7 +138,7 @@ const RustlePage = () => {
         estiver pronta.
       </p>
 
-      <h2>Estado atual</h2>
+      <h2 id="estado-atual">Estado atual</h2>
       <p>
         O núcleo está publicado: grafo de cena, objetos, componentes e
         transforms hierárquicos, com testes e integração contínua rodando
@@ -144,7 +152,7 @@ const RustlePage = () => {
         promessa com data.
       </p>
 
-      <h2>Competências em destaque</h2>
+      <h2 id="competencias-em-destaque">Competências em destaque</h2>
       <ul>
         <li>
           <strong>Arquitetura de software:</strong> grafo de dependência entre
@@ -164,7 +172,7 @@ const RustlePage = () => {
         </li>
       </ul>
 
-      <h2>Código fonte</h2>
+      <h2 id="codigo-fonte">Código fonte</h2>
       <ul>
         <li>
           <a

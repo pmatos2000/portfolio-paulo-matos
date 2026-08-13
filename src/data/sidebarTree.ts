@@ -6,8 +6,17 @@ import { MdOutlineStar } from "react-icons/md";
 import { PiCompassRoseDuotone } from "react-icons/pi";
 import { SiHtml5, SiRust, SiTypescript } from "react-icons/si";
 import { VscMarkdown } from "react-icons/vsc";
+import { sectionId } from "@/data/sectionId";
+import { skillsData } from "@/data/skills";
 
 const BLOG_NODE_ID = "b8e1f4c3-7d29-4a56-9e08-1c3f5b7a2d64";
+
+/** Uma seção da página, para o painel OUTLINE. O hash tem que casar com o
+    id do <section> ou do <h2> correspondente na página. */
+export type OutlineEntry = {
+  title: string;
+  hash: string;
+};
 
 export type TreeLeaf = {
   id: string;
@@ -16,6 +25,8 @@ export type TreeLeaf = {
   icon: IconType;
   url: string;
   transient?: boolean;
+  /** Outline declarado à mão, para páginas cujas seções não são folhas. */
+  outline?: OutlineEntry[];
 };
 
 export type TreeNode = {
@@ -28,6 +39,8 @@ export type TreeNode = {
   icon?: IconType;
   /** Pastas nascem abertas; use false para começar fechada. */
   defaultExpanded?: boolean;
+  /** Outline declarado à mão, para páginas cujas seções não são folhas. */
+  outline?: OutlineEntry[];
   children: (TreeNode | TreeLeaf)[];
 };
 
@@ -47,6 +60,17 @@ export const sidebarTree: TreeItem[] = [
         title: "sobre-mim.css",
         icon: BsHash,
         url: "/sobre-mim",
+        outline: [
+          {
+            title: "Desenvolvedor Full-Stack & Líder Técnico",
+            hash: "desenvolvedor-full-stack-lider-tecnico",
+          },
+          {
+            title: "Minha Jornada com a Programação",
+            hash: "minha-jornada-com-a-programacao",
+          },
+          { title: "Além do Código", hash: "alem-do-codigo" },
+        ],
       },
       {
         id: "6cf9a0f7-424b-4134-8e5e-845cf0977337",
@@ -54,6 +78,11 @@ export const sidebarTree: TreeItem[] = [
         title: "competências.css",
         icon: BsHash,
         url: "/competencias",
+        /** Vem do skillsData para o painel nunca divergir das categorias. */
+        outline: skillsData.map((group) => ({
+          title: group.category,
+          hash: sectionId(group.category),
+        })),
       },
       {
         id: BLOG_NODE_ID,
@@ -161,6 +190,23 @@ export const sidebarTree: TreeItem[] = [
             title: "portfólio.tsx",
             icon: FaReact,
             url: "/projetos/portfolio",
+            outline: [
+              {
+                title: "A metáfora e o que ela custa",
+                hash: "a-metafora-e-o-que-ela-custa",
+              },
+              {
+                title: "Três problemas que só apareceram medindo",
+                hash: "tres-problemas-que-so-apareceram-medindo",
+              },
+              { title: "Resultado", hash: "resultado" },
+              { title: "Decisões técnicas", hash: "decisoes-tecnicas" },
+              {
+                title: "Competências em Destaque",
+                hash: "competencias-em-destaque",
+              },
+              { title: "Código Fonte", hash: "codigo-fonte" },
+            ],
           },
           {
             id: "7c3d5b81-2e64-4f19-9a07-b5d8e1f34a26",
@@ -168,6 +214,46 @@ export const sidebarTree: TreeItem[] = [
             title: "leaf.rs",
             icon: SiRust,
             url: "/projetos/leaf",
+            outline: [
+              {
+                title: "O problema que originou a linguagem",
+                hash: "o-problema-que-originou-a-linguagem",
+              },
+              {
+                title: "Por que não usar uma linguagem pronta",
+                hash: "por-que-nao-usar-uma-linguagem-pronta",
+              },
+              { title: "Os cinco requisitos", hash: "os-cinco-requisitos" },
+              { title: "Como Leaf se parece", hash: "como-leaf-se-parece" },
+              { title: "O estado de um script", hash: "o-estado-de-um-script" },
+              { title: "Anotações", hash: "anotacoes" },
+              {
+                title: "Sem coletor de lixo, e sem vazamento",
+                hash: "sem-coletor-de-lixo-e-sem-vazamento",
+              },
+              {
+                title: "A VM não entra em pânico",
+                hash: "a-vm-nao-entra-em-panico",
+              },
+              {
+                title: "Por que tipagem estática",
+                hash: "por-que-tipagem-estatica",
+              },
+              { title: "Estado atual", hash: "estado-atual" },
+              {
+                title: "Por que a linguagem antes do motor",
+                hash: "por-que-a-linguagem-antes-do-motor",
+              },
+              {
+                title: "Competências em destaque",
+                hash: "competencias-em-destaque",
+              },
+              {
+                title: "Escrevendo sobre o Leaf",
+                hash: "escrevendo-sobre-o-leaf",
+              },
+              { title: "Onde acompanhar", hash: "onde-acompanhar" },
+            ],
           },
           {
             id: "e91a4f0d-8b73-4c25-a6de-30f7c982b514",
@@ -175,6 +261,31 @@ export const sidebarTree: TreeItem[] = [
             title: "rustle.rs",
             icon: SiRust,
             url: "/projetos/rustle",
+            outline: [
+              {
+                title: "A ideia central: a cena é um documento",
+                hash: "a-ideia-central-a-cena-e-um-documento",
+              },
+              { title: "Três princípios", hash: "tres-principios" },
+              {
+                title: "A regra que protege a arquitetura",
+                hash: "a-regra-que-protege-a-arquitetura",
+              },
+              {
+                title: "O que a prova de conceito ensinou",
+                hash: "o-que-a-prova-de-conceito-ensinou",
+              },
+              {
+                title: "O que ficou de fora, e virou outro projeto",
+                hash: "o-que-ficou-de-fora-e-virou-outro-projeto",
+              },
+              { title: "Estado atual", hash: "estado-atual" },
+              {
+                title: "Competências em destaque",
+                hash: "competencias-em-destaque",
+              },
+              { title: "Código fonte", hash: "codigo-fonte" },
+            ],
           },
           {
             id: "1e47d46b-1501-4fa5-8448-a6ae26a19ca2",
@@ -188,6 +299,21 @@ export const sidebarTree: TreeItem[] = [
                 title: "rosa-polar.app",
                 icon: PiCompassRoseDuotone,
                 url: "/projetos/jogos/rosa-polar",
+                outline: [
+                  { title: "Demonstração", hash: "demonstracao" },
+                  {
+                    title: "Godot como Ferramenta de Simulação Matemática",
+                    hash: "godot-como-ferramenta-de-simulacao-matematica",
+                  },
+                  {
+                    title: "Competências em Destaque",
+                    hash: "competencias-em-destaque",
+                  },
+                  {
+                    title: "Download e Interação",
+                    hash: "download-e-interacao",
+                  },
+                ],
               },
             ],
           },
@@ -196,6 +322,10 @@ export const sidebarTree: TreeItem[] = [
             type: "node",
             title: "Aplicativos",
             url: "/projetos/aplicativos",
+            outline: [
+              { title: "Projetos", hash: "projetos" },
+              { title: "O contexto", hash: "o-contexto" },
+            ],
             children: [
               {
                 id: "9d9380f7-6fe2-410d-8b01-adcbf362c73f",
@@ -203,6 +333,22 @@ export const sidebarTree: TreeItem[] = [
                 title: "zé-chinelão.app",
                 icon: GiSlippers,
                 url: "/projetos/aplicativos/ze-chinelao",
+                outline: [
+                  {
+                    title: "O Propósito: Do Livro à Prática",
+                    hash: "o-proposito-do-livro-a-pratica",
+                  },
+                  {
+                    title: "A Origem do Nome: Uma Homenagem",
+                    hash: "a-origem-do-nome-uma-homenagem",
+                  },
+                  { title: "Galeria", hash: "galeria" },
+                  {
+                    title: "Competências em Destaque",
+                    hash: "competencias-em-destaque",
+                  },
+                  { title: "Código Fonte", hash: "codigo-fonte" },
+                ],
               },
             ],
           },

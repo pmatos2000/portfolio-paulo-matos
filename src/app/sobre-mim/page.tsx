@@ -27,7 +27,9 @@ const SobreMimPage = () => {
 
         <div className={styles.textContainer}>
           <h1>Sobre mim</h1>
-          <h2>Desenvolvedor Full-Stack & Líder Técnico</h2>
+          <h2 id="desenvolvedor-full-stack-lider-tecnico">
+            Desenvolvedor Full-Stack & Líder Técnico
+          </h2>
 
           <p>
             Olá! Eu sou Paulo Matos, desenvolvedor Full-Stack com mais de 5 anos
@@ -38,7 +40,9 @@ const SobreMimPage = () => {
             desenvolvimento.
           </p>
 
-          <h2>Minha Jornada com a Programação</h2>
+          <h2 id="minha-jornada-com-a-programacao">
+            Minha Jornada com a Programação
+          </h2>
           <p>
             Minha primeira aventura no mundo do código começou de uma forma um
             tanto inusitada: criando scripts em Ruby para modificar jogos no RPG
@@ -52,7 +56,7 @@ const SobreMimPage = () => {
             ajudar muitos colegas a se formarem.
           </p>
 
-          <h2>Além do Código</h2>
+          <h2 id="alem-do-codigo">Além do Código</h2>
           <p>
             Acredito que a criatividade e a lógica que aplicamos no
             desenvolvimento se estendem para muitas outras áreas. Minha vontade

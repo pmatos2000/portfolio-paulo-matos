@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import SkillBar from "@/components/SkillBar/SkillBar";
+import { sectionId } from "@/data/sectionId";
 import { pageMetadata } from "@/data/site";
 import { skillsData } from "@/data/skills";
 import styles from "./competencias.module.css";
@@ -21,7 +22,11 @@ const CompetenciasPage = () => {
       </p>
 
       {skillsData.map((group) => (
-        <section key={group.category} className={styles.skillGroup}>
+        <section
+          key={group.category}
+          id={sectionId(group.category)}
+          className={styles.skillGroup}
+        >
           <h2>{group.category}</h2>
           <p className={styles.categoryDescription}>{group.description}</p>
 

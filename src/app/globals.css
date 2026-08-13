@@ -8,6 +8,10 @@
   /* Texto de leitura: 7,06 sobre #252526. O secundário dava 4,67. */
   --text-color-prose: #b0b0b0;
   --text-color-secondary: #8e8e8e;
+  /* 3,27:1 sobre #1e1e1e — mínimo de 3:1 da WCAG 1.4.11 para componente de
+     interface. Um cinza mais discreto reprovaria. */
+  --scrollbar-thumb: #6e6e6e;
+  --scrollbar-thumb-hover: #8a8a8a;
 
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -27,6 +31,9 @@
   /* 7,04 sobre #f3f3f3. */
   --text-color-prose: #525252;
   --text-color-secondary: #5e5e5e;
+  /* 3,03:1 sobre #ffffff. */
+  --scrollbar-thumb: #949494;
+  --scrollbar-thumb-hover: #767676;
 }
 
 body {
@@ -40,6 +47,40 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+/* A barra de rolagem herda o cinza do sistema e destoa dos dois temas.
+   Padrão desde Chrome 121, Firefox 64 e Safari 26.2. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+/* Só para quem não conhece as propriedades acima — Safari antigo e Chrome
+   anterior ao 121. Aplicar as duas coisas ao mesmo tempo brigaria: definir
+   width em ::-webkit-scrollbar força barra clássica mesmo onde a padrão já
+   resolveu. */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border: 2px solid transparent;
+    border-radius: 5px;
+    /* Sem isto a borda transparente mostra o polegar por baixo. */
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
 }
 
 :focus-visible {

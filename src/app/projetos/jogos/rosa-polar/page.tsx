@@ -27,7 +27,7 @@ const RosaPolarPage = () => {
         interativa.
       </p>
 
-      <h2>Demonstração</h2>
+      <h2 id="demonstracao">Demonstração</h2>
       <div className="videoContainer">
         <iframe
           src="https://www.youtube.com/embed/AKIcIY77HKY"
@@ -36,7 +36,9 @@ const RosaPolarPage = () => {
         ></iframe>
       </div>
 
-      <h2>Godot como Ferramenta de Simulação Matemática</h2>
+      <h2 id="godot-como-ferramenta-de-simulacao-matematica">
+        Godot como Ferramenta de Simulação Matemática
+      </h2>
       <p>
         Minha formação em <strong>Matemática Computacional</strong> me deu uma
         base sólida para enxergar além do óbvio. Enquanto muitos veem a Godot
@@ -70,7 +72,7 @@ const RosaPolarPage = () => {
         experiências digitais únicas.
       </p>
 
-      <h2>Competências em Destaque</h2>
+      <h2 id="competencias-em-destaque">Competências em Destaque</h2>
       <ul>
         <li>
           <strong>Desenvolvimento de Jogos/Simulações:</strong> Godot Engine,
@@ -90,7 +92,7 @@ const RosaPolarPage = () => {
         </li>
       </ul>
 
-      <h2>Download e Interação</h2>
+      <h2 id="download-e-interacao">Download e Interação</h2>
       <ul>
         <li>
           <a

@@ -27,7 +27,7 @@ const PortfolioPage = () => {
         deveria parecer um site institucional?
       </p>
 
-      <h2>A metáfora e o que ela custa</h2>
+      <h2 id="a-metafora-e-o-que-ela-custa">A metáfora e o que ela custa</h2>
       <p>
         Toda decisão de design tem preço, e vale declarar o desta. Como os links
         do site são nomes de arquivo, o texto âncora — que é um dos sinais que
@@ -41,7 +41,9 @@ const PortfolioPage = () => {
         arquivo, e a trilha de navegação usa os segmentos reais da URL.
       </p>
 
-      <h2>Três problemas que só apareceram medindo</h2>
+      <h2 id="tres-problemas-que-so-apareceram-medindo">
+        Três problemas que só apareceram medindo
+      </h2>
 
       <p>
         <strong>A árvore escondia o site inteiro dos buscadores.</strong> As
@@ -73,7 +75,7 @@ const PortfolioPage = () => {
         matemática, não questão de gosto.
       </p>
 
-      <h2>Resultado</h2>
+      <h2 id="resultado">Resultado</h2>
       <ul>
         <li>
           <strong>Lighthouse (computador):</strong> 100 em desempenho,
@@ -89,7 +91,7 @@ const PortfolioPage = () => {
         </li>
       </ul>
 
-      <h2>Decisões técnicas</h2>
+      <h2 id="decisoes-tecnicas">Decisões técnicas</h2>
       <ul>
         <li>
           <strong>Server Components por padrão:</strong> só há{" "}
@@ -119,7 +121,7 @@ const PortfolioPage = () => {
         </li>
       </ul>
 
-      <h2>Competências em Destaque</h2>
+      <h2 id="competencias-em-destaque">Competências em Destaque</h2>
       <ul>
         <li>
           <strong>Next.js 16 e React 19:</strong> App Router, Server Components,
@@ -143,7 +145,7 @@ const PortfolioPage = () => {
         </li>
       </ul>
 
-      <h2>Código Fonte</h2>
+      <h2 id="codigo-fonte">Código Fonte</h2>
       <ul>
         <li>
           <a

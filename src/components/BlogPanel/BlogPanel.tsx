@@ -3,10 +3,10 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { SiHtml5 } from "react-icons/si";
-import { VscMarkdown, VscSymbolString } from "react-icons/vsc";
+import { VscMarkdown } from "react-icons/vsc";
 import { SidebarContext } from "@/contexts/SidebarContext";
 import type { BlogYear } from "@/data/blogTree";
-import type { TocHeading } from "@/data/postToc";
+import { tocToItems } from "@/data/outline";
 import type { TreeItem } from "@/data/sidebarTree";
 import TreeNodeComponent from "../TreeNodeComponent/TreeNodeComponent";
 import styles from "./BlogPanel.module.css";
@@ -17,24 +17,6 @@ type BlogPanelProps = {
 };
 
 const INDEX_ID = "blog-panel:index";
-
-/** h2 com h3 dentro vira nó com url: o chevron abre, o nome navega. */
-const tocToItems = (slug: string, headings: TocHeading[]): TreeItem[] =>
-  headings.map((heading) => {
-    const base = {
-      id: `blog-panel:${slug}#${heading.id}`,
-      title: heading.text,
-      icon: VscSymbolString,
-      url: `/blog/${slug}#${heading.id}`,
-    };
-    return heading.children.length > 0
-      ? {
-          ...base,
-          type: "node" as const,
-          children: tocToItems(slug, heading.children),
-        }
-      : { ...base, type: "leaf" as const };
-  });
 
 /**
  * Só o post aberto ganha os títulos como filhos — é o que o VS Code faz com o
@@ -63,7 +45,7 @@ const toTree = (years: BlogYear[], activeSlug: string | null): TreeItem[] => [
         ? {
             ...base,
             type: "node" as const,
-            children: tocToItems(post.slug, post.toc),
+            children: tocToItems(post.slug, post.toc, "blog-panel"),
           }
         : { ...base, type: "leaf" as const };
     }),

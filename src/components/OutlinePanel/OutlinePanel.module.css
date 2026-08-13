@@ -1,0 +1,35 @@
+.outline {
+  margin-top: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.summary {
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+  letter-spacing: 1px;
+  /* O marcador padrão desalinha entre navegadores; o ::before o substitui. */
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 1em;
+  transition: transform 0.15s ease;
+}
+
+.outline[open] .summary::before {
+  transform: rotate(90deg);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}

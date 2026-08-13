@@ -19,7 +19,13 @@ const ViewPanel = ({
 }: ViewPanelProps) => {
   switch (activeView) {
     case "Explorer":
-      return <Sidebar onCloseMenu={onCloseMenu} lastPostSlug={lastPostSlug} />;
+      return (
+        <Sidebar
+          onCloseMenu={onCloseMenu}
+          lastPostSlug={lastPostSlug}
+          blogYears={blogYears}
+        />
+      );
     case "Search":
       return <SearchPanel onCloseMenu={onCloseMenu} />;
     case "Blog":

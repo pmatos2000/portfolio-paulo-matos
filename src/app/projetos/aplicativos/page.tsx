@@ -27,7 +27,7 @@ const AplicativosPage = () => {
         costuma jogar fora.
       </p>
 
-      <h2>Projetos</h2>
+      <h2 id="projetos">Projetos</h2>
       <ul>
         <li>
           <Link href="/projetos/aplicativos/ze-chinelao">ze-chinelao.app</Link>{" "}
@@ -38,7 +38,7 @@ const AplicativosPage = () => {
         </li>
       </ul>
 
-      <h2>O contexto</h2>
+      <h2 id="o-contexto">O contexto</h2>
       <p>
         Este projeto foi a materialização de um estudo: eu estava lendo{" "}
         <em>Google Android</em>, de Ricardo R. Lecheta, e precisava de algo
