@@ -39,6 +39,9 @@ yarn-error.log*
 # indexnow (marcador local do ultimo commit submetido)
 .indexnow.json
 
+# texto das paginas para a busca (gerado no prebuild)
+src/data/pageText.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

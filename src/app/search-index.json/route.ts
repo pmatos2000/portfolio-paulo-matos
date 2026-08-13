@@ -6,6 +6,28 @@ import { sidebarTree, type TreeItem } from "@/data/sidebarTree";
 export const dynamic = "force-static";
 
 const CONTENT_DIR = join(process.cwd(), "src", "content", "blog");
+const PAGE_TEXT = join(process.cwd(), "src", "data", "pageText.json");
+
+type PageText = { heading: string; body: string };
+
+/**
+ * Texto das páginas estáticas, gerado por scripts/extract-page-text.mjs
+ * nos ganchos prebuild/predev.
+ *
+ * Ausente, o índice sai só com títulos — como era antes — em vez de derrubar o
+ * build. O aviso existe porque a falha seria invisível: a busca continuaria
+ * funcionando, achando menos.
+ */
+const readPageText = async (): Promise<Record<string, PageText>> => {
+  try {
+    return JSON.parse(await readFile(PAGE_TEXT, "utf8"));
+  } catch {
+    console.warn(
+      "[search-index] pageText.json ausente; páginas entram sem corpo. Rode `npm run page-text`.",
+    );
+    return {};
+  }
+};
 
 const stripMdx = (source: string) =>
   source
@@ -58,8 +80,23 @@ export async function GET() {
     }),
   );
 
+  const pageTexts = await readPageText();
+
   const pageEntries = [...collectPages(sidebarTree, new Map())].map(
-    ([url, title]) => ({ url, title, kind: "page" as const }),
+    ([url, title]) => {
+      const page = pageTexts[url];
+      return {
+        url,
+        /** Nome de arquivo, como a árvore mostra. */
+        title,
+        kind: "page" as const,
+        /** O h1 real vai em tags: pontua acima do corpo e abaixo do título,
+            que é exatamente onde ele deve ficar. O SearchPanel usa tags só
+            para pontuar, nunca para exibir. */
+        ...(page?.heading ? { tags: [page.heading] } : {}),
+        ...(page?.body ? { body: page.body } : {}),
+      };
+    },
   );
 
   return Response.json([...postEntries, ...pageEntries]);

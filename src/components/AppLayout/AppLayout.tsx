@@ -38,15 +38,15 @@ export default function AppLayout({
    * refaria o registro a cada render se estas mudassem. Por isso as atualizações
    * são funcionais, sem ler estado de fora.
    */
-  const abrirGaveta = useCallback(() => {
+  const openDrawer = useCallback(() => {
     /** Sem painel escolhido ainda, abre no Explorer. */
-    setActiveView((atual) => atual ?? "Explorer");
+    setActiveView((current) => current ?? "Explorer");
     setIsMobileMenuOpen(true);
   }, []);
 
-  const fecharGaveta = useCallback(() => setIsMobileMenuOpen(false), []);
+  const closeDrawer = useCallback(() => setIsMobileMenuOpen(false), []);
 
-  useDrawerSwipe(abrirGaveta, fecharGaveta);
+  useDrawerSwipe(openDrawer, closeDrawer);
 
   useEffect(() => {
     if (postSlug) {

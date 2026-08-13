@@ -6,6 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "page-text": "node scripts/extract-page-text.mjs",
+    "predev": "npm run page-text",
+    "prebuild": "npm run page-text",
     "lint": "biome check",
     "format": "biome format --write",
     "indexnow": "node scripts/indexnow.mjs"

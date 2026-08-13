@@ -39,7 +39,7 @@ const inlineToText = (raw: string) =>
  */
 export const extractToc = (source: string): TocHeading[] => {
   const slugger = new GithubSlugger();
-  const raiz: TocHeading[] = [];
+  const roots: TocHeading[] = [];
 
   for (const match of source.replace(FENCED, "").matchAll(HEADING)) {
     const level = match[1].length;
@@ -47,13 +47,13 @@ export const extractToc = (source: string): TocHeading[] => {
     const id = slugger.slug(text);
 
     if (level === 2) {
-      raiz.push({ id, text, children: [] });
-    } else if (level === 3 && raiz.length > 0) {
-      raiz[raiz.length - 1].children.push({ id, text, children: [] });
+      roots.push({ id, text, children: [] });
+    } else if (level === 3 && roots.length > 0) {
+      roots[roots.length - 1].children.push({ id, text, children: [] });
     }
   }
 
-  return raiz;
+  return roots;
 };
 
 /** Lê o .mdx cru em build, como o /search-index.json já faz. */

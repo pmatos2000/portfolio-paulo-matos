@@ -3,13 +3,13 @@
 import { useEffect } from "react";
 
 /** Mesmo limiar do CSS. Ver o comentário do @media em AppLayout.module.css. */
-const COMPACTO = "(max-width: 1067px)";
+const COMPACT_LAYOUT = "(max-width: 1067px)";
 
 /** Distância horizontal mínima para valer como gesto, em px. */
-const DISTANCIA = 60;
+const MIN_DISTANCE = 60;
 
 /** O horizontal precisa dominar, senão rolagem na diagonal dispararia. */
-const DOMINANCIA = 1.5;
+const DOMINANCE = 1.5;
 
 /**
  * Faixa deixada de fora nas duas bordas laterais.
@@ -23,7 +23,7 @@ const DOMINANCIA = 1.5;
  * 32 e não 24 porque a sensibilidade do gesto é ajustável pelo usuário no
  * Android. Numa tela de 360px ainda sobram 296px de área útil.
  */
-const BORDA = 32;
+const EDGE_GUARD = 32;
 
 /**
  * O alvo, ou algum ancestral dele, rola na horizontal.
@@ -32,17 +32,17 @@ const BORDA = 32;
  * Sem esta checagem, arrastar para o lado dentro de um `pre` abriria a gaveta em
  * vez de rolar o código — e não haveria como ler uma linha longa no celular.
  */
-const rolaNaHorizontal = (alvo: EventTarget | null): boolean => {
-  let elemento = alvo instanceof Element ? alvo : null;
+const scrollsHorizontally = (target: EventTarget | null): boolean => {
+  let element = target instanceof Element ? target : null;
 
-  while (elemento) {
-    if (elemento.scrollWidth > elemento.clientWidth) {
-      const { overflowX } = getComputedStyle(elemento);
+  while (element) {
+    if (element.scrollWidth > element.clientWidth) {
+      const { overflowX } = getComputedStyle(element);
       if (overflowX === "auto" || overflowX === "scroll") {
         return true;
       }
     }
-    elemento = elemento.parentElement;
+    element = element.parentElement;
   }
 
   return false;
@@ -67,55 +67,56 @@ export const useDrawerSwipe = (
   onClose: () => void,
 ): void => {
   useEffect(() => {
-    const media = window.matchMedia(COMPACTO);
-    let compacto = media.matches;
+    const media = window.matchMedia(COMPACT_LAYOUT);
+    let compact = media.matches;
     const onMedia = (event: MediaQueryListEvent) => {
-      compacto = event.matches;
+      compact = event.matches;
     };
 
-    let inicioX = 0;
-    let inicioY = 0;
-    let rastreando = false;
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
 
     const onStart = (event: TouchEvent) => {
-      rastreando = false;
+      tracking = false;
 
       /** Mais de um dedo é pinça ou gesto do sistema, não arrastar. */
-      if (!compacto || event.touches.length !== 1) {
+      if (!compact || event.touches.length !== 1) {
         return;
       }
 
-      const toque = event.touches[0];
-      const naBorda =
-        toque.clientX < BORDA || toque.clientX > window.innerWidth - BORDA;
+      const touch = event.touches[0];
+      const onEdge =
+        touch.clientX < EDGE_GUARD ||
+        touch.clientX > window.innerWidth - EDGE_GUARD;
 
-      if (naBorda || rolaNaHorizontal(event.target)) {
+      if (onEdge || scrollsHorizontally(event.target)) {
         return;
       }
 
-      inicioX = toque.clientX;
-      inicioY = toque.clientY;
-      rastreando = true;
+      startX = touch.clientX;
+      startY = touch.clientY;
+      tracking = true;
     };
 
     /** Decide durante o movimento: responde antes de o dedo sair da tela. */
     const onMove = (event: TouchEvent) => {
-      if (!rastreando || event.touches.length !== 1) {
+      if (!tracking || event.touches.length !== 1) {
         return;
       }
 
-      const toque = event.touches[0];
-      const deltaX = toque.clientX - inicioX;
-      const deltaY = toque.clientY - inicioY;
+      const touch = event.touches[0];
+      const deltaX = touch.clientX - startX;
+      const deltaY = touch.clientY - startY;
 
-      if (Math.abs(deltaX) < DISTANCIA) {
+      if (Math.abs(deltaX) < MIN_DISTANCE) {
         return;
       }
-      if (Math.abs(deltaX) < Math.abs(deltaY) * DOMINANCIA) {
+      if (Math.abs(deltaX) < Math.abs(deltaY) * DOMINANCE) {
         return;
       }
 
-      rastreando = false;
+      tracking = false;
       if (deltaX > 0) {
         onOpen();
       } else {
@@ -123,22 +124,22 @@ export const useDrawerSwipe = (
       }
     };
 
-    const encerrar = () => {
-      rastreando = false;
+    const reset = () => {
+      tracking = false;
     };
 
     media.addEventListener("change", onMedia);
     document.addEventListener("touchstart", onStart, { passive: true });
     document.addEventListener("touchmove", onMove, { passive: true });
-    document.addEventListener("touchend", encerrar, { passive: true });
-    document.addEventListener("touchcancel", encerrar, { passive: true });
+    document.addEventListener("touchend", reset, { passive: true });
+    document.addEventListener("touchcancel", reset, { passive: true });
 
     return () => {
       media.removeEventListener("change", onMedia);
       document.removeEventListener("touchstart", onStart);
       document.removeEventListener("touchmove", onMove);
-      document.removeEventListener("touchend", encerrar);
-      document.removeEventListener("touchcancel", encerrar);
+      document.removeEventListener("touchend", reset);
+      document.removeEventListener("touchcancel", reset);
     };
   }, [onOpen, onClose]);
 };
