@@ -5,7 +5,7 @@ import { GiSlippers } from "react-icons/gi";
 import { MdOutlineStar } from "react-icons/md";
 import { PiCompassRoseDuotone } from "react-icons/pi";
 import { SiHtml5, SiRust, SiTypescript } from "react-icons/si";
-import { VscMarkdown } from "react-icons/vsc";
+import { VscHistory, VscMarkdown } from "react-icons/vsc";
 import { sectionId } from "@/data/sectionId";
 import { skillsData } from "@/data/skills";
 
@@ -27,6 +27,8 @@ export type TreeLeaf = {
   transient?: boolean;
   /** Outline declarado à mão, para páginas cujas seções não são folhas. */
   outline?: OutlineEntry[];
+  /** Navegável pela árvore, mas fora do sitemap. Ver src/app/sitemap.ts. */
+  noindex?: boolean;
 };
 
 export type TreeNode = {
@@ -41,6 +43,8 @@ export type TreeNode = {
   defaultExpanded?: boolean;
   /** Outline declarado à mão, para páginas cujas seções não são folhas. */
   outline?: OutlineEntry[];
+  /** Navegável pela árvore, mas fora do sitemap. Ver src/app/sitemap.ts. */
+  noindex?: boolean;
   children: (TreeNode | TreeLeaf)[];
 };
 
@@ -78,11 +82,18 @@ export const sidebarTree: TreeItem[] = [
         title: "competências.css",
         icon: BsHash,
         url: "/competencias",
-        /** Vem do skillsData para o painel nunca divergir das categorias. */
         outline: skillsData.map((group) => ({
           title: group.category,
           hash: sectionId(group.category),
         })),
+      },
+      {
+        id: "c7d05b18-9a4e-4f31-b6c2-1e8f7a3d5049",
+        type: "leaf",
+        title: "CHANGELOG.md",
+        icon: VscHistory,
+        url: "/changelog",
+        noindex: true,
       },
       {
         id: BLOG_NODE_ID,

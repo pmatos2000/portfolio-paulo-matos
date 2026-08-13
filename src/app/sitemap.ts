@@ -5,7 +5,7 @@ import { siteConfig } from "@/data/site";
 
 const collectRoutes = (nodes: TreeItem[], acc: Set<string>): Set<string> => {
   for (const node of nodes) {
-    if (node.url) {
+    if (node.url && !node.noindex) {
       const path = node.url.split("#")[0];
       if (path.startsWith("/")) {
         acc.add(path);

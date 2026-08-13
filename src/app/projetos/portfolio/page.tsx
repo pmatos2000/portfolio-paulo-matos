@@ -121,6 +121,15 @@ const PortfolioPage = () => {
         </li>
       </ul>
 
+      <h2 id="historico-de-mudancas">Histórico de mudanças</h2>
+      <p>
+        O painel <strong>Source Control</strong> da barra lateral lê os commits
+        recentes deste repositório na API do GitHub durante o build, e o{" "}
+        <Link href="/changelog">CHANGELOG.md</Link> mostra o diff de cada um,
+        renderizado com os mesmos temas do editor. É o site se explicando com o
+        próprio histórico, em vez de um texto sobre ele.
+      </p>
+
       <h2 id="competencias-em-destaque">Competências em Destaque</h2>
       <ul>
         <li>
