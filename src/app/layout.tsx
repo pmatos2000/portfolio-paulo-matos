@@ -4,6 +4,7 @@ import "./globals.css";
 import AppLayout from "@/components/AppLayout/AppLayout";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { getBlogYears } from "@/data/blogTree";
+import { getCommits } from "@/data/gitLog";
 import { OG_IMAGE, siteConfig } from "@/data/site";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -42,7 +43,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const blogYears = await getBlogYears();
+  const [blogYears, commits] = await Promise.all([
+    getBlogYears(),
+    getCommits(),
+  ]);
 
   return (
     <html lang="pt-BR" suppressHydrationWarning>
@@ -50,7 +54,9 @@ export default async function RootLayout({
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: script estático, sem entrada de usuário */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <ThemeProvider>
-          <AppLayout blogYears={blogYears}>{children}</AppLayout>
+          <AppLayout blogYears={blogYears} commits={commits}>
+            {children}
+          </AppLayout>
         </ThemeProvider>
       </body>
     </html>

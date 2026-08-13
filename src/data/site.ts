@@ -39,6 +39,8 @@ type PageMetadataInput = {
   absoluteTitle?: boolean;
   /** A rota tem opengraph-image próprio; não injetar o card do site. */
   routeImage?: boolean;
+  /** Fora do índice dos buscadores, mas os links continuam valendo. */
+  noindex?: boolean;
   article?: {
     publishedTime: string;
     modifiedTime: string;
@@ -52,10 +54,12 @@ export const pageMetadata = ({
   path,
   absoluteTitle = false,
   routeImage = false,
+  noindex = false,
   article,
 }: PageMetadataInput): Metadata => ({
   title: absoluteTitle ? { absolute: title } : title,
   description,
+  ...(noindex ? { robots: { index: false, follow: true } } : {}),
   alternates: {
     canonical: path,
     types: { "application/rss+xml": blogConfig.feedPath },

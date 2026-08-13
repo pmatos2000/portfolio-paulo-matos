@@ -1,0 +1,79 @@
+.back {
+  font-size: var(--font-size-sm);
+  margin-bottom: 1rem;
+}
+
+.title {
+  /* Assunto de commit é curto; o xl do h1 padrão fica desproporcional aqui. */
+  font-size: var(--font-size-lg);
+  line-height: 1.4;
+}
+
+.type {
+  color: var(--primary-color);
+  font-family: Consolas, "SF Mono", Menlo, "Courier New", monospace;
+  font-size: var(--font-size-md);
+  margin-right: 0.5rem;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+  /* Compensa o margin-bottom: 1.5rem que .contentPage h1 aplica. */
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+}
+
+.sha {
+  font-family: Consolas, "SF Mono", Menlo, "Courier New", monospace;
+  background-color: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 0.05em 0.4em;
+}
+
+.added {
+  color: var(--primary-color);
+}
+
+.removed {
+  color: var(--diff-removed);
+}
+
+.file {
+  margin-bottom: 2.5rem;
+}
+
+/* Sobrepõe o .contentPage h2 do globals.css: aqui o título é o caminho do
+   arquivo, e a borda inferior brigaria com a moldura do bloco de código. */
+.file .filename {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem;
+  max-width: none;
+  font-size: var(--font-size-sm);
+  margin: 0 0 0.5rem;
+  padding: 0;
+  border-bottom: none;
+}
+
+.filename code {
+  font-family: Consolas, "SF Mono", Menlo, "Courier New", monospace;
+  color: var(--text-color);
+}
+
+.status {
+  font-size: var(--font-size-xs);
+  color: var(--text-color-secondary);
+  font-weight: normal;
+}
+
+.skipped {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+}

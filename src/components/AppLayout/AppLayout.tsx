@@ -10,15 +10,21 @@ import TabsBar from "@/components/TabsBar/TabsBar";
 import ViewPanel from "@/components/ViewPanel/ViewPanel";
 import type { ActivityView } from "@/data/activityViews";
 import type { BlogYear } from "@/data/blogTree";
+import type { Commit } from "@/data/gitLog";
 import { postSlugFromPath } from "@/data/sidebarTree";
 import styles from "./AppLayout.module.css";
 
 type AppLayoutProps = {
   children: React.ReactNode;
   blogYears: BlogYear[];
+  commits: Commit[];
 };
 
-export default function AppLayout({ children, blogYears }: AppLayoutProps) {
+export default function AppLayout({
+  children,
+  blogYears,
+  commits,
+}: AppLayoutProps) {
   const pathname = usePathname();
   const postSlug = postSlugFromPath(pathname);
   const [lastPostSlug, setLastPostSlug] = useState<string | null>(postSlug);
@@ -79,6 +85,7 @@ export default function AppLayout({ children, blogYears }: AppLayoutProps) {
           onCloseMenu={closeMobileMenu}
           lastPostSlug={lastPostSlug}
           blogYears={blogYears}
+          commits={commits}
         />
         <div className={styles.mobileViews}>
           <MobileViewBar activeView={activeView} onSelect={handleFooterClick} />

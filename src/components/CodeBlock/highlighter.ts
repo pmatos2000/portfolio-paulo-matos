@@ -45,6 +45,8 @@ const getHighlighter = (): Promise<HighlighterCore> => {
         import("@shikijs/langs/typescript"),
         import("@shikijs/langs/toml"),
         import("@shikijs/langs/json"),
+        /** Colore o +/- dos patches no /changelog. */
+        import("@shikijs/langs/diff"),
         leafGrammar,
       ],
       themes: [patch(darkPlus, DARK_FIX), patch(lightPlus, LIGHT_FIX)],

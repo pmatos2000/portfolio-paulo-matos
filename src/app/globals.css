@@ -12,6 +12,8 @@
      interface. Um cinza mais discreto reprovaria. */
   --scrollbar-thumb: #6e6e6e;
   --scrollbar-thumb-hover: #8a8a8a;
+  /* Linha removida no diff do /changelog. 4,58:1 sobre #1e1e1e. */
+  --diff-removed: #e06c6c;
 
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -34,6 +36,8 @@
   /* 3,03:1 sobre #ffffff. */
   --scrollbar-thumb: #949494;
   --scrollbar-thumb-hover: #767676;
+  /* 4,53:1 sobre #ffffff. */
+  --diff-removed: #c02626;
 }
 
 body {

@@ -1,0 +1,88 @@
+/* Especificidade acima de `.contentPage ol` e `.contentPage li` do globals.css,
+   que aplicariam recuo e margem de parágrafo à lista de commits. */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+  max-width: 40rem;
+}
+
+.item {
+  margin: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.link {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 4px;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.link:hover {
+  background-color: var(--background-hover);
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--text-color-secondary);
+  padding-top: 0.1rem;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.subject {
+  line-height: 1.4;
+}
+
+.type {
+  color: var(--primary-color);
+  font-family: Consolas, "SF Mono", Menlo, "Courier New", monospace;
+  font-size: var(--font-size-sm);
+  margin-right: 0.4rem;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+}
+
+.sha {
+  font-family: Consolas, "SF Mono", Menlo, "Courier New", monospace;
+  background-color: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 0.05em 0.4em;
+}
+
+.footer {
+  margin-top: 2rem;
+  font-size: var(--font-size-sm);
+}
+
+/* Especificidade acima de `.contentPage a`, que pintaria o texto e aplicaria
+   sublinhado no hover — aqui a moldura já sinaliza que é ação. */
+.footer .button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+}
+
+.footer .button:hover {
+  background-color: var(--background-hover);
+  text-decoration: none;
+}

@@ -1,0 +1,117 @@
+.panel {
+  width: min(320px, 90vw);
+  min-width: min(320px, 90vw);
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--background-primary);
+  padding: 0.5rem 1rem;
+  border-right: 1px solid var(--border-color);
+  font-family: "Segoe UI", sans-serif;
+  font-size: var(--font-size-md);
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+  letter-spacing: 1px;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.repo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  padding: 0.25rem 0;
+  margin-bottom: 0.75rem;
+}
+
+.repo:hover {
+  color: var(--primary-color);
+}
+
+.empty {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+  line-height: 1.5;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  margin: 0;
+}
+
+.link {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.4rem 0.25rem;
+  border-radius: 4px;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.link:hover {
+  background-color: var(--background-hover);
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--text-color-secondary);
+  padding-top: 0.15rem;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.subject {
+  font-size: var(--font-size-sm);
+  line-height: 1.35;
+}
+
+/* O prefixo convencional identifica a natureza do commit num relance. */
+.type {
+  color: var(--primary-color);
+  font-family: Consolas, "SF Mono", Menlo, "Courier New", monospace;
+  font-size: var(--font-size-xs);
+  margin-right: 0.4rem;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-size-xs);
+  color: var(--text-color-secondary);
+}
+
+.sha {
+  font-family: Consolas, "SF Mono", Menlo, "Courier New", monospace;
+  background-color: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 0.05em 0.35em;
+}
+
+.footer {
+  margin: 1rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  font-size: var(--font-size-sm);
+}
+
+.footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+}

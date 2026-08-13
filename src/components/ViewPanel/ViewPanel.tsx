@@ -1,5 +1,7 @@
 import type { BlogYear } from "@/data/blogTree";
+import type { Commit } from "@/data/gitLog";
 import BlogPanel from "../BlogPanel/BlogPanel";
+import GitPanel from "../GitPanel/GitPanel";
 import SearchPanel from "../SearchPanel/SearchPanel";
 import SettingsPanel from "../SettingsPanel/SettingsPanel";
 import Sidebar from "../Sidebar/Sidebar";
@@ -9,6 +11,7 @@ type ViewPanelProps = {
   onCloseMenu: () => void;
   lastPostSlug: string | null;
   blogYears: BlogYear[];
+  commits: Commit[];
 };
 
 const ViewPanel = ({
@@ -16,6 +19,7 @@ const ViewPanel = ({
   onCloseMenu,
   lastPostSlug,
   blogYears,
+  commits,
 }: ViewPanelProps) => {
   switch (activeView) {
     case "Explorer":
@@ -30,6 +34,8 @@ const ViewPanel = ({
       return <SearchPanel onCloseMenu={onCloseMenu} />;
     case "Blog":
       return <BlogPanel years={blogYears} onCloseMenu={onCloseMenu} />;
+    case "Git":
+      return <GitPanel commits={commits} />;
     case "Manage":
       return <SettingsPanel />;
     default:
