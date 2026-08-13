@@ -1,6 +1,6 @@
 .panel {
-  width: min(280px, 85vw);
-  min-width: min(280px, 85vw);
+  width: min(320px, 90vw);
+  min-width: min(320px, 90vw);
   height: 100%;
   overflow-y: auto;
   background-color: var(--background-primary);
