@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import AppLayout from "@/components/AppLayout/AppLayout";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { getBlogYears } from "@/data/blogTree";
@@ -59,6 +60,7 @@ export default async function RootLayout({
           </AppLayout>
         </ThemeProvider>
       </body>
+      <SpeedInsights />
     </html>
   );
 }
