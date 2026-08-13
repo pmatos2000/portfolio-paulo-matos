@@ -28,7 +28,10 @@ const APP_DIR = "src/app";
 const BLOG_DIR = "src/content/blog";
 
 const git = (...args) =>
-  execFileSync("git", args, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+  execFileSync("git", args, {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  }).trim();
 
 // ---------------------------------------------------------------- descoberta
 
@@ -78,7 +81,9 @@ const findPublishedSlugs = () => {
   const source = readFileSync("src/data/posts.ts", "utf8");
   const start = source.indexOf("export const postLoaders");
   const block = source.slice(start, source.indexOf("} satisfies", start));
-  return new Set([...block.matchAll(/"([a-z0-9-]+)":\s*\(\)/g)].map((m) => m[1]));
+  return new Set(
+    [...block.matchAll(/"([a-z0-9-]+)":\s*\(\)/g)].map((m) => m[1]),
+  );
 };
 
 const tagsOfPost = (slug) => {
@@ -182,7 +187,9 @@ const mapChangesToPaths = (changes, base) => {
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
-const since = args.find((a) => a.startsWith("--since="))?.slice("--since=".length);
+const since = args
+  .find((a) => a.startsWith("--since="))
+  ?.slice("--since=".length);
 const manualPaths = args.filter((a) => a.startsWith("/"));
 
 let paths = manualPaths;
@@ -198,7 +205,9 @@ if (paths.length === 0) {
       git("cat-file", "-e", `${lastCommit}^{commit}`);
       base = lastCommit;
     } catch {
-      console.warn(`aviso: commit ${lastCommit} do ${STATE_FILE} não existe mais`);
+      console.warn(
+        `aviso: commit ${lastCommit} do ${STATE_FILE} não existe mais`,
+      );
     }
   }
   base ??= "HEAD~1";
@@ -219,7 +228,9 @@ if (paths.length === 0) {
   const mapped = mapChangesToPaths(changes, base);
   paths = mapped.paths;
 
-  console.log(`intervalo: ${base}..HEAD (${changes.length} arquivo(s) alterado(s))`);
+  console.log(
+    `intervalo: ${base}..HEAD (${changes.length} arquivo(s) alterado(s))`,
+  );
   for (const warning of mapped.warnings) {
     console.warn(`  aviso: ${warning}`);
   }
@@ -231,7 +242,9 @@ if (paths.length === 0) {
 }
 
 /** A chave vive no host www; submeter URL do apex responde 403. */
-const urlList = paths.map((path) => new URL(path, `https://${HOST}`).toString());
+const urlList = paths.map((path) =>
+  new URL(path, `https://${HOST}`).toString(),
+);
 
 if (dryRun) {
   console.log(`\n--dry-run — ${urlList.length} URL(s) seriam enviadas:`);
@@ -266,6 +279,10 @@ for (const url of urlList) {
 
 /** Só avança o marcador no modo automático: modo manual não representa o deploy. */
 if (head) {
-  writeFileSync(STATE_FILE, `${JSON.stringify({ lastCommit: head }, null, 2)}\n`, "utf8");
+  writeFileSync(
+    STATE_FILE,
+    `${JSON.stringify({ lastCommit: head }, null, 2)}\n`,
+    "utf8",
+  );
   console.log(`\nmarcador salvo em ${STATE_FILE} (${head.slice(0, 7)})`);
 }
