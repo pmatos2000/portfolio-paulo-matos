@@ -1,17 +1,31 @@
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd/JsonLd";
+import { projectSchema } from "@/data/schema";
 import { pageMetadata } from "@/data/site";
+
+const DESCRIPTION =
+  "Como este site foi construído: a metáfora do editor de código, o que ela custa em SEO, e as decisões de acessibilidade e performance por trás do resultado.";
 
 export const metadata = pageMetadata({
   title: "Portfólio em Next.js com a interface do VS Code",
-  description:
-    "Como este site foi construído: a metáfora do editor de código, o que ela custa em SEO, e as decisões de acessibilidade e performance por trás do resultado.",
+  description: DESCRIPTION,
   path: "/projetos/portfolio",
   absoluteTitle: true,
+});
+
+const schema = projectSchema({
+  name: "Portfólio de Paulo Matos",
+  description: DESCRIPTION,
+  path: "/projetos/portfolio",
+  codeRepository: "https://github.com/pmatos2000/portfolio-paulo-matos",
+  programmingLanguage: ["TypeScript"],
+  keywords: ["Next.js", "React", "TypeScript", "acessibilidade", "SEO"],
 });
 
 const PortfolioPage = () => {
   return (
     <div className="contentPage">
+      <JsonLd data={schema} />
       <h1>Portfólio — este site</h1>
 
       <p>

@@ -1,16 +1,35 @@
+import JsonLd from "@/components/JsonLd/JsonLd";
+import { projectSchema } from "@/data/schema";
 import { pageMetadata } from "@/data/site";
+
+const DESCRIPTION =
+  "Simulação interativa da curva de Rhodonea (rosa polar) construída na Godot Engine, usando o motor de jogos como laboratório de visualização matemática.";
 
 export const metadata = pageMetadata({
   title: "Rosa Polar: simulação da curva de Rhodonea em Godot",
-  description:
-    "Simulação interativa da curva de Rhodonea (rosa polar) construída na Godot Engine, usando o motor de jogos como laboratório de visualização matemática.",
+  description: DESCRIPTION,
   path: "/projetos/jogos/rosa-polar",
   absoluteTitle: true,
+});
+
+const schema = projectSchema({
+  name: "Rosa Polar",
+  description: DESCRIPTION,
+  path: "/projetos/jogos/rosa-polar",
+  codeRepository:
+    "https://github.com/pmatos2000/godot_study/tree/main/rose-curve",
+  programmingLanguage: ["GDScript"],
+  sameAs: [
+    "https://magolaplace.itch.io/rose-curve",
+    "https://www.youtube.com/watch?v=AKIcIY77HKY",
+  ],
+  keywords: ["Godot Engine", "curva de Rhodonea", "visualização matemática"],
 });
 
 const RosaPolarPage = () => {
   return (
     <div className="contentPage">
+      <JsonLd data={schema} />
       <h1>Rosa Polar - Uma Simulação Matemática com Godot</h1>
 
       <p>

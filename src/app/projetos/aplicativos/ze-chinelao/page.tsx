@@ -7,14 +7,27 @@ import imgSistemaLinear from "@/assets/images/ze-chinelao/imgSistemaLinear.png";
 import imgSistemaLinearCalculo from "@/assets/images/ze-chinelao/imgSistemaLinearCalculo.png";
 import imgTelaInicial from "@/assets/images/ze-chinelao/imgTelaInicial.png";
 import ImageCarousel from "@/components/ImageCarousel/ImageCarousel";
+import JsonLd from "@/components/JsonLd/JsonLd";
+import { projectSchema } from "@/data/schema";
 import { pageMetadata } from "@/data/site";
+
+const DESCRIPTION =
+  "Aplicativo que resolve divisores, MMC e sistemas lineares exibindo o cálculo passo a passo, pensado para o ensino de matemática.";
 
 export const metadata = pageMetadata({
   title: "Zé Chinelão: MMC e sistemas lineares passo a passo",
-  description:
-    "Aplicativo que resolve divisores, MMC e sistemas lineares exibindo o cálculo passo a passo, pensado para o ensino de matemática.",
+  description: DESCRIPTION,
   path: "/projetos/aplicativos/ze-chinelao",
   absoluteTitle: true,
+});
+
+const schema = projectSchema({
+  name: "Zé Chinelão",
+  description: DESCRIPTION,
+  path: "/projetos/aplicativos/ze-chinelao",
+  codeRepository: "https://github.com/pmatos2000/ze_chinelao",
+  programmingLanguage: ["Java"],
+  keywords: ["Android", "MMC", "sistemas lineares", "ensino de matemática"],
 });
 
 const zeChinelaoImages = [
@@ -49,6 +62,7 @@ const zeChinelaoImages = [
 const ZeChinelaoPage = () => {
   return (
     <div className="contentPage">
+      <JsonLd data={schema} />
       <h1>Projeto: Zé Chinelão (2016)</h1>
 
       <p>

@@ -1,13 +1,26 @@
 import Link from "next/link";
 import Code from "@/components/CodeBlock/Code";
+import JsonLd from "@/components/JsonLd/JsonLd";
+import { projectSchema } from "@/data/schema";
 import { pageMetadata } from "@/data/site";
+
+const DESCRIPTION =
+  "Engine de jogos 2D em Rust, projetada para renderizar pixels idênticos no nativo e na web. A arquitetura e o que uma prova de conceito de 8 mil linhas ensinou.";
 
 export const metadata = pageMetadata({
   title: "Rustle: engine de jogos 2D em Rust com a cena como documento JSON",
-  description:
-    "Engine de jogos 2D em Rust, projetada para renderizar pixels idênticos no nativo e na web. A arquitetura e o que uma prova de conceito de 8 mil linhas ensinou.",
+  description: DESCRIPTION,
   path: "/projetos/rustle",
   absoluteTitle: true,
+});
+
+const schema = projectSchema({
+  name: "Rustle",
+  description: DESCRIPTION,
+  path: "/projetos/rustle",
+  codeRepository: "https://github.com/pmatos2000/rustle",
+  programmingLanguage: ["Rust"],
+  keywords: ["engine de jogos", "Rust", "WebAssembly", "renderização 2D"],
 });
 
 const SCENE = `{
@@ -24,6 +37,7 @@ const SCENE = `{
 const RustlePage = () => {
   return (
     <div className="contentPage">
+      <JsonLd data={schema} />
       <h1>Rustle — uma engine de jogos 2D em Rust</h1>
 
       <p>

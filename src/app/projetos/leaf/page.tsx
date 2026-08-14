@@ -1,14 +1,35 @@
 import Link from "next/link";
 import Code from "@/components/CodeBlock/Code";
+import JsonLd from "@/components/JsonLd/JsonLd";
 import PostLinks from "@/components/PostLinks/PostLinks";
+import { projectSchema } from "@/data/schema";
 import { pageMetadata } from "@/data/site";
+
+const DESCRIPTION =
+  "Linguagem de script tipada para jogos, compilada para bytecode de uma VM de registradores, sem coletor de lixo e sem panic. Por que não usar Lua ou Rhai.";
 
 export const metadata = pageMetadata({
   title: "Leaf: linguagem de script tipada e sem GC, embarcável em Rust",
-  description:
-    "Linguagem de script tipada para jogos, compilada para bytecode de uma VM de registradores, sem coletor de lixo e sem panic. Por que não usar Lua ou Rhai.",
+  description: DESCRIPTION,
   path: "/projetos/leaf",
   absoluteTitle: true,
+});
+
+/**
+ * Sem codeRepository: o compilador ainda não existe, então o tipo cai para
+ * CreativeWork. Vira SoftwareSourceCode no dia em que houver fonte pública.
+ */
+const schema = projectSchema({
+  name: "Leaf",
+  description: DESCRIPTION,
+  path: "/projetos/leaf",
+  keywords: [
+    "linguagem de script",
+    "Rust",
+    "VM de registradores",
+    "tipagem estática",
+    "desenvolvimento de jogos",
+  ],
 });
 
 const EXAMPLE = `@implements(Atualizavel)
@@ -42,6 +63,7 @@ let c: int? = a.get(10)         // None, nunca panic`;
 const LeafPage = () => {
   return (
     <div className="contentPage">
+      <JsonLd data={schema} />
       <h1>Leaf — uma linguagem de script embarcável em Rust</h1>
 
       <p>

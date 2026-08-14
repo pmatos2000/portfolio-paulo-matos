@@ -6,6 +6,7 @@ import PostToc from "@/components/PostToc/PostToc";
 import RelatedPosts from "@/components/RelatedPosts/RelatedPosts";
 import { type PostSlug, postLoaders, postSlugs } from "@/data/posts";
 import { getPostToc } from "@/data/postToc";
+import { personRef } from "@/data/schema";
 import { pageMetadata, siteConfig } from "@/data/site";
 import styles from "./post.module.css";
 
@@ -78,12 +79,8 @@ const PostPage = async ({ params }: Props) => {
     dateModified: meta.updated ?? meta.date,
     inLanguage: "pt-BR",
     keywords: meta.tags.join(", "),
-    author: { "@type": "Person", name: siteConfig.name, url: siteConfig.url },
-    publisher: {
-      "@type": "Person",
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
+    author: personRef,
+    publisher: personRef,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     image: new URL(`/blog/${slug}/opengraph-image`, siteConfig.url).toString(),
   };

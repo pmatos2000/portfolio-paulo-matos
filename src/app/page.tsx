@@ -4,6 +4,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 import profileImage from "@/assets/images/profile.jpg";
 import JsonLd from "@/components/JsonLd/JsonLd";
 import PostLinks from "@/components/PostLinks/PostLinks";
+import { personSchema } from "@/data/schema";
 import { pageMetadata, siteConfig, socialLinks } from "@/data/site";
 import styles from "./page.module.css";
 
@@ -14,34 +15,6 @@ export const metadata = pageMetadata({
   path: "/",
   absoluteTitle: true,
 });
-
-const personSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: siteConfig.name,
-  alternateName: "Paulo Henrique Rodrigues de Matos",
-  url: siteConfig.url,
-  image: new URL(profileImage.src, siteConfig.url).toString(),
-  jobTitle: "Desenvolvedor Full-Stack",
-  description: siteConfig.description,
-  worksFor: {
-    "@type": "Organization",
-    name: "Lyncas",
-    url: "https://lyncas.net/",
-  },
-  sameAs: [socialLinks.linkedin, socialLinks.github],
-  knowsAbout: ["C#", "ASP.NET Core", "React", "TypeScript", "Rust"],
-  alumniOf: [
-    {
-      "@type": "CollegeOrUniversity",
-      name: "Universidade Federal de Minas Gerais",
-    },
-    {
-      "@type": "CollegeOrUniversity",
-      name: "CEFET-MG",
-    },
-  ],
-};
 
 const SOCIAL = [
   { href: socialLinks.linkedin, label: "LinkedIn", Icon: FaLinkedin },
@@ -71,7 +44,7 @@ const PROJECTS = [
 const Home = () => {
   return (
     <div className={styles.welcome}>
-      <JsonLd data={personSchema} />
+      <JsonLd data={personSchema(profileImage.src)} />
       <header className={styles.header}>
         <Image
           src={profileImage}
