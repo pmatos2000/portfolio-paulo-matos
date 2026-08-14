@@ -146,6 +146,25 @@ const Home = () => {
           <Link href="/blog">Todos os posts</Link>
         </p>
       </section>
+
+      <section className={styles.contact} aria-labelledby="contato">
+        <h2 id="contato" className={styles.contactTitle}>
+          Vamos conversar?
+        </h2>
+        <p>
+          Se quiser conversar sobre desenvolvimento de software, arquitetura,
+          liderança técnica ou algum dos projetos deste site, entre em contato
+          pelo LinkedIn.
+        </p>
+        <a
+          href={socialLinks.linkedin}
+          className={styles.contactLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Entrar em contato pelo LinkedIn →
+        </a>
+      </section>
     </div>
   );
 };

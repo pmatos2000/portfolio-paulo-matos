@@ -178,6 +178,36 @@
   margin-top: 0.15rem;
 }
 
+.contact {
+  max-width: 40rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.contactTitle {
+  margin: 0 0 0.75rem;
+  color: var(--text-color);
+  font-size: var(--font-size-lg);
+}
+
+.contact p {
+  margin: 0 0 0.75rem;
+  color: var(--text-color-prose);
+  line-height: 1.7;
+}
+
+.contactLink {
+  color: var(--primary-color);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.contactLink:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   .columns {
     grid-template-columns: 1fr;
