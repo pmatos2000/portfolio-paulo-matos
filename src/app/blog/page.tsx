@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatPostDate, postYear } from "@/data/postDate";
 import { type LoadedPost, loadPosts } from "@/data/posts";
 import { blogConfig, pageMetadata } from "@/data/site";
 import styles from "./blog.module.css";
@@ -12,7 +13,7 @@ export const metadata = pageMetadata({
 const groupByYear = (posts: LoadedPost[]): [string, LoadedPost[]][] => {
   const years = new Map<string, LoadedPost[]>();
   for (const post of posts) {
-    const year = post.date.slice(0, 4);
+    const year = postYear(post.date);
     const bucket = years.get(year);
     if (bucket) {
       bucket.push(post);
@@ -22,14 +23,6 @@ const groupByYear = (posts: LoadedPost[]): [string, LoadedPost[]][] => {
   }
   return [...years];
 };
-
-const formatDate = (iso: string) =>
-  new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(iso));
 
 const BlogPage = async () => {
   const groups = groupByYear(await loadPosts());
@@ -51,7 +44,7 @@ const BlogPage = async () => {
                   <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                 </h3>
                 <time className={styles.date} dateTime={post.date}>
-                  {formatDate(post.date)}
+                  {formatPostDate(post.date, "short")}
                 </time>
                 <p className={styles.description}>{post.description}</p>
               </li>

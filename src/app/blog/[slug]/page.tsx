@@ -4,7 +4,8 @@ import JsonLd from "@/components/JsonLd/JsonLd";
 import PostNav from "@/components/PostNav/PostNav";
 import PostToc from "@/components/PostToc/PostToc";
 import RelatedPosts from "@/components/RelatedPosts/RelatedPosts";
-import { type PostSlug, postLoaders, postSlugs } from "@/data/posts";
+import { formatPostDate } from "@/data/postDate";
+import { loadPost, type PostSlug, postSlugs } from "@/data/posts";
 import { getPostToc } from "@/data/postToc";
 import { personRef } from "@/data/schema";
 import { pageMetadata, siteConfig } from "@/data/site";
@@ -18,21 +19,9 @@ export function generateStaticParams() {
   return postSlugs.map((slug) => ({ slug }));
 }
 
-/**
- * UTC explícito: `new Date("2026-08-11")` é meia-noite UTC, e formatar em
- * America/Sao_Paulo (UTC-3) exibiria 10/08.
- */
-const formatDate = (iso: string) =>
-  new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(iso));
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const { meta } = await postLoaders[slug]();
+  const { meta } = await loadPost(slug);
 
   return pageMetadata({
     title: meta.title,
@@ -49,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const PostPage = async ({ params }: Props) => {
   const { slug } = await params;
-  const { default: Content, meta } = await postLoaders[slug]();
+  const { default: Content, meta } = await loadPost(slug);
   const toc = await getPostToc(slug);
 
   /**
@@ -91,7 +80,7 @@ const PostPage = async ({ params }: Props) => {
       <article>
         <h1>{meta.title}</h1>
         <div className={styles.postMeta}>
-          <time dateTime={meta.date}>{formatDate(meta.date)}</time>
+          <time dateTime={meta.date}>{formatPostDate(meta.date)}</time>
           <ul className={styles.tags}>
             {meta.tags.map((tag) => (
               <li key={tag} className={styles.tag}>

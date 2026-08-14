@@ -10,8 +10,24 @@ import { siteConfig, socialLinks } from "@/data/site";
  */
 export const PERSON_ID = `${siteConfig.url}/#paulo`;
 
-/** Aponta para o nó da home; não o redeclara. */
-export const personRef = { "@id": PERSON_ID } as const;
+/**
+ * Referência ao nó da home, com o mínimo repetido junto.
+ *
+ * Só o @id seria o correto pela especificação, e foi o que estava aqui. Mas
+ * o validador do Google avalia cada página isolada: ele não busca a home
+ * para descobrir quem é esse @id, e reportava author/publisher sem nome nem
+ * url — chegava a inferir "Thing" no lugar de "Person".
+ *
+ * Repetir @type, name e url não cria um segundo nó: o @id é o mesmo, então
+ * quem monta o grafo funde as duas descrições. O que ainda não se pode fazer
+ * é omitir o @id — era isso que fragmentava a entidade.
+ */
+export const personRef = {
+  "@id": PERSON_ID,
+  "@type": "Person",
+  name: siteConfig.name,
+  url: siteConfig.url,
+} as const;
 
 /**
  * Tecnologia como entidade, não como string.

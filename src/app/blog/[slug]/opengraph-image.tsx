@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
-import { type PostSlug, postLoaders, postSlugs } from "@/data/posts";
+import { formatPostDate } from "@/data/postDate";
+import { loadPost, type PostSlug, postSlugs } from "@/data/posts";
 import { siteConfig } from "@/data/site";
 
 export const alt = `Post no blog de ${siteConfig.name}`;
@@ -36,21 +37,13 @@ const titleFontSize = (title: string) => {
   return 58;
 };
 
-const formatDate = (iso: string) =>
-  new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(iso));
-
 export default async function Image({
   params,
 }: {
   params: Promise<{ slug: PostSlug }>;
 }) {
   const { slug } = await params;
-  const { meta } = await postLoaders[slug]();
+  const { meta } = await loadPost(slug);
 
   return new ImageResponse(
     <div
@@ -136,7 +129,7 @@ export default async function Image({
             marginTop: 36,
           }}
         >
-          {`${formatDate(meta.date)} · ${siteConfig.name}`}
+          {`${formatPostDate(meta.date)} · ${siteConfig.name}`}
         </div>
         <div
           style={{

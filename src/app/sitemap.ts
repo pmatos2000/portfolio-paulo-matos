@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { postLoaders, postSlugs } from "@/data/posts";
+import { loadPost, postSlugs } from "@/data/posts";
 import { sidebarTree, type TreeItem } from "@/data/sidebarTree";
 import { siteConfig } from "@/data/site";
 
@@ -26,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const posts = await Promise.all(
     postSlugs.map(async (slug) => {
-      const { meta } = await postLoaders[slug]();
+      const { meta } = await loadPost(slug);
       return {
         url: new URL(`/blog/${slug}`, siteConfig.url).toString(),
         lastModified: meta.date,

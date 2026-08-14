@@ -1,3 +1,4 @@
+import { postYear } from "@/data/postDate";
 import { loadPosts } from "@/data/posts";
 import { getPostToc, type TocHeading } from "@/data/postToc";
 
@@ -22,7 +23,7 @@ export const getBlogYears = async (): Promise<BlogYear[]> => {
   const years = new Map<string, BlogPostRef[]>();
 
   for (const post of await loadPosts()) {
-    const year = post.date.slice(0, 4);
+    const year = postYear(post.date);
     const slug = String(post.slug);
     const ref = {
       slug,

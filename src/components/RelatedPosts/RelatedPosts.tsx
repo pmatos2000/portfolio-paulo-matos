@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { postDay } from "@/data/postDate";
 import { type LoadedPost, loadPosts, type PostSlug } from "@/data/posts";
 import styles from "./RelatedPosts.module.css";
 
@@ -45,7 +46,11 @@ const RelatedPosts = async ({ slug, limit = 3 }: RelatedPostsProps) => {
     .filter((post) => !skip.has(post.slug))
     .map((post) => ({ post, score: scoreOf(post, current, frequency) }))
     .filter((entry) => entry.score > 0)
-    .sort((a, b) => b.score - a.score || b.post.date.localeCompare(a.post.date))
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        postDay(b.post.date).localeCompare(postDay(a.post.date)),
+    )
     .slice(0, limit);
 
   if (related.length === 0) {
