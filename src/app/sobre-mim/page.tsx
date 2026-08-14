@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import profileImage from "@/assets/images/profile.jpg";
 import { pageMetadata } from "@/data/site";
@@ -74,6 +75,21 @@ const SobreMimPage = () => {
             com a natureza; já tive um jardim repleto de plantas, com um carinho
             especial pelas onze-horas, e cheguei a construir uma compostagem
             caseira, aprendendo na prática sobre ciclos e sustentabilidade.
+          </p>
+
+          <h2 id="trajetoria-digital">Minha trajetória digital</h2>
+          <p>
+            Antes deste portfólio, mantive blogs e canais onde comecei a
+            documentar projetos, ensinar programação e compartilhar outros
+            interesses. Também publiquei tutoriais em comunidades e artigos
+            técnicos no Medium. Esses espaços registram a fase em que comecei a
+            transformar estudo em conteúdo; hoje concentro novos projetos e
+            textos neste site.
+          </p>
+          <p>
+            Organizei essa história, os canais antigos e os textos que ainda
+            estão disponíveis no meu{" "}
+            <Link href="/publicacoes">arquivo de publicações</Link>.
           </p>
         </div>
       </div>

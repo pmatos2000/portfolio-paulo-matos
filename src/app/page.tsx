@@ -26,6 +26,7 @@ const START_LINKS = [
   { href: "/experiencias", file: "experiências.tsx", hint: "Onde trabalhei" },
   { href: "/competencias", file: "competências.css", hint: "O que eu uso" },
   { href: "/formacao", file: "formação.ts", hint: "Onde estudei" },
+  { href: "/publicacoes", file: "publicações/", hint: "O que documentei" },
 ];
 
 const PROJECTS = [
@@ -56,9 +57,14 @@ const Home = () => {
           priority
         />
         <div>
-          <h1 className={styles.title}>Paulo Matos</h1>
+          <h1 className={styles.title}>
+            <span>Paulo Matos</span>
+            <span className={styles.role}>
+              Desenvolvedor Full-Stack &amp; Líder Técnico
+            </span>
+          </h1>
           <p className={styles.subtitle}>
-            Desenvolvedor Full-Stack &amp; Líder Técnico
+            C#, ASP.NET Core, React, TypeScript e Rust
           </p>
           <div className={styles.social}>
             {SOCIAL.map(({ href, label, Icon }) => (
@@ -76,6 +82,22 @@ const Home = () => {
           </div>
         </div>
       </header>
+
+      <section className={styles.intro} aria-label="Apresentação">
+        <p>
+          Desenvolvo aplicações e soluções de software há mais de cinco anos,
+          com experiência em arquitetura de sistemas, desenvolvimento full-stack
+          e liderança técnica. Sou formado em Engenharia de Sistemas pela UFMG e
+          gosto de transformar problemas complexos em produtos simples,
+          confiáveis e fáceis de manter.
+        </p>
+        <p>
+          Conheça minha <Link href="/sobre-mim">trajetória</Link>, veja minhas{" "}
+          <Link href="/experiencias">experiências profissionais</Link>, explore
+          os <Link href="/projetos">projetos que desenvolvi</Link> ou leia meus{" "}
+          <Link href="/blog">artigos técnicos</Link>.
+        </p>
+      </section>
 
       <div className={styles.columns}>
         <section>
@@ -112,16 +134,11 @@ const Home = () => {
           <Link href="/projetos/leaf">Leaf</Link>
         </h2>
         <p>
-          Criar um componente novo no{" "}
-          <Link href="/projetos/rustle">Rustle</Link> — a engine de jogos 2D que
-          estou escrevendo em Rust — hoje exige recompilar o projeto inteiro.
-          Leaf é a linguagem de script que elimina esse ciclo.
-        </p>
-        <p>
-          Tipagem estática, compilada para uma VM de registradores, integração
-          nativa com Rust, sem coletor de lixo e sem panic. Construí a camada de
-          script da prova de conceito em Rune antes de decidir escrever a minha
-          — foi usando que os limites apareceram.
+          O <Link href="/projetos/leaf">Leaf</Link> é uma linguagem de script
+          com tipagem estática que estou desenvolvendo em Rust. O projeto nasceu
+          para acelerar o desenvolvimento do{" "}
+          <Link href="/projetos/rustle">Rustle</Link>, minha engine de jogos 2D,
+          evitando a recompilação completa a cada alteração de comportamento.
         </p>
         <h3 className={styles.highlightSub}>Escrevendo sobre isso</h3>
         <PostLinks tag="leaf" limit={3} />
